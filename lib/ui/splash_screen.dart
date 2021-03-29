@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -9,40 +11,118 @@ class Splash extends StatefulWidget {
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   /// Calling [navigate()] before the page loads
+  AnimationController _controller;
+  Animation _animation;
+  bool left = false;
+  bool right = false;
   @override
   void initState() {
     super.initState();
    // navigate();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds:2),
+    );
+    //Implement animation here
+    _animation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   /// A function to set a 3 seconds timer for my splash screen to show
   /// and navigate to my [welcome] screen after
   void navigate() {
     Timer(
-      Duration(seconds: 2),
+      Duration(seconds: 7),
           () {
-        //getBoolValuesSF();
+       Navigator.pushNamed(context, OnBoard.id);
+      },
+    );
+  }
+
+  void positioned() {
+    Timer(
+      Duration(milliseconds: 900),
+          () {
+        setState(() {
+          left = right =true;
+        });
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    _controller.forward();
+    navigate();
+    positioned();
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Color(0xFFF3F6F8),
       body: Stack(
         children: [
-          Center(
-            child: Image.asset(
-              'assets/icons/splash_logo.png',
-              width: 192,
-              height:48,
-              fit: BoxFit.contain,
+          AnimatedPositioned(
+            top: 10,
+            left:right == false?100:-50,
+            duration: Duration(milliseconds: 250),
+            child: Image.asset("assets/icons/blur_right.png", height: 689, width: 689,fit: BoxFit.contain,),
+          ),
+          AnimatedPositioned(
+            top: 0,
+            right: left == false ?-100:30,
+            duration: Duration(milliseconds: 500),
+            child: Image.asset("assets/icons/blur_left.png", height:487, width:487,fit: BoxFit.contain,),
+          ),
+          FadeTransition(
+            opacity: _animation,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icons/splash_logo.png',
+                    width: 192,
+                    height:48,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(height:17),
+                  Text(
+                    "Good help is no longer so hard to find",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Gelion',
+                      color: Color(0xFF717F88),
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 1,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
+          Positioned(
+            bottom: 50,
+            right: SizeConfig.screenWidth/2,
+            child: Center(
+              child: FadeTransition(
+                opacity: _animation,
+                child: CupertinoActivityIndicator(
+                  radius: 10,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

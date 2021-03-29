@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
+//import 'package:householdexecutives_mobile/ui/registration/forgot_password/create_new_password.dart';
+//import 'package:householdexecutives_mobile/ui/registration/forgot_password/reset_password.dart';
+//import 'package:householdexecutives_mobile/ui/registration/forgot_password/sent_link_page.dart';
+//import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
+//import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/ui/splash_screen.dart';
 
 void main() {
@@ -25,6 +31,13 @@ class MyApp extends StatelessWidget {
       initialRoute: Splash.id,
       routes: {
         Splash.id: (context) => Splash(),
+        OnBoard.id:(context)=>OnBoard(),
+//        SignIn.id:(context)=>SignIn(),
+//        SignUp.id:(context)=>SignUp(),
+//        Reset.id:(context)=>Reset(),
+//        SentLinkPage.id:(context)=>SentLinkPage(),
+//        CreateNewPassword.id:(context)=>CreateNewPassword(),
+
       },
     );
   }
