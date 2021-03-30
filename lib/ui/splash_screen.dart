@@ -45,7 +45,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
     Timer(
       Duration(seconds: 7),
           () {
-       Navigator.pushNamed(context, OnBoard.id);
+       //Navigator.pushNamed(context, OnBoard.id);
       },
     );
   }
