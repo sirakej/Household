@@ -66,6 +66,7 @@ class _FindACandidateState extends State<FindACandidate> {
               Expanded(
                 child: Container(
                   child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         Container(height: 16,),
