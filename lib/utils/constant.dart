@@ -74,6 +74,16 @@ const kFieldDecoration = InputDecoration(
   )
 );
 
+const kPayCardDecoration = InputDecoration(
+  border: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Color(0XFFC4C4C4),
+      width: 1,
+    ),
+   // borderRadius: BorderRadius.all(Radius.circular(8))
+  )
+);
+
 /// setting a constant [kTextBigFieldDecoration] for [InputDecoration] styles
 const kTextBigFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 18.0, horizontal: 20.0),

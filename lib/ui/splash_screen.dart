@@ -13,6 +13,7 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   /// Calling [navigate()] before the page loads
+  ///
   AnimationController _controller;
   Animation _animation;
   bool left = false;
@@ -20,10 +21,11 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
-   // navigate();
+   navigate();
+
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds:2),
+      duration: Duration(seconds:1),
     );
     //Implement animation here
     _animation = Tween(
@@ -45,12 +47,12 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
     Timer(
       Duration(seconds: 7),
           () {
-       //Navigator.pushNamed(context, OnBoard.id);
+       Navigator.pushNamed(context, OnBoard.id);
       },
     );
   }
 
-  void positioned() {
+  void time() {
     Timer(
       Duration(milliseconds: 900),
           () {
@@ -64,8 +66,8 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     _controller.forward();
-    navigate();
-    positioned();
+    time();
+    //navigate();
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Color(0xFFF3F6F8),
@@ -80,7 +82,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
           AnimatedPositioned(
             top: 0,
             right: left == false ?-100:30,
-            duration: Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 250),
             child: Image.asset("assets/icons/blur_left.png", height:487, width:487,fit: BoxFit.contain,),
           ),
           FadeTransition(

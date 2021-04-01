@@ -96,7 +96,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                       children: [
                         _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5),
                         SizedBox(height: 6,),
-_buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5),
+                        _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5),
                         SizedBox(height: 6,),
 _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5),
                         SizedBox(height: 6,),
@@ -116,7 +116,6 @@ _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Wee
                         SizedBox(height: 6,),
 _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5),
                         SizedBox(height: 6,),
-
                       ],
                     ),
                   ),
