@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/registration/forgot_password/sent_link_page.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
@@ -71,7 +72,13 @@ class _ResetState extends State<Reset> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
+                        onPressed:(){
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (_){
+                                return SentLinkPage();
+                              })
+                          );
+                        },
                         color: Color(0xFF00A69D),
                         child: Text(
                           "Send Instructions",
@@ -87,7 +94,9 @@ class _ResetState extends State<Reset> {
                       SizedBox(height: 22,),
                       Center(
                         child: TextButton(
-                            onPressed:(){},
+                            onPressed:(){
+                              Navigator.pop(context);
+                            },
                             child:  Text(
                                 "Cancel",
                                 style: TextStyle(

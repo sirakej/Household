@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/home/home_screen.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+
+import 'forgot_password/reset_password.dart';
 
 
 class SignIn extends StatefulWidget {
@@ -78,7 +82,13 @@ class _SignInState extends State<SignIn> {
                            borderRadius: BorderRadius.circular(8)
                        ),
                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                       onPressed:(){},
+                       onPressed:(){
+                         Navigator.push(context,
+                             CupertinoPageRoute(builder: (_){
+                               return HomeScreen();
+                             })
+                         );
+                       },
                        color: Color(0xFF00A69D),
                        child: Text(
                          "Login",
@@ -94,7 +104,13 @@ class _SignInState extends State<SignIn> {
                      SizedBox(height: 28,),
                      Center(
                        child: TextButton(
-                           onPressed:(){},
+                           onPressed:(){
+                             Navigator.push(context,
+                                 CupertinoPageRoute(builder: (_){
+                                   return SignUp();
+                                 })
+                             );
+                           },
                            child:  RichText(
                              text:TextSpan(
                                  text: "Not yet a register user?\n",
@@ -266,7 +282,13 @@ class _SignInState extends State<SignIn> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                onPressed:(){},
+                onPressed:(){
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_){
+                        return Reset();
+                      })
+                  );
+                },
                 child: Text(
                   "Forgot Password?",
                   textAlign: TextAlign.start,

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
+import 'package:householdexecutives_mobile/ui/registration/user_created_successfully.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
@@ -48,6 +50,7 @@ class _SignUpState extends State<SignUp> {
   /// A string variable holding the password
   String _password = '';
 
+  bool isCheck = false;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -59,123 +62,134 @@ class _SignUpState extends State<SignUp> {
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, right: 24),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //Container(height: 20,),
-                      Image.asset("assets/icons/register_logo.png",height:48.46,width:30,fit: BoxFit.contain,),
-                      SizedBox(height: 22.54,),
-                      Text(
-                        'Create An Account!',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Gelion',
-                          fontSize: 19,
-                          color: Color(0xFFF7941D),
-                        ),
-                      ),
-                      SizedBox(height: 8,),
-                      Text(
-                        'Register with your account details\nto begin.',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          //letterSpacing: 1,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 14,
-                          color: Color(0xFF57565C),
-                        ),
-                      ),
-                      SizedBox(height: 43,),
-                      _buildSignUp(),
-                      SizedBox(height: 44,),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
-                        color: Color(0xFF00A69D),
-                        child: Text(
-                          "Register Account",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFFFFFFFF),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 28,),
-                      Center(
-                        child: TextButton(
-                            onPressed:(){},
-                            child:  RichText(
-                              text:TextSpan(
-                                  text: "Already have an existing account?\n",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF042538),
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                        text: "Login",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFF00A69D),
-                                        )
-                                    )
-                                  ]
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                        ),
-                      ),
-                    ],
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset("assets/icons/register_logo.png",height:48.46,width:30,fit: BoxFit.contain,),
+              SizedBox(height: 22.54,),
+              Text(
+                'Create An Account!',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Gelion',
+                  fontSize: 19,
+                  color: Color(0xFFF7941D),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Center(
-                    child: FlatButton(
-                        onPressed: null,
-                        child:Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                                "Become a candidate today\t",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFF00A69D),
-                                )
-                            ),
-                            Icon(
-                              Icons.arrow_forward_outlined,
-                              size: 18,
-                              color: Color(0xFF00A69D),
-                            ),
-                          ],
-                        )
-                    ),
-                  ),
-                )
-              ],
-            ),
+              ),
+              SizedBox(height: 8,),
+              Text(
+                'Register with your account details\nto begin.',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF57565C),
+                ),
+              ),
+              SizedBox(height: 43,),
+             Expanded(
+               child: SingleChildScrollView(
+                 physics: BouncingScrollPhysics(),
+                 child: Column(
+                   children: [
+                     _buildSignUp(),
+                     SizedBox(height: 44,),
+                     FlatButton(
+                       minWidth: SizeConfig.screenWidth,
+                       shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(8)
+                       ),
+                       padding: EdgeInsets.only(top:18 ,bottom: 18),
+                       onPressed:(){
+                         Navigator.push(context,
+                             CupertinoPageRoute(builder: (_){
+                               return UserCreatedSuccessfully();
+                             })
+                         );
+                       },
+                       color: Color(0xFF00A69D),
+                       child: Text(
+                         "Register Account",
+                         textAlign: TextAlign.start,
+                         style: TextStyle(
+                           fontWeight: FontWeight.w400,
+                           fontFamily: 'Gelion',
+                           fontSize: 16,
+                           color: Color(0xFFFFFFFF),
+                         ),
+                       ),
+                     ),
+                     SizedBox(height: 28,),
+                     Center(
+                       child: TextButton(
+                           onPressed:(){
+                             Navigator.push(context,
+                                 CupertinoPageRoute(builder: (_){
+                                   return SignIn();
+                                 })
+                             );
+                           },
+                           child:  RichText(
+                             text:TextSpan(
+                                 text: "Already have an existing account?\n",
+                                 style: TextStyle(
+                                   fontWeight: FontWeight.w400,
+                                   fontFamily: 'Gelion',
+                                   fontSize: 14,
+                                   color: Color(0xFF042538),
+                                 ),
+                                 children: [
+                                   TextSpan(
+                                       text: "Login",
+                                       style: TextStyle(
+                                         fontWeight: FontWeight.w500,
+                                         fontFamily: 'Gelion',
+                                         fontSize: 16,
+                                         color: Color(0xFF00A69D),
+                                       )
+                                   )
+                                 ]
+                             ),
+                             textAlign: TextAlign.center,
+                           )
+                       ),
+                     ),
+                     Container(
+                       alignment: Alignment.center,
+                       child: Center(
+                         child: FlatButton(
+                             onPressed: null,
+                             child:Row(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               children: [
+                                 Text(
+                                     "Become a candidate today\t",
+                                     style: TextStyle(
+                                       fontWeight: FontWeight.w400,
+                                       fontFamily: 'Gelion',
+                                       fontSize: 16,
+                                       color: Color(0xFF00A69D),
+                                     )
+                                 ),
+                                 Icon(
+                                   Icons.arrow_forward_outlined,
+                                   size: 18,
+                                   color: Color(0xFF00A69D),
+                                 ),
+                               ],
+                             )
+                         ),
+                       ),
+                     )
+                   ],
+                 ),
+               ),
+             )
+            ],
           ),
         ),
       ),
@@ -530,7 +544,23 @@ class _SignUpState extends State<SignUp> {
         ),
           SizedBox(height: 28,),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              IconButton(
+                  icon: isCheck?Icon(
+                    Icons.check_box_outline_blank_outlined,
+                    size: 25,
+                    color:  Color(0xFF9097A5),
+                  ):Icon(
+                    Icons.check_box_outlined,
+                    size: 25,
+                    color:  Color(0xFF9097A5),
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      isCheck =! isCheck;
+                    });
+                  }),
               RichText(
                 text:TextSpan(
                     text: "I agree to the ",

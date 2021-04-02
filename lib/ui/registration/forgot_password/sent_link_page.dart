@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/registration/forgot_password/create_new_password.dart';
+import 'package:householdexecutives_mobile/ui/registration/forgot_password/reset_password.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 
@@ -75,7 +77,13 @@ class _SentLinkPageState extends State<SentLinkPage> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
+                        onPressed:(){
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (_){
+                                return CreateNewPassword();
+                              })
+                          );
+                        },
                         color: Color(0xFF00A69D),
                         child: Text(
                           "Open email app",
@@ -118,7 +126,13 @@ class _SentLinkPageState extends State<SentLinkPage> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (_){
+                                    return Reset();
+                                  })
+                              );
+                            },
                             child: Text(
                               "try another email address",
                               style: TextStyle(

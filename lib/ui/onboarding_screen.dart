@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 class OnBoard extends StatefulWidget {
@@ -171,7 +174,13 @@ class _OnBoardState extends State<OnBoard> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
+                        onPressed:(){
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (_){
+                                return SignIn();
+                              })
+                          );
+                        },
                         color: Color(0xFF00A69D).withOpacity(0.4),
                         child: Text(
                           "Hire A Candidate",

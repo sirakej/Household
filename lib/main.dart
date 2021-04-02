@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:householdexecutives_mobile/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/home/saved_candidate.dart';
-import 'file:///C:/Users/Oluwafemi/androidProject/householdexecutives_mobile/lib/home/home_screen.dart';
-import 'file:///C:/Users/Oluwafemi/androidProject/householdexecutives_mobile/lib/ui/candidate/find_a_candidate.dart';
+import 'package:householdexecutives_mobile/ui/candidate/find_a_candidate.dart';
+import 'package:householdexecutives_mobile/ui/candidate/selected_candidate_list.dart';
 import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
 import 'package:householdexecutives_mobile/ui/packages.dart';
 import 'package:householdexecutives_mobile/ui/registration/forgot_password/create_new_password.dart';
@@ -12,9 +12,10 @@ import 'package:householdexecutives_mobile/ui/registration/forgot_password/reset
 import 'package:householdexecutives_mobile/ui/registration/forgot_password/sent_link_page.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
-import 'file:///C:/Users/Oluwafemi/androidProject/householdexecutives_mobile/lib/ui/candidate/selected_candidate_list.dart';
 import 'package:householdexecutives_mobile/ui/splash_screen.dart';
 import 'package:householdexecutives_mobile/ui/successful_pay.dart';
+
+import 'home/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Color(0xFF1A60CD),
       ),
-      initialRoute: SavedCandidate.id,
+      initialRoute: Splash.id,
       routes: {
         Splash.id: (context) => Splash(),
         OnBoard.id:(context)=>OnBoard(),

@@ -1,5 +1,7 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/candidate/selected_candidate_list.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
@@ -37,7 +39,7 @@ class _FindACandidateState extends State<FindACandidate> {
                   ),
                   onPressed:(){Navigator.pop(context);}
                   ),
-              SizedBox(height: 44,),
+              SizedBox(height: 30,),
               Text(
                 'Find a candidate!',
                 textAlign: TextAlign.start,
@@ -60,7 +62,7 @@ class _FindACandidateState extends State<FindACandidate> {
                   color: Color(0xFF57565C),
                 ),
               ),
-              SizedBox(height: 24,),
+              SizedBox(height: 15,),
               _buildSearch(),
               SizedBox(height: 8,),
               Expanded(
@@ -70,9 +72,18 @@ class _FindACandidateState extends State<FindACandidate> {
                     child: Column(
                       children: [
                         Container(height: 16,),
-                        _buildCandidateContainer("Hire a Butler", "assets/icons/butler.png"),
+                        InkWell
+                          (
+                          onTap: (){
+                            Navigator.push(context,
+                                CupertinoPageRoute(builder: (_){
+                                  return SelectedCandidateList();
+                                })
+                            );
+                          },
+                            child: _buildCandidateContainer("Hire a Chef", "assets/icons/chef.png")),
                         SizedBox(height: 6,),
-                        _buildCandidateContainer("Hire a Chef", "assets/icons/chef.png"),
+                        _buildCandidateContainer("Hire a Butler", "assets/icons/butler.png"),
                         SizedBox(height: 6,),
                         _buildCandidateContainer("Hire a Carpenter", "assets/icons/Carpenter.png"),
                         SizedBox(height: 6,),

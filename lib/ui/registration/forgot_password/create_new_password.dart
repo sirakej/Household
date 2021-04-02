@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
@@ -91,7 +92,13 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
+                        onPressed:(){
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (_){
+                                return SignIn();
+                              })
+                          );
+                        },
                         color: Color(0xFF00A69D),
                         child: Text(
                           "Reset password",

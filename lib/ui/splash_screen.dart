@@ -45,7 +45,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   /// and navigate to my [welcome] screen after
   void navigate() {
     Timer(
-      Duration(seconds: 7),
+      Duration(seconds: 5),
           () {
        Navigator.pushNamed(context, OnBoard.id);
       },
