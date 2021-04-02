@@ -61,6 +61,7 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                                 })
                             );
                           },
+
                           child: Container(
                             child: Row(
                               children: [

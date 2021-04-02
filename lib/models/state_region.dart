@@ -11,6 +11,7 @@ class StateRegionModel {
     region = json['lgas'].cast<String>();
   }
 
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['state'] = this.state;

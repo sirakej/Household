@@ -113,6 +113,7 @@ class _SentLinkPageState extends State<SentLinkPage> {
                           color: Color(0xFF57565C),
                         ),
                       ),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

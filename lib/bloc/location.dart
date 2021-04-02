@@ -6,6 +6,7 @@ class Location {
     return _state;
   }
 
+
   getLocalByCountry(String state) {
     return _state
         .map((map) => StateRegionModel.fromJson(map))

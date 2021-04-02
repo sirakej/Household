@@ -19,6 +19,7 @@ class SizeConfig {
   void init(BuildContext context){
     _mediaQueryData = MediaQuery.of(context);
 
+
     brightnessValue = _mediaQueryData.platformBrightness;
 
     screenWidth = _mediaQueryData.size.width;

@@ -894,6 +894,7 @@ _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Wee
                             ),
                           ),
                         ),
+
                         SizedBox(height:37),
                         SingleChildScrollView(
                           child: Column(

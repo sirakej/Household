@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Color(0xFF1A60CD),
       ),
+
       initialRoute: Splash.id,
       routes: {
         Splash.id: (context) => Splash(),

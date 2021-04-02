@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Image.asset("assets/icons/profile.png",width: 64, height: 64, fit:BoxFit.contain,),
                   ],
                 ),
+
                 Container(
                   padding: EdgeInsets.only(left:75,),
                   child: Column(

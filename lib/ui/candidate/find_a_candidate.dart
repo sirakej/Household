@@ -65,6 +65,7 @@ class _FindACandidateState extends State<FindACandidate> {
               SizedBox(height: 15,),
               _buildSearch(),
               SizedBox(height: 8,),
+
               Expanded(
                 child: Container(
                   child: SingleChildScrollView(

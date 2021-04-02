@@ -80,6 +80,7 @@ const kPayCardDecoration = InputDecoration(
       color: Color(0XFFC4C4C4),
       width: 1,
     ),
+
    // borderRadius: BorderRadius.all(Radius.circular(8))
   )
 );

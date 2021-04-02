@@ -79,6 +79,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
             duration: Duration(milliseconds: 250),
             child: Image.asset("assets/icons/blur_right.png", height: 689, width: 689,fit: BoxFit.contain,),
           ),
+
           AnimatedPositioned(
             top: 0,
             right: left == false ?-100:30,

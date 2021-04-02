@@ -20,6 +20,7 @@ class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
       backgroundColor: Color(0xFFFFFFFF),
+
       body: SafeArea(
         child: Container(
           width: SizeConfig.screenWidth,

@@ -11,6 +11,7 @@ class SelectedCandidateList extends StatefulWidget {
 
 class _SelectedCandidateListState extends State<SelectedCandidateList> {
   bool male = true;
+
   bool female = false;
   Location _location = Location();
   /// A list of string variables holding a list of all countries

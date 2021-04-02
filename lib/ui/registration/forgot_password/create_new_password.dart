@@ -83,6 +83,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                           color: Color(0xFF57565C),
                         ),
                       ),
+
                       SizedBox(height: 42,),
                       _buildCreateNewPassword(),
                       SizedBox(height: 38,),

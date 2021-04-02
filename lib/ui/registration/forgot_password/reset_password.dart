@@ -63,6 +63,7 @@ class _ResetState extends State<Reset> {
                           color: Color(0xFF57565C),
                         ),
                       ),
+
                       SizedBox(height: 42,),
                         _buildReset(),
                       SizedBox(height: 38,),

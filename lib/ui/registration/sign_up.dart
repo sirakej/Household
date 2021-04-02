@@ -123,6 +123,7 @@ class _SignUpState extends State<SignUp> {
                          ),
                        ),
                      ),
+
                      SizedBox(height: 28,),
                      Center(
                        child: TextButton(

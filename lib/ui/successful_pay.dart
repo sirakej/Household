@@ -11,6 +11,7 @@ class SuccessfulPay extends StatefulWidget {
 
 class _SuccessfulPayState extends State<SuccessfulPay> {
 
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
