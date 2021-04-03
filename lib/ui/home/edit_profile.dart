@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
-import 'package:householdexecutives_mobile/home/password_and_security.dart';
-import 'package:householdexecutives_mobile/home/saved_candidate.dart';
+import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
+import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
 
 class EditProfile extends StatefulWidget {
   static const String id = 'edit_profile';
