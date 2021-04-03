@@ -18,6 +18,7 @@ class _FindACandidateState extends State<FindACandidate> {
 
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -73,16 +74,7 @@ class _FindACandidateState extends State<FindACandidate> {
                     child: Column(
                       children: [
                         Container(height: 16,),
-                        InkWell
-                          (
-                          onTap: (){
-                            Navigator.push(context,
-                                CupertinoPageRoute(builder: (_){
-                                  return SelectedCandidateList();
-                                })
-                            );
-                          },
-                            child: _buildCandidateContainer("Hire a Chef", "assets/icons/chef.png")),
+                        _buildCandidateContainer("Hire a Chef", "assets/icons/chef.png"),
                         SizedBox(height: 6,),
                         _buildCandidateContainer("Hire a Butler", "assets/icons/butler.png"),
                         SizedBox(height: 6,),
@@ -112,7 +104,8 @@ class _FindACandidateState extends State<FindACandidate> {
       ),
     );
   }
-    Widget _buildSearch() {
+
+  Widget _buildSearch() {
     return Form(
       key: _formKey,
       child: Column(
@@ -147,9 +140,16 @@ class _FindACandidateState extends State<FindACandidate> {
       ),
     );
   }
+
   Widget _buildCandidateContainer(String candidateRole , String imagePath){
     return InkWell(
-      onTap: null,
+      onTap: (){
+        Navigator.push(context,
+            CupertinoPageRoute(builder: (_){
+              return SelectedCandidateList();
+            })
+        );
+      },
       child: Container(
         width: SizeConfig.screenWidth,
         padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
@@ -188,4 +188,5 @@ class _FindACandidateState extends State<FindACandidate> {
       ),
     );
   }
+
 }
