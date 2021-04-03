@@ -57,239 +57,282 @@ class _SavedCandidateState extends State<SavedCandidate> {
                 ],
               ),
               SizedBox(height:10,),
-           Expanded(
-             child: SingleChildScrollView(
-               physics: BouncingScrollPhysics(),
-               child: Container(
-                 child: Column(
-                   children: [
-                     SizedBox(height:22),
-                     _buildSearch(),
-                     SizedBox(height: 20,),
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         Text(
-                           "Popular Categories",
-                           textAlign: TextAlign.start,
-                           style: TextStyle(
-                             fontWeight: FontWeight.w400,
-                             fontFamily: 'Gelion',
-                             fontSize: 14,
-                             color: Color(0xFF6F8A9C),
-                           ),
-                         ),
-                         TextButton(
-                           onPressed: (){},
-                           child: Text(
-                             "see all",
-                             textAlign: TextAlign.start,
-                             style: TextStyle(
-                               fontWeight: FontWeight.w400,
-                               fontFamily: 'Gelion',
-                               fontSize: 14,
-                               color: Color(0xFF00A69D),
-                             ),
-                           ),
-                         )
-                       ],
-                     ),
-                     SizedBox(
-                       height: 50,
-                       child: ListView.builder(
-                           shrinkWrap: true,
-                           scrollDirection: Axis.horizontal,
-                           itemCount: 1,
-                           physics: BouncingScrollPhysics(),
-                           itemBuilder: (_,__)=>  Row(
-                             children: [
-                               Container(
-                                 color: Color(0xFFFFFFFF),
-                                 padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Image.asset("assets/icons/baby-boy 1.png",width: 24,height: 24,fit: BoxFit.contain,),
-                                     SizedBox(width: 6,),
-                                     Text(
-                                       "Caregiver",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontWeight: FontWeight.w400,
-                                         fontFamily: 'Gelion',
-                                         fontSize: 14,
-                                         color: Color(0xFF042538),
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                               SizedBox(width: 10,),
-                               Container(
-                                 color: Color(0xFFFFFFFF),
-                                 padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Image.asset("assets/icons/hammer 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
-                                     SizedBox(width: 6,),
-                                     Text(
-                                       "Capenter",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontWeight: FontWeight.w400,
-                                         fontFamily: 'Gelion',
-                                         fontSize: 14,
-                                         color: Color(0xFF042538),
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                               SizedBox(width: 10,),
-                               Container(
-                                 color: Color(0xFFFFFFFF),
-                                 padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
-                                     SizedBox(width: 6,),
-                                     Text(
-                                       "Chef",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontWeight: FontWeight.w400,
-                                         fontFamily: 'Gelion',
-                                         fontSize: 14,
-                                         color: Color(0xFF042538),
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                               SizedBox(width: 10,),
-                               Container(
-                                 color: Color(0xFFFFFFFF),
-                                 padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
-                                     SizedBox(width: 6,),
-                                     Text(
-                                       "House Keeper",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontWeight: FontWeight.w400,
-                                         fontFamily: 'Gelion',
-                                         fontSize: 14,
-                                         color: Color(0xFF042538),
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                               SizedBox(width: 10,),
-                               Container(
-                                 color: Color(0xFFFFFFFF),
-                                 padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Image.asset("assets/icons/taxi-driver 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
-                                     SizedBox(width: 6,),
-                                     Text(
-                                       "Chauffeur",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontWeight: FontWeight.w400,
-                                         fontFamily: 'Gelion',
-                                         fontSize: 14,
-                                         color: Color(0xFF042538),
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                               SizedBox(width: 10,),
-                               Container(
-                                 color: Color(0xFFFFFFFF),
-                                 padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children: [
-                                     Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
-                                     SizedBox(width: 6,),
-                                     Text(
-                                       "Butler",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontWeight: FontWeight.w400,
-                                         fontFamily: 'Gelion',
-                                         fontSize: 14,
-                                         color: Color(0xFF042538),
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                             ],
-                           )
-                       ),
-                     ),
-                     SizedBox(height: 20,),
-                     Text(
-                       "Recommended Candidates",
-                       textAlign: TextAlign.start,
-                       style: TextStyle(
-                         fontWeight: FontWeight.w400,
-                         fontFamily: 'Gelion',
-                         fontSize: 14,
-                         color: Color(0xFF6F8A9C),
-                       ),
-                     ),
-                     SizedBox(height: 18,),
-                     Column(
-                       children: [
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [
-                             _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
-                             _buildRecommendedContainer("assets/icons/dog_walker.png","Dog Walker", "Michelle", 3.5),
-                           ],
-                         ),
-                         SizedBox(height: 18,),
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [
-                             _buildRecommendedContainer("assets/icons/home_tutor.png","Home Tutor", "Taiwo", 3.5),
-                             _buildRecommendedContainer("assets/icons/carpenter_cat.png","Carpenter", "Dauda", 3.5),
-                           ],
-                         ),
-                       ],
-                     ),
-                     SizedBox(height: 5,),
-                     Center(
-                       child: TextButton(
-                           onPressed:(){},
-                           child: Text(
-                             "see all candidates",
-                             textAlign: TextAlign.start,
-                             style: TextStyle(
-                               fontWeight: FontWeight.w400,
-                               fontFamily: 'Gelion',
-                               fontSize: 14,
-                               color: Color(0xFF00A69D),
-                             ),
-                           )
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-             ),
-           )
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        SizedBox(height:22),
+                        _buildSearch(),
+                        SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Popular Categories",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF6F8A9C),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: (){},
+                              child: Text(
+                                "see all",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF00A69D),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 1,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (_,__)=>  Row(
+                                children: [
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/baby-boy 1.png",width: 24,height: 24,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Caregiver",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/hammer 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Capenter",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Chef",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "House Keeper",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/taxi-driver 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Chauffeur",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Butler",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
+                        SizedBox(height: 20,),
+                        Text(
+                          "Recommended Candidates",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 14,
+                            color: Color(0xFF6F8A9C),
+                          ),
+                        ),
+                        SizedBox(height: 18,),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
+                                SizedBox(width: 50,),
+                                _buildRecommendedContainer("assets/icons/dog_walker.png","Dog Walker", "Michelle", 3.5),
+                              ],
+                            ),
+                            SizedBox(height: 18,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildRecommendedContainer("assets/icons/home_tutor.png","Home Tutor", "Taiwo", 3.5),
+                                SizedBox(width: 50,),
+                                _buildRecommendedContainer("assets/icons/carpenter_cat.png","Carpenter", "Dauda", 3.5),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                        Center(
+                          child: TextButton(
+                              onPressed:(){},
+                              child: Text(
+                                "see all candidates",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF00A69D),
+                                ),
+                              )
+                          ),
+                        ),
+                        SizedBox(height:7),
+                        Container(
+                          width: SizeConfig.screenWidth,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(6))
+                          ),
+                          child: Stack(
+                            children: [
+                              Image.asset("assets/icons/ads.png",fit:BoxFit.contain,),
+                              Container(
+                                padding: EdgeInsets.only(left:27,top:12 , bottom:13),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'You’re in good hands',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 19,
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                    ),
+                                    SizedBox(height: 6,),
+                                    Text(
+                                      "Aliqua id fugiat nostrud irure ex duis ea\nquis id quis ad et. ",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        //letterSpacing: 1,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF57565C),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -332,69 +375,71 @@ class _SavedCandidateState extends State<SavedCandidate> {
     );
   }
   Widget _buildRecommendedContainer(String imagePath,String category,String candidateName, double ratings ){
-    return Container(
-      width: 160,
-      height: 159,
-      decoration: BoxDecoration(
-        //color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.all(Radius.circular(8))
-      ),
-      child: Stack(
-        children: [
-          Image.asset(imagePath , fit:BoxFit.contain,width: 160,height: 130,),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              width: 160,
-              padding: EdgeInsets.only(left: 10,right: 10,top: 6,bottom: 11),
-              alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        category,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 13,
-                          color: Color(0xFF042538),
+    return FittedBox(
+      child: Container(
+        width: SizeConfig.screenWidth/2.8,
+        height: 159,
+        decoration: BoxDecoration(
+          //color: Color(0xFFFFFFFF),
+            borderRadius: BorderRadius.all(Radius.circular(8))
+        ),
+        child: Stack(
+          children: [
+            Image.asset(imagePath , fit:BoxFit.contain,width:SizeConfig.screenWidth,height: 160,),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: SizeConfig.screenWidth/2.8,
+                padding: EdgeInsets.only(left: 10,right: 10,top: 6,bottom: 11),
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 13,
+                            color: Color(0xFF042538),
+                          ),
                         ),
-                      ),
-                      Text(
-                        candidateName,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 12,
-                          color: Color(0xFF717F88),
+                        Text(
+                          candidateName,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 12,
+                            color: Color(0xFF717F88),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "$ratings",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 12,
-                      color: Color(0xFF717F88),
+                      ],
                     ),
-                  ),
-                ],
-              ) ,
-            ),
-          )
-        ],
+                    Text(
+                      "$ratings",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 12,
+                        color: Color(0xFF717F88),
+                      ),
+                    ),
+                  ],
+                ) ,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

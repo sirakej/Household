@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/bloc/location.dart';
+import 'package:householdexecutives_mobile/home/home_screen.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
-import '../packages.dart';
-
-class MyListCandidate extends StatefulWidget {
-  static const String id = 'my_list';
+class PickedList extends StatefulWidget {
+  static const String id = 'piked_list';
   @override
-  _MyListCandidateState createState() => _MyListCandidateState();
+  _PickedListState createState() => _PickedListState();
 }
 
-class _MyListCandidateState extends State<MyListCandidate> {
+class _PickedListState extends State<PickedList> {
 
   /// A list of string variables holding a list of all countries
   List<String> _category = [
@@ -22,7 +20,6 @@ class _MyListCandidateState extends State<MyListCandidate> {
   /// A string variable holding the selected country value
   String _selectedCategory;
 
-  bool isPressed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -73,16 +70,16 @@ class _MyListCandidateState extends State<MyListCandidate> {
 //                      ],
 //                    ),
 
-                  Text(
-                          'List',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Gelion',
-                            fontSize: 19,
-                            color: Color(0xFF000000),
-                          ),
-                        ),
+                    Text(
+                      'List',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Gelion',
+                        fontSize: 19,
+                        color: Color(0xFF000000),
+                      ),
+                    ),
                     SizedBox(height: 8,),
                     Text(
                       'Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ',
@@ -170,9 +167,12 @@ class _MyListCandidateState extends State<MyListCandidate> {
                       children: [
                         InkWell(
                             onTap: (){
-                              setState(() {
-                                isPressed =!isPressed;
-                              });
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (_){
+                                    return HomeScreen();
+                                  })
+                              );
+                              _buildModalSheet(context);
                             },
                             child: _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5)
                         ),
@@ -181,36 +181,6 @@ class _MyListCandidateState extends State<MyListCandidate> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(left: 24),
-                alignment: Alignment.bottomCenter,
-                child: FlatButton(
-                  minWidth: SizeConfig.screenWidth,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.only(top:18 ,bottom: 18),
-                  onPressed:(){
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (_){
-                          return Packages();
-                        })
-                    );
-                  },
-                  color: Color(0xFF00A69D),
-                  child: Text(
-                    "Proceed To Payment",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 30,)
             ],
           ),
         ),
@@ -218,16 +188,123 @@ class _MyListCandidateState extends State<MyListCandidate> {
     );
   }
 
+  _buildModalSheet(BuildContext context){
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        elevation: 100,
+        isScrollControlled: true,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: false,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder:(BuildContext context, StateSetter setState /*You can rename this!*/){
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(
+                    padding: EdgeInsets.only(right: 24),
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: 26,
+                      height: 26,
+                      child: FloatingActionButton(
+                          elevation: 30,
+                          backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
+                          shape:CircleBorder(),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.close,
+                            color: Color(0xFFFFFFFF),
+                            size:13,
+                          )
+                      ),
+                    )
+                ),
+                SizedBox(height:8),
+                Container(
+                  //height: SizeConfig.screenHeight,
+                  padding: EdgeInsets.fromLTRB(24, 46, 24, 0),
+                  width: SizeConfig.screenWidth,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+                  ),
+                  child: Column(
+                    mainAxisSize:  MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Center(
+                        child: Text(
+                          "Request Sent",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height:16),
+                      Center(
+                        child: Text(
+                          "Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 28,),
+                      FlatButton(
+                        minWidth: SizeConfig.screenWidth,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                width: 2,
+                                color: Color(0xFF00A69D)
+                            ),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        padding: EdgeInsets.only(top:18 ,bottom: 18),
+                        onPressed:(){},
+                        color: Color(0xFF00A69D).withOpacity(0.4),
+                        child: Text(
+                          "View List",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFF00A69D),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16,),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          });
+        }
+    );
+  }
   Widget _buildCandidateContainer(String candidateName ,String candidateGender ,String candidateExperienceYears,String candidateAvailability ,String candidateCity, String imagePath , double ratings){
     return Container(
       width: SizeConfig.screenWidth,
       padding: EdgeInsets.only(left:8 ,top:19,bottom: 22,right: 8 ),
       decoration: BoxDecoration(
-          color: isPressed?Color(0xFFFFFFFF):Color(0xFFF7941D).withOpacity(0.1),
+          color:Color(0xFFFFFFFF),
           borderRadius: BorderRadius.all(Radius.circular(6)),
           border: Border.all(
-              width: 1,
-              color: isPressed?Color(0xFFEBF1F4):Color(0xFFF7941D),
+            width: 1,
+            color:Color(0xFFEBF1F4),
           )
       ),
       child: Row(
@@ -286,44 +363,24 @@ class _MyListCandidateState extends State<MyListCandidate> {
           Container(),
           Container(),
           Container(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
             children: [
-              Row(
-                children: [
-                  Text(
-                    "$ratings",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      //letterSpacing: 1,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 11,
-                      color: Color(0xFF717F88),
-                    ),
-                  ),
-                  Icon(
-                    Icons.ac_unit_sharp,
-                    size: 18,
-                    color: Color(0xFFF7941D),
-                  ),
-                ],
+              Text(
+                "$ratings",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gelion',
+                  fontSize: 11,
+                  color: Color(0xFF717F88),
+                ),
               ),
-              IconButton(
-                  icon: isPressed?Icon(
-                    Icons.check_box_outline_blank_outlined,
-                    size: 25,
-                    color:  Color(0xFFF7941D),
-                  ):Icon(
-                    Icons.check_box_outlined,
-                    size: 25,
-                    color:  Color(0xFFF7941D),
-                  ),
-                  onPressed: (){
-                    setState(() {
-                      isPressed =! isPressed;
-                    });
-                  }),
+              Icon(
+                Icons.ac_unit_sharp,
+                size: 18,
+                color: Color(0xFFF7941D),
+              ),
             ],
           )
         ],

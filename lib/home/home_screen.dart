@@ -397,6 +397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
+                                SizedBox(width: 50,),
                                 _buildRecommendedContainer("assets/icons/dog_walker.png","Dog Walker", "Michelle", 3.5),
                               ],
                             ),
@@ -405,6 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _buildRecommendedContainer("assets/icons/home_tutor.png","Home Tutor", "Taiwo", 3.5),
+                                SizedBox(width: 50,),
                                 _buildRecommendedContainer("assets/icons/carpenter_cat.png","Carpenter", "Dauda", 3.5),
                               ],
                             ),
@@ -426,6 +428,50 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                           ),
                         ),
+                        SizedBox(height:7),
+                        Container(
+
+                          child: Stack(
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(10))
+                                  ),
+                                  child: Image.asset("assets/icons/ads.png",fit:BoxFit.contain,)
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left:27,top:12 , bottom:13),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'You’re in good hands',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 19,
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                    ),
+                                    SizedBox(height: 6,),
+                                    Text(
+                                      "Aliqua id fugiat nostrud irure ex duis ea\nquis id quis ad et. ",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        //letterSpacing: 1,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -473,69 +519,71 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   Widget _buildRecommendedContainer(String imagePath,String category,String candidateName, double ratings ){
-    return Container(
-     width: 160,
-      height: 159,
-      decoration: BoxDecoration(
-        //color: Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.all(Radius.circular(8))
-      ),
-      child: Stack(
-        children: [
-          Image.asset(imagePath , fit:BoxFit.contain,width: 160,height: 130,),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              width: 160,
-              padding: EdgeInsets.only(left: 10,right: 10,top: 6,bottom: 11),
-              alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        category,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 13,
-                          color: Color(0xFF042538),
+    return FittedBox(
+      child: Container(
+       width: SizeConfig.screenWidth/2.8,
+        height: 159,
+        decoration: BoxDecoration(
+          //color: Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.all(Radius.circular(8))
+        ),
+        child: Stack(
+          children: [
+            Image.asset(imagePath , fit:BoxFit.contain,width:SizeConfig.screenWidth,height: 160,),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: SizeConfig.screenWidth/2.8,
+                padding: EdgeInsets.only(left: 10,right: 10,top: 6,bottom: 11),
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 13,
+                            color: Color(0xFF042538),
+                          ),
                         ),
-                      ),
-                      Text(
-                        candidateName,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 12,
-                          color: Color(0xFF717F88),
+                        Text(
+                          candidateName,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 12,
+                            color: Color(0xFF717F88),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "$ratings",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 12,
-                      color: Color(0xFF717F88),
+                      ],
                     ),
-                  ),
-                ],
-              ) ,
-            ),
-          )
-        ],
+                    Text(
+                      "$ratings",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 12,
+                        color: Color(0xFF717F88),
+                      ),
+                    ),
+                  ],
+                ) ,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

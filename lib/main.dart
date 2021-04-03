@@ -4,6 +4,8 @@ import 'package:householdexecutives_mobile/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/home/saved_candidate.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find_a_candidate.dart';
+import 'package:householdexecutives_mobile/ui/candidate/my_list.dart';
+import 'package:householdexecutives_mobile/ui/candidate/pickedList.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_candidate_list.dart';
 import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
 import 'package:householdexecutives_mobile/ui/packages.dart';
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xFF1A60CD),
       ),
 
-      initialRoute: Splash.id,
+      initialRoute: MyListCandidate.id,
       routes: {
         Splash.id: (context) => Splash(),
         OnBoard.id:(context)=>OnBoard(),
@@ -55,6 +57,8 @@ class MyApp extends StatelessWidget {
         EditProfile.id:(context)=>EditProfile(),
         PasswordAndSecurity.id:(context)=>PasswordAndSecurity(),
         SavedCandidate.id:(context)=>SavedCandidate(),
+        MyListCandidate.id:(context)=>MyListCandidate(),
+        PickedList.id:(context)=>PickedList(),
       },
     );
   }

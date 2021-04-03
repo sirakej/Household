@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/successful_pay.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
@@ -353,7 +354,13 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                                   borderRadius: BorderRadius.circular(2)
                               ),
                               padding: EdgeInsets.only(top:10 ,bottom: 10),
-                              onPressed:(){},
+                              onPressed:(){
+                                Navigator.push(context,
+                                    CupertinoPageRoute(builder: (_){
+                                      return SuccessfulPay();
+                                    })
+                                );
+                              },
                               color: Color(0xFF4EAF67),
                               child: Text(
                                 "Pay N350,000",
@@ -369,7 +376,9 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                             SizedBox(height: 5,),
                             Center(
                               child: TextButton(
-                                  onPressed:(){},
+                                  onPressed:(){
+                                    Navigator.pop(context);
+                                  },
                                   child: Text(
                                     "Cancel",
                                     textAlign: TextAlign.start,

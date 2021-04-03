@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
+import 'candidate/pickedList.dart';
+
 
 class SuccessfulPay extends StatefulWidget {
   static const String id = 'successful_pay';
@@ -56,7 +58,13 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
                     borderRadius: BorderRadius.circular(8)
                 ),
                 padding: EdgeInsets.only(top:18 ,bottom: 18),
-                onPressed:(){},
+                onPressed:(){
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_){
+                        return PickedList();
+                      })
+                  );
+                },
                 color: Color(0xFF00A69D),
                 child: Text(
                   "Proceed",
