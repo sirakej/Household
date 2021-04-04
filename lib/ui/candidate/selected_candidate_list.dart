@@ -67,15 +67,22 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Find a candidate!',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Gelion',
-                        fontSize: 19,
-                        color: Color(0xFFF7941D),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Chef',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Gelion',
+                            fontSize: 19,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        Image.asset("assets/icons/chef-hat 1.png",height:22,width: 22,fit: BoxFit.contain,)
+                      ],
                     ),
                     SizedBox(height: 8,),
                     Text(

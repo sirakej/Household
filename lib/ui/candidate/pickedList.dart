@@ -52,24 +52,6 @@ class _PickedListState extends State<PickedList> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-//                    Row(
-//                      mainAxisAlignment: MainAxisAlignment.start,
-//                      children: [
-//                        Text(
-//                          'Chef',
-//                          textAlign: TextAlign.start,
-//                          style: TextStyle(
-//                            fontWeight: FontWeight.w600,
-//                            fontFamily: 'Gelion',
-//                            fontSize: 19,
-//                            color: Color(0xFF000000),
-//                          ),
-//                        ),
-//                        SizedBox(width: 5,),
-//                        Image.asset("assets/icons/chef-hat 1.png",height:22,width: 22,fit: BoxFit.contain,)
-//                      ],
-//                    ),
-
                     Text(
                       'List',
                       textAlign: TextAlign.start,
@@ -376,11 +358,13 @@ class _PickedListState extends State<PickedList> {
                   color: Color(0xFF717F88),
                 ),
               ),
-              Icon(
-                Icons.ac_unit_sharp,
-                size: 18,
-                color: Color(0xFFF7941D),
-              ),
+              Image.asset(
+                  'assets/icons/star.png',
+                  width: 18,
+                  height: 15,
+                  color: Color(0xFFF7941D),
+                  fit: BoxFit.contain
+              )
             ],
           )
         ],

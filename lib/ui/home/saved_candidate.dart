@@ -32,10 +32,15 @@ class _SavedCandidateState extends State<SavedCandidate> {
                 children: [
                   Row(
                     children: [
-                      Icon(
-                        Icons.arrow_back_ios_outlined,
-                        size: 20,
-                        color: Color(0xFF000000),
+                      IconButton(
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          Icons.arrow_back_ios_outlined,
+                          size: 20,
+                          color: Color(0xFF000000),
+                        ),
                       ),
                       SizedBox(width:16,),
                       Text(

@@ -156,10 +156,15 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.menu,
-                    size: 20,
-                    color: Color(0xFF000000),
+                  IconButton(
+                      onPressed: () {
+                        _buildModalSheet(context);
+                      },
+                      icon:Icon(
+                        Icons.menu,
+                        size: 20,
+                        color: Color(0xFF000000),
+                      )
                   ),
                   InkWell(
                       onTap: (){},

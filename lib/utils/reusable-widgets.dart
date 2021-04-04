@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/candidate/my_list.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 class CandidateContainer extends StatelessWidget {
@@ -39,66 +41,63 @@ class CandidateContainer extends StatelessWidget {
           border: Border.all(width: 1, color: Color(0xFFEBF1F4))
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+              ),
+              child: Image.asset("assets/icons/$imagePath.png",height: 57,width: 72,fit: BoxFit.contain,),
+            ),
+            SizedBox(width:12,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  margin: EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
-                  child: Image.asset(
-                    'assets/icons/$imagePath.png',
-                    height: 57,
-                    width: 72,
-                    fit: BoxFit.contain
+                Text(
+                  "$candidateName($candidateGender)",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    //letterSpacing: 1,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Gelion',
+                    fontSize: 16,
+                    color: Color(0xFF042538),
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "$candidateName($candidateGender)",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 16,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    Text(
-                      candidateExperienceYears,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFFF7941D),
-                      ),
-                    ),
-                    Text(
-                      "$candidateAvailability . $candidateCity",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFF717F88),
-                      ),
-                    ),
-                  ],
+                Text(
+                  candidateExperienceYears,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    //letterSpacing: 1,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Gelion',
+                    fontSize: 12,
+                    color: Color(0xFFF7941D),
+                  ),
+                ),
+                Text(
+                  "$candidateAvailability . $candidateCity",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    //letterSpacing: 1,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    fontSize: 12,
+                    color: Color(0xFF717F88),
+                  ),
                 ),
               ],
             ),
+            Container(),
+            Container(),
+            Container(),
+            Container(),
+            Container(),
+            Container(),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "$ratings",
@@ -112,14 +111,14 @@ class CandidateContainer extends StatelessWidget {
                   ),
                 ),
                 Image.asset(
-                  'assets/icons/star.png',
-                  height: 8.81,
-                  width: 10,
-                  color: Color(0xFFF7941D),
-                  fit: BoxFit.contain
+                    'assets/icons/star.png',
+                    width: 18,
+                    height: 15,
+                    color: Color(0xFFF7941D),
+                    fit: BoxFit.contain
                 )
               ],
-            ),
+            )
           ],
         ),
       ),
@@ -718,6 +717,12 @@ class CandidateContainer extends StatelessWidget {
                                       setModalState(() {
                                         viewProfile = true;
                                       });
+                                    }else if(viewProfile == true){
+                                      Navigator.push(context,
+                                          CupertinoPageRoute(builder: (_){
+                                            return MyListCandidate();
+                                          })
+                                      );
                                     }
                                   },
                                   color: Color(0xFF00A69D),

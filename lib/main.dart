@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xFF1A60CD),
       ),
 
-      initialRoute: MyListCandidate.id,
+      initialRoute: Splash.id,
       routes: {
         Splash.id: (context) => Splash(),
         OnBoard.id:(context)=>OnBoard(),

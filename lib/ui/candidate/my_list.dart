@@ -302,11 +302,13 @@ class _MyListCandidateState extends State<MyListCandidate> {
                       color: Color(0xFF717F88),
                     ),
                   ),
-                  Icon(
-                    Icons.ac_unit_sharp,
-                    size: 18,
-                    color: Color(0xFFF7941D),
-                  ),
+                  Image.asset(
+                      'assets/icons/star.png',
+                      width: 18,
+                      height: 15,
+                      color: Color(0xFFF7941D),
+                      fit: BoxFit.contain
+                  )
                 ],
               ),
               IconButton(
