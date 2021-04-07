@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
-import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 class OnBoard extends StatefulWidget {
@@ -135,7 +134,7 @@ class _OnBoardState extends State<OnBoard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Good help is no longer\nso hard to find!',
+                        'Good help, Better Life',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,

@@ -217,6 +217,45 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                       ),
                     ],),
                 ),
+                SizedBox(height:16),
+                Container(
+                  padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
+                  width: SizeConfig.screenWidth,
+                  decoration: BoxDecoration(
+                    // color: Color(0xFF00A69D).withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                          width: 1,
+                          color: Color(0xFFF7941D)
+                      )
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "12 Months",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          //letterSpacing: 1,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 18,
+                          color: Color(0xFFF7941D),
+                        ),
+                      ),
+                      Text(
+                        "Validity",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          //letterSpacing: 1,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          color: Color(0xFF99B9CF),
+                        ),
+                      ),
+                    ],),
+                ),
                 SizedBox(height: 93,),
                 FlatButton(
                   minWidth: SizeConfig.screenWidth,
