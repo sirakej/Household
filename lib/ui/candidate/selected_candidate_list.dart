@@ -28,9 +28,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
   /// A string variable holding the selected state value
   String _selectedRegion;
 
-  double _lowerValue = 50;
 
-  double _upperValue = 180;
 
   @override
   void initState() {
@@ -62,6 +60,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                     onPressed:(){Navigator.pop(context);}
                 ),
               ),
+
               Container(
                 padding: EdgeInsets.only(left: 24, top: 24),
                 child: Column(
@@ -260,6 +259,10 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
     bool partTime = false;
     bool weekDays = false;
     bool weekEnds = false;
+    RangeValues values = RangeValues(1, 20);
+    RangeLabels labels =RangeLabels('1', "20");
+    RangeValues values_1 = RangeValues(1, 100);
+    RangeLabels labels_1 =RangeLabels('1', "100");
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         elevation: 100,
@@ -268,30 +271,30 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
         isDismissible: false,
         context: context,
         builder: (BuildContext context){
-          return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
-            return Column(
+          return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState){
+            return  Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                   padding: EdgeInsets.only(right: 24),
-                   alignment: Alignment.centerRight,
-                   child: Container(
-                     width: 26,
-                     height: 26,
-                     child: FloatingActionButton(
-                       elevation: 30,
-                       backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
-                       shape:CircleBorder(),
-                       onPressed: (){
-                         Navigator.pop(context);
-                       },
-                       child: Icon(
-                         Icons.close,
-                         color: Color(0xFFFFFFFF),
-                         size:13,
-                       )
-                     ),
-                   )
+                    padding: EdgeInsets.only(right: 24),
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: 26,
+                      height: 26,
+                      child: FloatingActionButton(
+                          elevation: 30,
+                          backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
+                          shape:CircleBorder(),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.close,
+                            color: Color(0xFFFFFFFF),
+                            size:13,
+                          )
+                      ),
+                    )
                 ),
                 SizedBox(height: 8,),
                 Container(
@@ -319,7 +322,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                         children: [
                           InkWell(
                             onTap: (){
-                              setModalState(() {
+                              setState(() {
                                 male = true;
                                 female = false;
                               });
@@ -352,7 +355,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                           SizedBox(width: 11,),
                           InkWell(
                             onTap: (){
-                              setModalState(() {
+                              setState(() {
                                 male = false;
                                 female = true;
                               });
@@ -415,10 +418,10 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                   ),
                                   value: _selectedState,
                                   icon: Image.asset(
-                                    'assets/icons/arrow-down.png',
-                                    height: 18,
-                                    width: 18,
-                                    fit: BoxFit.contain
+                                      'assets/icons/arrow-down.png',
+                                      height: 18,
+                                      width: 18,
+                                      fit: BoxFit.contain
                                   ),
                                   onChanged: (String value){
                                     if(!mounted)return;
@@ -575,9 +578,21 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                         ),
                       ),
                       RangeSlider(
-                        //inactiveColor: Color(0xFFFFFFFF),
-                        values:RangeValues(0 , 0),
-                        onChanged: (RangeValues value) {  },
+                          divisions: 100,
+                          activeColor: Color(0xFF00A69D),
+                          inactiveColor: Color(0xFFC4C4C4),
+                          min: 1,
+                          max: 20,
+                          values: values,
+                          labels: labels,
+                          onChanged: (value){
+                            print("START: ${value.start}, End: ${value.end}");
+
+                            setState(() {
+                              values =value;
+                              labels =RangeLabels("${value.start.toInt().toString()}", "${value.end.toInt().toString()}");
+                            });
+                          }
                       ),
                       SizedBox(height:27),
                       Text(
@@ -590,66 +605,22 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                           color: Color(0xFF042538),
                         ),
                       ),
-//                        FlutterSlider(
-//                          values: [1000, 15000],
-//                          rangeSlider: true,
-//
-////rtl: true,
-//                          ignoreSteps: [
-//                            FlutterSliderIgnoreSteps(from: 8000, to: 12000),
-//                            FlutterSliderIgnoreSteps(from: 18000, to: 22000),
-//                          ],
-//                          max: 25000,
-//                          min: 0,
-//                          step: FlutterSliderStep(step: 100),
-//
-//                          jump: true,
-//
-//                          trackBar: FlutterSliderTrackBar(
-//                            activeTrackBarHeight: 2,
-//                            activeTrackBar: BoxDecoration(color: Colors.brown),
-//                          ),
-//                          tooltip: FlutterSliderTooltip(
-//                            textStyle: TextStyle(fontSize: 17, color: Colors.lightBlue),
-//                          ),
-//                          handler: FlutterSliderHandler(
-//                            decoration: BoxDecoration(),
-//                            child: Container(
-//                              decoration: BoxDecoration(
-//                                  color: Colors.brown,
-//                                  borderRadius: BorderRadius.circular(25)),
-//                              padding: EdgeInsets.all(10),
-//                              child: Container(
-//                                padding: EdgeInsets.all(5),
-//                                decoration: BoxDecoration(
-//                                    color: Colors.white,
-//                                    borderRadius: BorderRadius.circular(25)),
-//                              ),
-//                            ),
-//                          ),
-//                          rightHandler: FlutterSliderHandler(
-//                            decoration: BoxDecoration(),
-//                            child: Container(
-//                              decoration: BoxDecoration(
-//                                  color: Colors.brown,
-//                                  borderRadius: BorderRadius.circular(25)),
-//                              padding: EdgeInsets.all(10),
-//                              child: Container(
-//                                padding: EdgeInsets.all(5),
-//                                decoration: BoxDecoration(
-//                                    color: Colors.white,
-//                                    borderRadius: BorderRadius.circular(25)),
-//                              ),
-//                            ),
-//                          ),
-//                          disabled: false,
-//
-//                          onDragging: (handlerIndex, lowerValue, upperValue) {
-//                            _lowerValue = lowerValue;
-//                            _upperValue = upperValue;
-//                            setState(() {});
-//                          },
-//                        ),
+                      RangeSlider(
+                          divisions: 100,
+                          activeColor: Color(0xFF00A69D),
+                          inactiveColor: Color(0xFFC4C4C4),
+                          min: 1,
+                          max: 100,
+                          values: values_1,
+                          labels: labels_1,
+                          onChanged: (value){
+                            print("START: ${value.start}, End: ${value.end}");
+                            setState(() {
+                              values_1 =value;
+                              labels_1 =RangeLabels("${value.start.toInt().toString()}", "${value.end.toInt().toString()}");
+                            });
+                          }
+                      ),
                       Text(
                         "Availability",
                         textAlign: TextAlign.start,
@@ -669,7 +640,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                             children: [
                               InkWell(
                                 onTap: (){
-                                  setModalState((){
+                                  setState((){
                                     fullTime = !fullTime;
                                   });
                                 },
@@ -679,14 +650,14 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                   children: [
                                     fullTime == false
                                         ? Icon(
-                                      Icons.radio_button_unchecked_rounded,
-                                      size: 18,
-                                      color: Color(0xFFC4C4C4)
+                                        Icons.radio_button_unchecked_rounded,
+                                        size: 18,
+                                        color: Color(0xFFC4C4C4)
                                     )
                                         : Icon(
-                                      Icons.radio_button_checked_outlined,
-                                      size: 18,
-                                      color: Color(0xFF00A69D)
+                                        Icons.radio_button_checked_outlined,
+                                        size: 18,
+                                        color: Color(0xFF00A69D)
                                     ),
                                     SizedBox(width: 7.75),
                                     Text(
@@ -705,7 +676,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                               SizedBox(height: 22,),
                               InkWell(
                                 onTap: (){
-                                  setModalState((){
+                                  setState((){
                                     weekDays = !weekDays;
                                   });
                                 },
@@ -745,7 +716,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                             children: [
                               InkWell(
                                 onTap: (){
-                                  setModalState((){
+                                  setState((){
                                     partTime = !partTime;
                                   });
                                 },
@@ -781,7 +752,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                               SizedBox(height: 22,),
                               InkWell(
                                 onTap: (){
-                                  setModalState((){
+                                  setState((){
                                     weekEnds = !weekEnds;
                                   });
                                 },

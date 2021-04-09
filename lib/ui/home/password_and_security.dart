@@ -5,6 +5,8 @@ import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
 
+import 'home_screen.dart';
+
 class PasswordAndSecurity extends StatefulWidget {
   static const String id = 'password_and_security';
   @override
@@ -200,7 +202,13 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                               borderRadius: BorderRadius.circular(8)
                           ),
                           padding: EdgeInsets.only(top:18 ,bottom: 18),
-                          onPressed:(){},
+                          onPressed:(){
+                            Navigator.push(context,
+                                CupertinoPageRoute(builder: (_){
+                                  return HomeScreen();
+                                })
+                            );
+                          },
                           color: Color(0xFF00A69D),
                           child: Text(
                             "Save",

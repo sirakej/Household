@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:householdexecutives_mobile/ui/candidate/find_a_candidate.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
@@ -415,7 +416,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: 5,),
                         Center(
                           child: TextButton(
-                              onPressed:(){},
+                              onPressed:(){
+                                Navigator.push(context,
+                                    CupertinoPageRoute(builder: (_){
+                                      return FindACandidate();
+                                    })
+                                );
+                              },
                               child: Text(
                                 "see all candidates",
                                 textAlign: TextAlign.start,

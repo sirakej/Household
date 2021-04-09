@@ -39,247 +39,256 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       resizeToAvoidBottomPadding: true,
       backgroundColor: Color(0xFF050729),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: SizeConfig.screenWidth,
-            padding: EdgeInsets.only(left: 24,right: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-               // SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        icon: Icon(
-                          Icons.arrow_back_ios_sharp,
-                          size: 19,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                        onPressed:(){Navigator.pop(context);}
-                    ),
-                    SizedBox(width: 24,),
-                    Text(
-                      "Our Packages",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
+        child: Container(
+          width: SizeConfig.screenWidth,
+          padding: EdgeInsets.only(left: 24,right: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+             // SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios_sharp,
+                        size: 19,
                         color: Color(0xFFFFFFFF),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 32,),
-                Text(
-                  'Precious',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Gelion',
-                    fontSize: 25,
-                    color: Color(0xFFFFFFFF),
+                      onPressed:(){Navigator.pop(context);}
                   ),
-                ),
-                SizedBox(height: 7,),
-                Text(
-                  "Please make the payment, after that you can enjoy\nall features and benefits.",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    //letterSpacing: 1,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Gelion',
-                    fontSize: 13,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                SizedBox(height:40),
-                Container(
-                  padding: EdgeInsets.only(left:16,top:14 , bottom:14 ),
-                  width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(
-                     // color: Color(0xFF00A69D).withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          width: 1,
-                          color: Color(0xFFF7941D)
-                      )
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.arrow_forward_outlined,
-                            size: 15,
-                            color: Color(0xFFF7941D),
-                          ),
-                          SizedBox(width: 34,),
-                          Text(
-                            "Access to reports on three\ncandidates per category",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              //letterSpacing: 1,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 14,
-                              color: Color(0xFFEBF1F4),
-                            ),
-                          ),
-                      ],),
-                      SizedBox(height: 12,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.arrow_forward_outlined,
-                            size: 15,
-                            color: Color(0xFFF7941D),
-                          ),
-                          SizedBox(width: 34,),
-                          Text(
-                            "One Free Candidates Replacement",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              //letterSpacing: 1,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 14,
-                              color: Color(0xFFEBF1F4),
-                            ),
-                          ),
-                        ],),
-                      SizedBox(height: 12,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.arrow_forward_outlined,
-                            size: 15,
-                            color: Color(0xFFF7941D),
-                          ),
-                          SizedBox(width: 34,),
-                          Text(
-                            "One free quaterly medical report on\ncandidate after placement",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              //letterSpacing: 1,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 14,
-                              color: Color(0xFFEBF1F4),
-                            ),
-                          ),
-                        ],),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 74,),
-                Container(
-                  padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
-                  width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(
-                    // color: Color(0xFF00A69D).withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          width: 1,
-                          color: Color(0xFFF7941D)
-                      )
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "N 350,000.00",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          //letterSpacing: 1,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 18,
-                          color: Color(0xFFF7941D),
-                        ),
-                      ),
-                      Text(
-                        "One-time payment",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          //letterSpacing: 1,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 14,
-                          color: Color(0xFF99B9CF),
-                        ),
-                      ),
-                    ],),
-                ),
-                SizedBox(height:16),
-                Container(
-                  padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
-                  width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(
-                    // color: Color(0xFF00A69D).withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          width: 1,
-                          color: Color(0xFFF7941D)
-                      )
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "12 Months",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          //letterSpacing: 1,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 18,
-                          color: Color(0xFFF7941D),
-                        ),
-                      ),
-                      Text(
-                        "Validity",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          //letterSpacing: 1,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 14,
-                          color: Color(0xFF99B9CF),
-                        ),
-                      ),
-                    ],),
-                ),
-                SizedBox(height: 93,),
-                FlatButton(
-                  minWidth: SizeConfig.screenWidth,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.only(top:18 ,bottom: 18),
-                  onPressed:(){
-                    _buildPaymentDialog();
-                  },
-                  color: Color(0xFF00A69D),
-                  child: Text(
-                    "Continue",
+                  SizedBox(width: 24,),
+                  Text(
+                    "Our Packages",
                     textAlign: TextAlign.start,
                     style: TextStyle(
+                      //letterSpacing: 1,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
+                      fontSize: 14,
                       color: Color(0xFFFFFFFF),
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 32,),
+              Text(
+                'Precious',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Gelion',
+                  fontSize: 25,
+                  color: Color(0xFFFFFFFF),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 7,),
+              Text(
+                "Please make the payment, after that you can enjoy\nall features and benefits.",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gelion',
+                  fontSize: 13,
+                  color: Color(0xFFFFFFFF),
+                ),
+              ),
+              SizedBox(height:10),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 30,),
+                      Container(
+                        padding: EdgeInsets.only(left:16,top:14 , bottom:14 ),
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(
+                          // color: Color(0xFF00A69D).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                                width: 1,
+                                color: Color(0xFFF7941D)
+                            )
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFF7941D),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Access to reports on three\ncandidates per category",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFF7941D),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "One Free Candidates Replacement",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFF7941D),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "One free quaterly medical report on\ncandidate after placement",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 74,),
+                      Container(
+                        padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(
+                          // color: Color(0xFF00A69D).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                                width: 1,
+                                color: Color(0xFFF7941D)
+                            )
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "N 350,000.00",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                //letterSpacing: 1,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 18,
+                                color: Color(0xFFF7941D),
+                              ),
+                            ),
+                            Text(
+                              "One-time payment",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                //letterSpacing: 1,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF99B9CF),
+                              ),
+                            ),
+                          ],),
+                      ),
+                      SizedBox(height:16),
+                      Container(
+                        padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(
+                          // color: Color(0xFF00A69D).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                                width: 1,
+                                color: Color(0xFFF7941D)
+                            )
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "12 Months",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                //letterSpacing: 1,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 18,
+                                color: Color(0xFFF7941D),
+                              ),
+                            ),
+                            Text(
+                              "Validity",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                //letterSpacing: 1,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF99B9CF),
+                              ),
+                            ),
+                          ],),
+                      ),
+                      SizedBox(height: 73,),
+                      FlatButton(
+                        minWidth: SizeConfig.screenWidth,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        padding: EdgeInsets.only(top:18 ,bottom: 18),
+                        onPressed:(){
+                          _buildPaymentDialog();
+                        },
+                        color: Color(0xFF00A69D),
+                        child: Text(
+                          "Continue",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30,),
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),

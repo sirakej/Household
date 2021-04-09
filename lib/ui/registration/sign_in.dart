@@ -109,6 +109,7 @@ class _SignInState extends State<SignIn> {
                                     return SignUp();
                                   })
                               );
+
                             },
                             child:  RichText(
                               text:TextSpan(

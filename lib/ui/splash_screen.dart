@@ -100,7 +100,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
                   ),
                   SizedBox(height:17),
                   Text(
-                    "Good help is no longer so hard to find",
+                    "Good help, Better Life",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,

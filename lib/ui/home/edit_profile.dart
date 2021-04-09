@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
@@ -225,7 +226,13 @@ class _EditProfileState extends State<EditProfile> {
                                     borderRadius: BorderRadius.circular(8)
                                 ),
                                 padding: EdgeInsets.only(top:18 ,bottom: 18),
-                                onPressed:(){},
+                                onPressed:(){
+                                  Navigator.push(context,
+                                      CupertinoPageRoute(builder: (_){
+                                        return HomeScreen();
+                                      })
+                                  );
+                                },
                                 color: Color(0xFF00A69D),
                                 child: Text(
                                   "Save",
