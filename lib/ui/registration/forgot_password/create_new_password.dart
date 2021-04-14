@@ -62,7 +62,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       Image.asset("assets/icons/create_new_password.png",height:70,width:70,fit: BoxFit.contain,),
                       SizedBox(height: 8,),
                       Text(
-                        'Create new password',
+                        'Create New Password',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -102,7 +102,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                         },
                         color: Color(0xFF00A69D),
                         child: Text(
-                          "Reset password",
+                          "Reset Password",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,

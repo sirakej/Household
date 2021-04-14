@@ -145,7 +145,7 @@ class _SignInState extends State<SignIn> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      "Become a candidate today\t",
+                                      "Become A Candidate Today\t",
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Gelion',

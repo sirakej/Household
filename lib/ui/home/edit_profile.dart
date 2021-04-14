@@ -539,123 +539,167 @@ class _EditProfileState extends State<EditProfile> {
           return StatefulBuilder(builder:(BuildContext context, StateSetter setState /*You can rename this!*/){
             return Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.only(right: 24),
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      width: 26,
-                      height: 26,
-                      child: FloatingActionButton(
-                          elevation: 30,
-                          backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
-                          shape:CircleBorder(),
-                          onPressed: (){
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color: Color(0xFFFFFFFF),
-                            size:13,
-                          )
-                      ),
-                    )
-                ),
-                SizedBox(height:8),
-                Container(
-                  //height: SizeConfig.screenHeight,
-                  padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
                   width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                  ),
-                  child: Column(
-                    mainAxisSize:  MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Center(
-                        child: TextButton(
-                          onPressed:(){
-                            Navigator.pop(context);
-                            _scaffoldKey.currentState.openDrawer();
-                          },
-                          child: Text(
-                            "Update profile information",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFF00A69D),
+                  child: Stack(
+                    children: [
+                      Container(
+                        //height: SizeConfig.screenHeight,
+                        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                        margin: EdgeInsets.only(top: 34),
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+                        ),
+                        child: Column(
+                          mainAxisSize:  MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 64),
+                            Center(
+                              child: Text(
+                                "Akande Seun",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF042538),
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(height: 5,),
+                            Center(
+                              child: TextButton(
+                                onPressed:(){
+                                  Navigator.pop(context);
+                                  _scaffoldKey.currentState.openDrawer();
+                                },
+                                child: Text(
+                                  "Update profile information",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFF00A69D),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8,),
+                            FlatButton(
+                              minWidth: SizeConfig.screenWidth,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 2,
+                                      color: Color(0xFF00A69D)
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:18 ,bottom: 18),
+                              onPressed:(){},
+                              color: Color(0xFF00A69D).withOpacity(0.4),
+                              child: Text(
+                                "Hire from a different category",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF00A69D),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16,),
+                            FlatButton(
+                              minWidth: SizeConfig.screenWidth,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    color: Color(0xFFC4C4C4).withOpacity(0.48),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:18 ,bottom: 18),
+                              onPressed:(){},
+                              child: Text(
+                                "View List",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF00A69D),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height:15,),
+                            Center(
+                              child: TextButton(
+                                onPressed:(){},
+                                child: Text(
+                                  "Sign Out",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFFE36D45),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                          ],
                         ),
                       ),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 2,
-                                color: Color(0xFF00A69D)
-                            ),
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
-                        color: Color(0xFF00A69D).withOpacity(0.4),
-                        child: Text(
-                          "Hire from a different category",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFF00A69D),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16,),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 1,
-                              color: Color(0xFFC4C4C4).withOpacity(0.48),
-                            ),
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
-                        child: Text(
-                          "View List",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFF00A69D),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height:20  ,),
-                      Center(
-                        child: TextButton(
-                          onPressed:(){},
-                          child: Text(
-                            "Sign Out",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFFE36D45),
+                      Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(
+                                "assets/icons/profile.png",
+                                // width: 90,
+                                // height: 90,
+                                fit:BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                                padding: EdgeInsets.only(right: 24),
+                                child: Container(
+                                  width: 26,
+                                  height: 26,
+                                  child: FloatingActionButton(
+                                      elevation: 30,
+                                      backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
+                                      shape: CircleBorder(),
+                                      onPressed: (){
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Color(0xFFFFFFFF),
+                                        size:13,
+                                      )
+                                  ),
+                                )
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 20,),
                     ],
                   ),
                 ),

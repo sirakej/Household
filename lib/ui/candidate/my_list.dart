@@ -16,7 +16,7 @@ class _MyListCandidateState extends State<MyListCandidate> {
 
   /// A list of string variables holding a list of all countries
   List<String> _category = [
-    "Butler","Chef","Carpenter","Chaffer","HouseKeeper","Home Tutor","Dog Walker","Hair Stylist","Barber","Caregiver"
+    "Butlers","Caregivers","Carpenters","Chauffeurs","Chefs","Doormen","Electricians","Gardeners","GateKeepers","Housekeepers","Nannies","Plumbers"
   ];
 
   /// A string variable holding the selected country value

@@ -134,7 +134,7 @@ class _OnBoardState extends State<OnBoard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Good help, Better Life',
+                        'Good Help Better Life',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -198,7 +198,7 @@ class _OnBoardState extends State<OnBoard> {
                         child: TextButton(
                           onPressed:(){},
                           child: Text(
-                              "Register as a candidate",
+                              "Register As A Candidate",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,

@@ -251,6 +251,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
+                                        Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Butler",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),//butler
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
                                         Image.asset("assets/icons/baby-boy 1.png",width: 24,height: 24,fit: BoxFit.contain,),
                                         SizedBox(width: 6,),
                                         Text(
@@ -265,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     ),
-                                  ),
+                                  ),//caregiver
                                   SizedBox(width: 10,),
                                   Container(
                                     color: Color(0xFFFFFFFF),
@@ -276,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Image.asset("assets/icons/hammer 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
                                         SizedBox(width: 6,),
                                         Text(
-                                          "Capenter",
+                                          "Carpenter",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
@@ -287,51 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Chef",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "House Keeper",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  ),//car
                                   SizedBox(width: 10,),
                                   Container(
                                     color: Color(0xFFFFFFFF),
@@ -353,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     ),
-                                  ),
+                                  ),//chauffeur
                                   SizedBox(width: 10,),
                                   Container(
                                     color: Color(0xFFFFFFFF),
@@ -361,10 +339,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
                                         SizedBox(width: 6,),
                                         Text(
-                                          "Butler",
+                                          "Chef",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
@@ -375,7 +353,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     ),
-                                  ),
+                                  ),//chef
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "House Keeper",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),//housekeeper
                                 ],
                               )
                           ),
@@ -399,16 +399,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
                                 SizedBox(width: 50,),
-                                _buildRecommendedContainer("assets/icons/dog_walker.png","Dog Walker", "Michelle", 3.5),
+                                _buildRecommendedContainer("assets/icons/home_plumber.png","Plumber", "Michelle", 3.5),
                               ],
                             ),
                             SizedBox(height: 18,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _buildRecommendedContainer("assets/icons/home_tutor.png","Home Tutor", "Taiwo", 3.5),
+                                _buildRecommendedContainer("assets/icons/home_electrician.png","Electrician", "Taiwo", 3.5),
                                 SizedBox(width: 50,),
-                                _buildRecommendedContainer("assets/icons/carpenter_cat.png","Carpenter", "Dauda", 3.5),
+                                _buildRecommendedContainer("assets/icons/home_carpenter.png","Carpenter", "Dauda", 3.5),
                               ],
                             ),
                           ],
@@ -444,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(Radius.circular(10))
                                   ),
-                                  child: Image.asset("assets/icons/ads.png",fit:BoxFit.contain,)
+                                  child: Image.asset("assets/icons/ads.png",fit:BoxFit.contain,width:327 ,height:96)
                               ),
                               Container(
                                 padding: EdgeInsets.only(left:27,top:12 , bottom:13),
@@ -575,15 +575,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    Text(
-                      "$ratings",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFF717F88),
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          "$ratings",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 12,
+                            color: Color(0xFF717F88),
+                          ),
+                        ),
+                        Image.asset("assets/icons/star.png",width:10 ,height:8.81,fit:BoxFit.contain ,)
+                      ],
                     ),
                   ],
                 ) ,
@@ -606,123 +611,167 @@ class _HomeScreenState extends State<HomeScreen> {
           return StatefulBuilder(builder:(BuildContext context, StateSetter setState /*You can rename this!*/){
             return Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.only(right: 24),
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      width: 26,
-                      height: 26,
-                      child: FloatingActionButton(
-                          elevation: 30,
-                          backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
-                          shape:CircleBorder(),
-                          onPressed: (){
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color: Color(0xFFFFFFFF),
-                            size:13,
-                          )
-                      ),
-                    )
-                ),
-                SizedBox(height:8),
-                Container(
-                  //height: SizeConfig.screenHeight,
-                  padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
                   width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                  ),
-                  child: Column(
-                    mainAxisSize:  MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Center(
-                        child: TextButton(
-                          onPressed:(){
-                            Navigator.pop(context);
-                            _scaffoldKey.currentState.openDrawer();
-                            },
-                          child: Text(
-                            "Update profile information",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFF00A69D),
+                  child: Stack(
+                    children: [
+                      Container(
+                        //height: SizeConfig.screenHeight,
+                        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                        margin: EdgeInsets.only(top: 34),
+                        width: SizeConfig.screenWidth,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+                        ),
+                        child: Column(
+                          mainAxisSize:  MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 64),
+                            Center(
+                              child: Text(
+                                "Akande Seun",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF042538),
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(height: 5,),
+                            Center(
+                              child: TextButton(
+                                onPressed:(){
+                                  Navigator.pop(context);
+                                  _scaffoldKey.currentState.openDrawer();
+                                  },
+                                child: Text(
+                                  "Update profile information",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFF00A69D),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8,),
+                            FlatButton(
+                              minWidth: SizeConfig.screenWidth,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 2,
+                                      color: Color(0xFF00A69D)
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:18 ,bottom: 18),
+                              onPressed:(){},
+                              color: Color(0xFF00A69D).withOpacity(0.4),
+                              child: Text(
+                                "Hire from a different category",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF00A69D),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16,),
+                            FlatButton(
+                              minWidth: SizeConfig.screenWidth,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFFC4C4C4).withOpacity(0.48),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:18 ,bottom: 18),
+                              onPressed:(){},
+                              child: Text(
+                                "View List",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF00A69D),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height:15,),
+                            Center(
+                              child: TextButton(
+                                onPressed:(){},
+                                child: Text(
+                                  "Sign Out",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFFE36D45),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                          ],
                         ),
                       ),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 2,
-                                color: Color(0xFF00A69D)
-                            ),
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
-                        color: Color(0xFF00A69D).withOpacity(0.4),
-                        child: Text(
-                          "Hire from a different category",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFF00A69D),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16,),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 1,
-                                color: Color(0xFFC4C4C4).withOpacity(0.48),
-                            ),
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){},
-                        child: Text(
-                          "View List",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFF00A69D),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height:20  ,),
-                      Center(
-                        child: TextButton(
-                          onPressed:(){},
-                          child: Text(
-                            "Sign Out",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFFE36D45),
+                      Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(
+                                "assets/icons/profile.png",
+                                // width: 90,
+                                // height: 90,
+                                fit:BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                                padding: EdgeInsets.only(right: 24),
+                                child: Container(
+                                  width: 26,
+                                  height: 26,
+                                  child: FloatingActionButton(
+                                      elevation: 30,
+                                      backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
+                                      shape: CircleBorder(),
+                                      onPressed: (){
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Color(0xFFFFFFFF),
+                                        size:13,
+                                      )
+                                  ),
+                                )
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 20,),
                     ],
                   ),
                 ),

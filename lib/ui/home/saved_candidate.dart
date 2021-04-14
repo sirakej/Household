@@ -114,6 +114,28 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
+                                        Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "Butler",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),//butler
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
                                         Image.asset("assets/icons/baby-boy 1.png",width: 24,height: 24,fit: BoxFit.contain,),
                                         SizedBox(width: 6,),
                                         Text(
@@ -128,7 +150,7 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                         )
                                       ],
                                     ),
-                                  ),
+                                  ),//caregiver
                                   SizedBox(width: 10,),
                                   Container(
                                     color: Color(0xFFFFFFFF),
@@ -139,7 +161,7 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                         Image.asset("assets/icons/hammer 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
                                         SizedBox(width: 6,),
                                         Text(
-                                          "Capenter",
+                                          "Carpenter",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
@@ -150,51 +172,7 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                         )
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Chef",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "House Keeper",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  ),//car
                                   SizedBox(width: 10,),
                                   Container(
                                     color: Color(0xFFFFFFFF),
@@ -216,7 +194,7 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                         )
                                       ],
                                     ),
-                                  ),
+                                  ),//chauffeur
                                   SizedBox(width: 10,),
                                   Container(
                                     color: Color(0xFFFFFFFF),
@@ -224,10 +202,10 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
+                                        Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
                                         SizedBox(width: 6,),
                                         Text(
-                                          "Butler",
+                                          "Chef",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
@@ -238,7 +216,29 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                         )
                                       ],
                                     ),
-                                  ),
+                                  ),//chef
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    color: Color(0xFFFFFFFF),
+                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
+                                        SizedBox(width: 6,),
+                                        Text(
+                                          "House Keeper",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF042538),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),//housekeeper
                                 ],
                               )
                           ),
@@ -262,16 +262,16 @@ class _SavedCandidateState extends State<SavedCandidate> {
                               children: [
                                 _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
                                 SizedBox(width: 50,),
-                                _buildRecommendedContainer("assets/icons/dog_walker.png","Dog Walker", "Michelle", 3.5),
+                                _buildRecommendedContainer("assets/icons/home_plumber.png","Plumber", "Michelle", 3.5),
                               ],
                             ),
                             SizedBox(height: 18,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _buildRecommendedContainer("assets/icons/home_tutor.png","Home Tutor", "Taiwo", 3.5),
+                                _buildRecommendedContainer("assets/icons/home_electrician.png","Electrician", "Taiwo", 3.5),
                                 SizedBox(width: 50,),
-                                _buildRecommendedContainer("assets/icons/carpenter_cat.png","Carpenter", "Dauda", 3.5),
+                                _buildRecommendedContainer("assets/icons/home_carpenter.png","Carpenter", "Dauda", 3.5),
                               ],
                             ),
                           ],
@@ -300,7 +300,7 @@ class _SavedCandidateState extends State<SavedCandidate> {
                           ),
                           child: Stack(
                             children: [
-                              Image.asset("assets/icons/ads.png",fit:BoxFit.contain,),
+                              Image.asset("assets/icons/ads.png",fit:BoxFit.contain,width: 327,height:96),
                               Container(
                                 padding: EdgeInsets.only(left:27,top:12 , bottom:13),
                                 child: Column(

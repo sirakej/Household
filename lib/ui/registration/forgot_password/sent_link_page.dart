@@ -36,7 +36,7 @@ class _SentLinkPageState extends State<SentLinkPage> {
                       Image.asset("assets/icons/create_new_password.png",height:112,width:112,fit: BoxFit.contain,),
                       SizedBox(height: 23,),
                       Text(
-                        'Check your mail',
+                        'Check Your Mail',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -86,7 +86,7 @@ class _SentLinkPageState extends State<SentLinkPage> {
                         },
                         color: Color(0xFF00A69D),
                         child: Text(
-                          "Open email app",
+                          "Open Email App",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
