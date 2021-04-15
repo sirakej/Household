@@ -150,8 +150,13 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                       controller: _passwordController,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
-                      validator: (value){
-                        if(value.isEmpty){
+                      onChanged: (value){
+                        setState(() {
+                          _password = _passwordController.text;
+                        });
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
                           return 'Enter your password';
                         }
                         return null;
@@ -200,12 +205,14 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                     Row(
                       children: [
                         Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            color: _condition1 ? Color(0xFF1D1D1D) : Color(0xFFE6E6E6),
-                            shape: BoxShape.circle,
-                          ),
+                          child: _condition1 == false ? Icon(
+                            Icons.circle,
+                            color: Color(0xFF9097A5),
+                            size: 12,
+                          ):Icon(
+                            Icons.check_circle,
+                            size: 12,
+                            color: Color(0xFF00A69D),),
                         ),
                         SizedBox(width: 6),
                         Text(
@@ -214,7 +221,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             fontFamily: 'Gelion',
-                            color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFF999999),
+                            color:Color(0xFF717F88),
                           ),
                         ),
                       ],
@@ -223,12 +230,14 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                     Row(
                       children: [
                         Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFFE6E6E6),
-                            shape: BoxShape.circle,
-                          ),
+                          child: _condition2 == false ? Icon(
+                            Icons.circle,
+                            color: Color(0xFF9097A5),
+                            size: 12,
+                          ):Icon(
+                            Icons.check_circle,
+                            size: 12,
+                            color: Color(0xFF00A69D),),
                         ),
                         SizedBox(width: 6),
                         Text(
@@ -237,7 +246,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             fontFamily: 'Gelion',
-                            color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFF999999),
+                            color: Color(0xFF717F88),
                           ),
                         ),
                       ],
@@ -246,12 +255,14 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                     Row(
                       children: [
                         Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            color: _condition3 ? Color(0xFF1D1D1D) : Color(0xFFE6E6E6),
-                            shape: BoxShape.circle,
-                          ),
+                          child: _condition3 == false ? Icon(
+                            Icons.circle,
+                            color: Color(0xFF9097A5),
+                            size: 12,
+                          ):Icon(
+                            Icons.check_circle,
+                            size: 12,
+                            color: Color(0xFF00A69D),),
                         ),
                         SizedBox(width: 6),
                         Text(
@@ -260,7 +271,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             fontFamily: 'Gelion',
-                            color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFF999999),
+                            color:Color(0xFF717F88),
                           ),
                         ),
                       ],
@@ -280,6 +291,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
     });
   }
   /// Function to build the widget of conditions passed
+  /// Function to build the widget of conditions passed
   Widget _conditionsPassed(){
     bool two = _condition2 = (_password.contains(RegExp(r'[A-Z]'))  && _password.contains(RegExp(r'[a-z]')));
     bool one = _condition1 = _password.length > 8;
@@ -296,17 +308,17 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
@@ -324,12 +336,12 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
@@ -348,7 +360,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),

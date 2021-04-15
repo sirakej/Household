@@ -219,7 +219,7 @@ class CandidateContainer extends StatelessWidget {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "Origin State:",
+                                                    "Tribe",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -230,7 +230,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height: 8),
                                                   Text(
-                                                    "Kaduna",
+                                                    "Yoruba",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -742,6 +742,7 @@ class CandidateContainer extends StatelessWidget {
                                 FlatButton(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(6),
+                                      side: BorderSide(color: Color(0xFF00A69D),width: 1.4)
                                   ),
                                   padding: EdgeInsets.fromLTRB(24, 16, 24, 16),
                                   onPressed:(){},

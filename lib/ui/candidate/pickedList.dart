@@ -5,7 +5,7 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 class PickedList extends StatefulWidget {
-  static const String id = 'piked_list';
+  static const String id = 'picked_list';
   @override
   _PickedListState createState() => _PickedListState();
 }
@@ -365,7 +365,7 @@ class _PickedListState extends State<PickedList> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "Origin State:",
+                                                    "Tribe:",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -376,7 +376,7 @@ class _PickedListState extends State<PickedList> {
                                                   ),
                                                   SizedBox(height: 8),
                                                   Text(
-                                                    "Kaduna",
+                                                    "Yoruba",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,

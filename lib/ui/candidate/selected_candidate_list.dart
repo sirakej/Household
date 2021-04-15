@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/bloc/location.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/custom_slider.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 
@@ -13,20 +13,60 @@ class SelectedCandidateList extends StatefulWidget {
 }
 
 class _SelectedCandidateListState extends State<SelectedCandidateList> {
-
-  Location _location = Location();
+  /// A string variable holding the selected state value
+  String _selectedTribe;
 
   /// A list of string variables holding a list of all countries
-  List<String> _state = List<String>();
-
-  /// A string variable holding the selected country value
-  String _selectedState;
-
-  /// A list of string variables holding a list of all states of a specified country
-  List<String> _region = List<String>();
+  List<String> _tribe =[
+    "Annang",
+    "Bekwarra",
+    "Berom",
+    "Boki",
+    "Delta-Igbo",
+    "Efik",
+    "Eregbe",
+    "Esan",
+    "Foreign – Béninois",
+    "Foreign - Gambien",
+    "Foreign – Ghanaian",
+    "Foreign - Malien",
+    "Hausa",
+    "Ibibio",
+    "Idoma",
+    "Igala",
+    "Igidi",
+    "Igebe",
+    "Igbo",
+    "Isobo",
+    "Ijaw",
+    "Ika (Auchi)",
+    "Itsekiri",
+    "Obanliku",
+    "Ogoja",
+    "Oron",
+    "Ugep",
+    "Ukwuani",
+    "Urhobo",
+    "Tiv",
+    "Yoruba",
+    "Other"
+  ];
 
   /// A string variable holding the selected state value
-  String _selectedRegion;
+  String _selectedReligion;
+
+  /// A list of string variables holding a list of all countries
+  List<String> _religion =[
+        "Buddhism",
+        "Christianity – Anglican",
+        "Christianity – Catholic",
+        "Christianity – Protestant",
+        "Hinduism",
+        "Islam",
+        "Judaism",
+        "None"
+  ];
+
 
   /// A string variable holding the selected state value
   String _selectedExperience;
@@ -39,12 +79,6 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
     "10 years and above",
   ];
 
-
-  @override
-  void initState() {
-    _state = List.from(_state)..addAll(_location.getCountries());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,8 +303,8 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
     bool partTime = false;
     bool weekDays = false;
     bool weekEnds = false;
-    RangeValues values_1 = RangeValues(20, 50);
-    RangeLabels labels_1 =RangeLabels('20', "50");
+    double _lowerValue = 20;
+    double _upperValue = 50;
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         elevation: 100,
@@ -420,34 +454,32 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                   child: DropdownButtonFormField<String>(
                                     isExpanded: true,
                                     style: TextStyle(
-                                      color: Color(0xFF000000),
+                                      color: Color(0xFF999999),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Gelion',
                                     ),
-                                    value: _selectedState,
                                     icon: Image.asset(
                                         'assets/icons/arrow-down.png',
                                         height: 18,
                                         width: 18,
                                         fit: BoxFit.contain
                                     ),
+                                    value: _selectedTribe,
                                     onChanged: (String value){
                                       if(!mounted)return;
                                       setState(() {
-                                        _region = [];
-                                        _selectedRegion = null;
-                                        _region = List.from(_region)..addAll(_location.getLocalByCountry(value));
-                                        _selectedState = value;
+                                        _selectedTribe = value;
                                       });
                                     },
                                     validator: (value){
-                                      if (_selectedState == null || _selectedState.isEmpty){
+                                      if (_selectedTribe == null || _selectedTribe.isEmpty){
                                         return 'Pick your option';
                                       }
                                       return null;
                                     },
                                     decoration: kFieldDecoration.copyWith(
+                                      //contentPadding: EdgeInsets.only(right: 10),
                                       hintText: 'Please Select',
                                       hintStyle: TextStyle(
                                         color: Color(0xFF717F88),
@@ -457,7 +489,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                       ),
                                     ),
                                     selectedItemBuilder: (BuildContext context){
-                                      return _state.map((value){
+                                      return _tribe.map((value){
                                         return Text(
                                           value,
                                           style: TextStyle(
@@ -469,7 +501,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                         );
                                       }).toList();
                                     },
-                                    items: _state.map((String value){
+                                    items: _tribe.map((String value){
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(
@@ -519,15 +551,15 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                         width: 18,
                                         fit: BoxFit.contain
                                     ),
-                                    value: _selectedRegion,
+                                    value: _selectedReligion,
                                     onChanged: (String value){
                                       if(!mounted)return;
                                       setState(() {
-                                        _selectedRegion = value;
+                                        _selectedReligion = value;
                                       });
                                     },
                                     validator: (value){
-                                      if (_selectedRegion == null || _selectedRegion.isEmpty){
+                                      if (_selectedReligion == null || _selectedReligion.isEmpty){
                                         return 'Pick your option';
                                       }
                                       return null;
@@ -543,7 +575,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                       ),
                                     ),
                                     selectedItemBuilder: (BuildContext context){
-                                      return _region.map((value){
+                                      return _religion.map((value){
                                         return Text(
                                           value,
                                           style: TextStyle(
@@ -555,7 +587,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                                         );
                                       }).toList();
                                     },
-                                    items: _region.map((String value){
+                                    items: _religion.map((String value){
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(
@@ -657,7 +689,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                         ),
                         SizedBox(height:27),
                         Text(
-                          "Age",
+                          "Age Range",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -666,22 +698,92 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                             color: Color(0xFF042538),
                           ),
                         ),
-                        RangeSlider(
-                            divisions: 100,
-                            activeColor: Color(0xFF00A69D),
-                            inactiveColor: Color(0xFFC4C4C4),
-                            min: 20,
-                            max: 50,
-                            values: values_1,
-                            labels: labels_1,
-                            onChanged: (value){
-                              print("START: ${value.start}, End: ${value.end}");
-                              setState(() {
-                                values_1 =value;
-                                labels_1 =RangeLabels("${value.start.toInt().toString()}s", "${value.end.toInt().toString()}s");
-                              });
-                            }
+//                        RangeSlider(
+//                            divisions: 100,
+//                            activeColor: Color(0xFF00A69D),
+//                            inactiveColor: Color(0xFFC4C4C4),
+//                            min: 20,
+//                            max: 50,
+//                            values: values_1,
+//                            labels: labels_1,
+//                            onChangeStart:(value) {
+//                              print("${value.start}");
+//                            },
+//                            onChangeEnd:(value) {
+//                              print("${value.end}");
+//                            },
+//                            onChanged: (value){
+//                              print("START: ${value.start}, End: ${value.end}");
+//                              setState(() {
+//                                values_1 =value;
+//                                labels_1 =RangeLabels("${value.start.toInt().toString()}s", "${value.end.toInt().toString()}s");
+//                              });
+//                            }
+//                        ),
+                        FlutterSlider(
+                          values: [_lowerValue,_upperValue],
+                          rangeSlider: true,
+//                        ignoreSteps: [
+//                          FlutterSliderIgnoreSteps(from: 50, to: 20),
+//                          FlutterSliderIgnoreSteps(from: 50, to: 20),
+//                        ],
+                          max: 50,
+                          min: 20,
+                          step: FlutterSliderStep(step: 1),
+                          trackBar: FlutterSliderTrackBar(
+                            activeTrackBarHeight: 1,
+                            activeTrackBar: BoxDecoration(color: Color(0xFF00A69D)),
+                          ),
+//                        tooltip: FlutterSliderTooltip(
+//                          textStyle: TextStyle(fontSize: 17, color: Colors.lightBlue),
+//                        ),
+                          handler: FlutterSliderHandler(
+                            decoration: BoxDecoration(),
+                            child: Container(
+                              width: 18,
+                              height: 18,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF00A69D),
+                                  borderRadius: BorderRadius.circular(25)),
+                              padding: EdgeInsets.all(1),
+                              child: Container(
+
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25)),
+                              ),
+                            ),
+                          ),
+                          rightHandler: FlutterSliderHandler(
+                            decoration: BoxDecoration(),
+                            child: Container(
+                              width: 18,
+                              height: 18,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF00A69D),
+                                  borderRadius: BorderRadius.circular(25)),
+                            ),
+                          ),
+                          disabled: false,
+
+                          onDragging: (handlerIndex, lowerValue, upperValue) {
+                            _lowerValue = lowerValue;
+                            _upperValue = upperValue;
+                            setState(() {});
+                          },
                         ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10,right:10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${_lowerValue.toInt().toString()}s"),
+                              Text("${_upperValue.toInt().toString()}s"),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20,),
                         Text(
                           "Availability",
                           textAlign: TextAlign.start,

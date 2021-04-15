@@ -172,7 +172,7 @@ class _SignUpState extends State<SignUp> {
                                      style: TextStyle(
                                        fontWeight: FontWeight.w400,
                                        fontFamily: 'Gelion',
-                                       fontSize: 16,
+                                       fontSize: 14,
                                        color: Color(0xFF00A69D),
                                      )
                                  ),
@@ -408,8 +408,13 @@ class _SignUpState extends State<SignUp> {
                   controller: _passwordController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
-                  validator: (value){
-                    if(value.isEmpty){
+                  onChanged: (value){
+                    setState(() {
+                      _password = _passwordController.text;
+                    });
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
                       return 'Enter your password';
                     }
                     return null;
@@ -449,24 +454,6 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed:(){},
-                child: Text(
-                  "Forgot Password?",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Gelion',
-                    fontSize: 14,
-                    color: Color(0xFF00A69D),
-                  ),
-                ),
-              )
-            ],
-          ),
         SizedBox(height: 9),
         Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -476,12 +463,14 @@ class _SignUpState extends State<SignUp> {
               Row(
                 children: [
                   Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(
-                      color: _condition1 ? Color(0xFF1D1D1D) : Color(0xFFE6E6E6),
-                      shape: BoxShape.circle,
-                    ),
+                    child: _condition1 == false ? Icon(
+                      Icons.circle,
+                      color: Color(0xFF9097A5),
+                      size: 12,
+                    ):Icon(
+                      Icons.check_circle,
+                      size: 12,
+                      color: Color(0xFF00A69D),),
                   ),
                   SizedBox(width: 6),
                   Text(
@@ -490,7 +479,7 @@ class _SignUpState extends State<SignUp> {
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       fontFamily: 'Gelion',
-                      color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFF999999),
+                      color:Color(0xFF717F88),
                     ),
                   ),
                 ],
@@ -499,12 +488,14 @@ class _SignUpState extends State<SignUp> {
               Row(
                 children: [
                   Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(
-                      color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFFE6E6E6),
-                      shape: BoxShape.circle,
-                    ),
+                    child: _condition2 == false ? Icon(
+                      Icons.circle,
+                      color: Color(0xFF9097A5),
+                      size: 12,
+                    ):Icon(
+                      Icons.check_circle,
+                      size: 12,
+                      color: Color(0xFF00A69D),),
                   ),
                   SizedBox(width: 6),
                   Text(
@@ -513,7 +504,7 @@ class _SignUpState extends State<SignUp> {
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       fontFamily: 'Gelion',
-                      color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFF999999),
+                      color: Color(0xFF717F88),
                     ),
                   ),
                 ],
@@ -522,12 +513,14 @@ class _SignUpState extends State<SignUp> {
               Row(
                 children: [
                   Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(
-                      color: _condition3 ? Color(0xFF1D1D1D) : Color(0xFFE6E6E6),
-                      shape: BoxShape.circle,
-                    ),
+                    child: _condition3 == false ? Icon(
+                      Icons.circle,
+                      color: Color(0xFF9097A5),
+                      size: 12,
+                    ):Icon(
+                      Icons.check_circle,
+                      size: 12,
+                      color: Color(0xFF00A69D),),
                   ),
                   SizedBox(width: 6),
                   Text(
@@ -536,7 +529,7 @@ class _SignUpState extends State<SignUp> {
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       fontFamily: 'Gelion',
-                      color:  _condition2 ? Color(0xFF1D1D1D) : Color(0xFF999999),
+                      color:Color(0xFF717F88),
                     ),
                   ),
                 ],
@@ -617,17 +610,17 @@ class _SignUpState extends State<SignUp> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
@@ -645,12 +638,12 @@ class _SignUpState extends State<SignUp> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),
@@ -669,7 +662,7 @@ class _SignUpState extends State<SignUp> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: ((SizeConfig.screenWidth - 30) / 3 ) - 2,
+              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
               color: Color(0xFFFA9E3E),
             ),

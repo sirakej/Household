@@ -149,7 +149,7 @@ class _SignInState extends State<SignIn> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Gelion',
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         color: Color(0xFF00A69D),
                                       )
                                   ),

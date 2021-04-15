@@ -203,7 +203,7 @@ class _OnBoardState extends State<OnBoard> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Gelion',
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: Color(0xFFFFFFFF),
                               ),
                             ),
