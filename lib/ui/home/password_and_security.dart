@@ -4,7 +4,6 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
-
 import 'home_screen.dart';
 
 class PasswordAndSecurity extends StatefulWidget {

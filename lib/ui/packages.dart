@@ -100,32 +100,61 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                   physics: BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      SizedBox(height: 30,),
+                      SizedBox(height: 26,),
                       Container(
-                        padding: EdgeInsets.only(left:16,top:14 , bottom:14 ),
+                        padding: EdgeInsets.only(left:22,top:16 , bottom:34 ),
                         width: SizeConfig.screenWidth,
                         decoration: BoxDecoration(
-                          // color: Color(0xFF00A69D).withOpacity(0.4),
+                           color: Color(0xFF00A69D).withOpacity(0.08),
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
                                 width: 1,
-                                color: Color(0xFFF7941D)
+                                color: Color(0xFF00A69D)
                             )
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              "Premium Package",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF99B9CF),
+                              ),
+                            ),
+                            SizedBox(height: 6,),
+                            Row(
+                              children: [
+                                Image.asset("assets/icons/currency_icon.png",width:17,height:17 ,fit:BoxFit.contain),
+                                SizedBox(width: 9,),
+                                Text(
+                                  "89,500.00",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 24,
+                                    color: Color(0xFFF7941D),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 17,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Icon(
                                   Icons.arrow_forward_outlined,
                                   size: 15,
-                                  color: Color(0xFFF7941D),
+                                  color: Color(0xFFFFFFFF),
                                 ),
                                 SizedBox(width: 34,),
                                 Text(
-                                  "Access to reports on three\ncandidates per category",
+                                  "3 Candidate Profiles for Interview l\n1 Preferred Candidate Selection",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     //letterSpacing: 1,
@@ -143,11 +172,11 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                                 Icon(
                                   Icons.arrow_forward_outlined,
                                   size: 15,
-                                  color: Color(0xFFF7941D),
+                                  color: Color(0xFFFFFFFF),
                                 ),
                                 SizedBox(width: 34,),
                                 Text(
-                                  "One Free Candidates Replacement",
+                                  "Primary Due Diligence",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     //letterSpacing: 1,
@@ -165,11 +194,143 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                                 Icon(
                                   Icons.arrow_forward_outlined,
                                   size: 15,
-                                  color: Color(0xFFF7941D),
+                                  color: Color(0xFFFFFFFF),
                                 ),
                                 SizedBox(width: 34,),
                                 Text(
-                                  "One free quaterly medical report on\ncandidate after placement",
+                                  "Background Check Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Guarantors Verification Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Identity Verification Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Medical Screening Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Basic Etiquette Training",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "1 Month Handholding Period",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "1 Free Post-Employment Replacement",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     //letterSpacing: 1,
@@ -183,85 +344,207 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                           ],
                         ),
                       ),
-                      SizedBox(height: 74,),
+                      SizedBox(height: 24,),
                       Container(
-                        padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
+                        padding: EdgeInsets.only(left:22,top:16 , bottom:34 ),
                         width: SizeConfig.screenWidth,
                         decoration: BoxDecoration(
-                          // color: Color(0xFF00A69D).withOpacity(0.4),
+                            color: Color(0xFFF7941D).withOpacity(0.06),
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
                                 width: 1,
                                 color: Color(0xFFF7941D)
                             )
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "N 350,000.00",
+                              "Standard Package",
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                //letterSpacing: 1,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Gelion',
-                                fontSize: 18,
-                                color: Color(0xFFF7941D),
-                              ),
-                            ),
-                            Text(
-                              "One-time payment",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                //letterSpacing: 1,
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Gelion',
                                 fontSize: 14,
                                 color: Color(0xFF99B9CF),
                               ),
                             ),
-                          ],),
-                      ),
-                      SizedBox(height:16),
-                      Container(
-                        padding: EdgeInsets.only(left:20,right:20,top:25 , bottom:25 ),
-                        width: SizeConfig.screenWidth,
-                        decoration: BoxDecoration(
-                          // color: Color(0xFF00A69D).withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                                width: 1,
-                                color: Color(0xFFF7941D)
-                            )
+                            SizedBox(height: 6,),
+                            Row(
+                              children: [
+                                Image.asset("assets/icons/currency_icon.png",width:17,height:17 ,fit:BoxFit.contain),
+                                SizedBox(width: 9,),
+                                Text(
+                                  "44,500.00",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 24,
+                                    color: Color(0xFFF7941D),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 17,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "3 Candidate Profiles for Interview l\n1 Preferred Candidate Selection",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Primary Due Diligence",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Background Check Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Guarantors Verification Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Identity Verification Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Medical Screening Report",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward_outlined,
+                                  size: 15,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(width: 34,),
+                                Text(
+                                  "Basic Etiquette Training",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    //letterSpacing: 1,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFEBF1F4),
+                                  ),
+                                ),
+                              ],),
+                          ],
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "12 Months",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                //letterSpacing: 1,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Gelion',
-                                fontSize: 18,
-                                color: Color(0xFFF7941D),
-                              ),
-                            ),
-                            Text(
-                              "Validity",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                //letterSpacing: 1,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Gelion',
-                                fontSize: 14,
-                                color: Color(0xFF99B9CF),
-                              ),
-                            ),
-                          ],),
                       ),
-                      SizedBox(height: 73,),
+                      SizedBox(height: 42,),
                       FlatButton(
                         minWidth: SizeConfig.screenWidth,
                         shape: RoundedRectangleBorder(
@@ -325,18 +608,6 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                   fontFamily: 'Gelion',
                   fontSize: 15,
                   color: Color(0xFF122933),
-                ),
-              ),
-              SizedBox(height:1),
-              Text(
-                "N350,000.00",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  //letterSpacing: 1,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Gelion',
-                  fontSize: 15,
-                  color: Color(0xFF4EAF67),
                 ),
               ),
               SizedBox(height:21,),
@@ -411,7 +682,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                               },
                               color: Color(0xFF4EAF67),
                               child: Text(
-                                "Pay N350,000",
+                                "Pay",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,

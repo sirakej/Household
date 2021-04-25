@@ -64,7 +64,7 @@ class _PickedListState extends State<PickedList> {
                     ),
                     SizedBox(height: 8,),
                     Text(
-                      'Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ',
+                      'You’re only allowed to select a maximmum of 3\ncandidates per category',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,
@@ -228,7 +228,7 @@ class _PickedListState extends State<PickedList> {
                       SizedBox(height:16),
                       Center(
                         child: Text(
-                          "Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ",
+                          "This candidate has been added to your\ncurrent preference list",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -610,6 +610,91 @@ class _PickedListState extends State<PickedList> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
+                                                "Work History:",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF042538),
+                                                ),
+                                              ),
+                                              SizedBox(height:8),
+                                              Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                        SizedBox(width:8),
+                                                        Text(
+                                                          "8 months at Radisson BLU Anchorage Hote",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                        SizedBox(width:8),
+                                                        Text(
+                                                          " 4 months at Best Western Hotel Ikeja",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                        SizedBox(width:8),
+                                                        Text(
+                                                          "12 months at Southern SUN Ikoyi.",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 18),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
                                                 "Reports Available:",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
@@ -750,91 +835,6 @@ class _PickedListState extends State<PickedList> {
                                                     ],
                                                   ),
                                                 ],
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 18),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Work History:",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Gelion',
-                                                  fontSize: 14,
-                                                  color: Color(0xFF042538),
-                                                ),
-                                              ),
-                                              SizedBox(height:8),
-                                              Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          "8 months at Radisson BLU Anchorage Hote",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          " 4 months at Best Western Hotel Ikeja",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          "12 months at Southern SUN Ikoyi.",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ]
                                               ),
                                             ],
                                           ),

@@ -302,11 +302,12 @@ class _SavedCandidateState extends State<SavedCandidate> {
                             children: [
                               Image.asset("assets/icons/ads.png",fit:BoxFit.contain,width: 327,height:96),
                               Container(
-                                padding: EdgeInsets.only(left:27,top:12 , bottom:13),
+                                padding: EdgeInsets.only(left:27,top:5, bottom:14),
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'You’re in good hands',
+                                      'Peace of Mind',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -317,14 +318,14 @@ class _SavedCandidateState extends State<SavedCandidate> {
                                     ),
                                     SizedBox(height: 6,),
                                     Text(
-                                      "Aliqua id fugiat nostrud irure ex duis ea\nquis id quis ad et. ",
+                                      "Every service required for the proper\nmaintenance and upkeep of your\nhome is covered.",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         //letterSpacing: 1,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
-                                        color: Color(0xFF57565C),
+                                        color: Color(0xFFFFFFFF),
                                       ),
                                     ),
                                   ],

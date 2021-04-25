@@ -145,7 +145,7 @@ class _OnBoardState extends State<OnBoard> {
                       ),
                       SizedBox(height: 12,),
                       Text(
-                        "Aliqua id fugiat nostrud irure ex duis ea\nquis id quis ad et. ",
+                        "The provision of professional craftsman,\ndomestic and allied services for the elite.",
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,

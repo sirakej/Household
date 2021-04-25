@@ -67,7 +67,6 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     _controller.forward();
     time();
-    //navigate();
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Color(0xFFF3F6F8),
@@ -93,7 +92,13 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/icons/splash_logo.png',
+                    'assets/icons/splash_head_logo.png',
+                    width:28.69,
+                    height:47.54,
+                    fit: BoxFit.contain,
+                  ),
+                  Image.asset(
+                    'assets/icons/frame_logo.png',
                     width: 192,
                     height:48,
                     fit: BoxFit.contain,

@@ -42,7 +42,7 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
               ),
               SizedBox(height: 12,),
               Text(
-                'Aliqua id fugiat nostrud irure ex duis ea\nquis id quis ad et. ',
+                'Thank you for your payment. You may now\nview the reports on your candidates(s)\nand schedule interview date(s)',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,

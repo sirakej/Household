@@ -1002,7 +1002,4 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
         }
     );
   }
-
-
-
 }

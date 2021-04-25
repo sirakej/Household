@@ -465,6 +465,91 @@ class CandidateContainer extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
+                                                "Work History:",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF042538),
+                                                ),
+                                              ),
+                                              SizedBox(height:8),
+                                              Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                        SizedBox(width:8),
+                                                        Text(
+                                                          "8 months at Radisson BLU Anchorage Hote",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                        SizedBox(width:8),
+                                                        Text(
+                                                          " 4 months at Best Western Hotel Ikeja",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                        SizedBox(width:8),
+                                                        Text(
+                                                          "12 months at Southern SUN Ikoyi.",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 18),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
                                                 "Reports Available:",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
@@ -605,91 +690,6 @@ class CandidateContainer extends StatelessWidget {
                                                     ],
                                                   ),
                                                 ],
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 18),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Work History:",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Gelion',
-                                                  fontSize: 14,
-                                                  color: Color(0xFF042538),
-                                                ),
-                                              ),
-                                              SizedBox(height:8),
-                                              Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          "8 months at Radisson BLU Anchorage Hote",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          " 4 months at Best Western Hotel Ikeja",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          "12 months at Southern SUN Ikoyi.",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ]
                                               ),
                                             ],
                                           ),

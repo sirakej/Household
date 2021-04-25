@@ -53,7 +53,7 @@ class _FindACandidateState extends State<FindACandidate> {
               ),
               SizedBox(height: 8,),
               Text(
-                'Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ',
+                'Experienced, Professional & Vetted',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   //letterSpacing: 1,
@@ -63,7 +63,7 @@ class _FindACandidateState extends State<FindACandidate> {
                   color: Color(0xFF57565C),
                 ),
               ),
-              SizedBox(height: 15,),
+              SizedBox(height: 32,),
               _buildSearch(),
               SizedBox(height: 8,),
 
@@ -86,7 +86,7 @@ class _FindACandidateState extends State<FindACandidate> {
                         SizedBox(height: 6,),
                         _buildCandidateContainer("Hire a Doorman", "assets/icons/doorman.png"),
                         SizedBox(height: 6,),
-                        _buildCandidateContainer("Hire a Electrician", "assets/icons/electrician.png"),
+                        _buildCandidateContainer("Hire an Electrician", "assets/icons/electrician.png"),
                         SizedBox(height: 6,),
                         _buildCandidateContainer("Hire a Gardener", "assets/icons/gardener.png"),
                         SizedBox(height: 6,),

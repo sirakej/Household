@@ -84,7 +84,7 @@ class _MyListCandidateState extends State<MyListCandidate> {
                         ),
                     SizedBox(height: 8,),
                     Text(
-                      'Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ',
+                      'You’re only allowed to select a maximmum of 3\ncandidates per category',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,

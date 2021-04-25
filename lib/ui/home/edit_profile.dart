@@ -12,7 +12,6 @@ class EditProfile extends StatefulWidget {
   _EditProfileState createState() => _EditProfileState();
 }
 
-
 class _EditProfileState extends State<EditProfile> {
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
