@@ -157,7 +157,7 @@ class CandidateContainer extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(height: 64),
+                            SizedBox(height: 89),
                             Align(
                               alignment: Alignment.topCenter,
                               child: Text(
@@ -765,8 +765,8 @@ class CandidateContainer extends StatelessWidget {
                           Align(
                             alignment: Alignment.topCenter,
                             child: Container(
-                              width: 90,
-                              height: 90,
+                              width: 120,
+                              height: 120,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                               ),

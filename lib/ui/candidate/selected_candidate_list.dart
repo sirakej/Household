@@ -129,7 +129,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                     ),
                     SizedBox(height: 8,),
                     Text(
-                      'Aliqua id fugiat nostrud irure ex duis ea quis\nid quis ad et. ',
+                      'These are men and women with the culinary skills to\nprepare special dietary meals and/or Nigerian staples\nto perfection. Every meal will bea delight.',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,
