@@ -4,7 +4,6 @@ import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
-
 import 'forgot_password/reset_password.dart';
 
 

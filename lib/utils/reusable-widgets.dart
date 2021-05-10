@@ -573,7 +573,7 @@ class CandidateContainer extends StatelessWidget {
                                                       ),
                                                       SizedBox(width:8),
                                                       Text(
-                                                        "Identity Verification",
+                                                        "Identity Verification Report",
                                                         textAlign: TextAlign.start,
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w400,
@@ -594,7 +594,7 @@ class CandidateContainer extends StatelessWidget {
                                                       ),
                                                       SizedBox(width:8),
                                                       Text(
-                                                        "Criminal Record",
+                                                        "Background Check Report",
                                                         textAlign: TextAlign.start,
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w400,
@@ -615,7 +615,7 @@ class CandidateContainer extends StatelessWidget {
                                                       ),
                                                       SizedBox(width:8),
                                                       Text(
-                                                        "Medical Profile and History",
+                                                        "Medical Screening Report",
                                                         textAlign: TextAlign.start,
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w400,
@@ -636,49 +636,7 @@ class CandidateContainer extends StatelessWidget {
                                                       ),
                                                       SizedBox(width:8),
                                                       Text(
-                                                        "Residential Address Verification",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.check,
-                                                        size:12,
-                                                        color: Color(0xFF717F88),
-                                                      ),
-                                                      SizedBox(width:8),
-                                                      Text(
-                                                        "Guarantors Profile Verification",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.check,
-                                                        size:12,
-                                                        color: Color(0xFF717F88),
-                                                      ),
-                                                      SizedBox(width:8),
-                                                      Text(
-                                                        "Work History Verification ",
+                                                        "Guarantors Verification Report",
                                                         textAlign: TextAlign.start,
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w400,
