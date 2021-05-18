@@ -14,6 +14,7 @@ import 'package:householdexecutives_mobile/ui/registration/forgot_password/reset
 import 'package:householdexecutives_mobile/ui/registration/forgot_password/sent_link_page.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
+import 'package:householdexecutives_mobile/ui/registration/user_created_successfully.dart';
 import 'package:householdexecutives_mobile/ui/splash_screen.dart';
 import 'package:householdexecutives_mobile/ui/successful_pay.dart';
 import 'ui/home/home_screen.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         Reset.id:(context)=>Reset(),
         SentLinkPage.id:(context)=>SentLinkPage(),
         CreateNewPassword.id:(context)=>CreateNewPassword(),
+        UserCreatedSuccessfully.id:(context)=>UserCreatedSuccessfully(),
         FindACandidate.id:(context)=>FindACandidate(),
         SelectedCandidateList.id:(context)=>SelectedCandidateList(),
         Packages.id:(context)=>Packages(),

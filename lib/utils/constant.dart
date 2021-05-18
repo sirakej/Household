@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Constants {
@@ -62,7 +64,118 @@ class Constants {
     return result;
   }
 
+  /// Function to show success message with [_showAlert]
+  static showSuccess(BuildContext context, String message, {Function whereTo, bool shouldDismiss = true}) {
+    Timer.run(() => _showAlert(
+        context,
+        message,
+        Color(0xFFE2F8FF),
+        CupertinoIcons.check_mark_circled_solid,
+        Color.fromRGBO(91, 180, 107, 1),
+        shouldDismiss,
+        whereTo: whereTo
+    ));
+  }
+
+  /// Function to show info message with [_showAlert]
+  static showInfo(BuildContext context, String message, {bool shouldDismiss = true}) {
+    Timer.run(() => _showAlert(
+        context,
+        message,
+        Color(0xFFE7EDFB),
+        Icons.info_outline,
+        Color.fromRGBO(54, 105, 214, 1),
+        shouldDismiss
+    ));
+  }
+
+  /// Function to show error message with [_showAlert]
+  static showError(BuildContext context, String message, {bool shouldDismiss = true}) {
+    Timer.run(() => _showAlert(
+        context,
+        message,
+        Color(0xFF000000).withOpacity(0.5),
+        Icons.error_outline,
+        Colors.white,
+        shouldDismiss,
+        textColor: Colors.white
+    ));
+  }
+
+  /// Building a custom general dialog for my toast message with dynamic details
+  static _showAlert(BuildContext context, String message, Color color, IconData icon, Color iconColor, bool shouldDismiss, {Color textColor, Function whereTo}) {
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        transitionDuration: const Duration(milliseconds: 700),
+        pageBuilder: (BuildContext buildContext, Animation animation, Animation secondaryAnimation) {
+          if(shouldDismiss){
+            Future.delayed(const Duration(seconds: 1), () {
+              Navigator.of(context, rootNavigator: true).pop();
+            }).then((value) {
+              if(whereTo != null){
+                whereTo();
+              }
+            });
+          }
+          return Material(
+            type: MaterialType.transparency,
+            //animationDuration: Duration(milliseconds: 3500),
+            child: WillPopScope(
+              onWillPop: () async => false,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50, bottom: 10),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                      width: MediaQuery.of(context).size.width - 40,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(10),
+                              bottom: Radius.circular(10)
+                          ),
+                          color: color
+                      ),
+                      padding: EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            icon,
+                            size: 30,
+                            color: iconColor,
+                          ),
+                          SizedBox(width: 5),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Text(
+                                message,
+                                style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    color: textColor ?? Colors.black
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
 }
+
+/// This variable holds the value of the API base url
+const String BASE_URL = "https://householdexecutives.herokuapp.com/v1/";
 
 const kFieldDecoration = InputDecoration(
   border: OutlineInputBorder(

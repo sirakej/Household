@@ -6,7 +6,7 @@ import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 
 class UserCreatedSuccessfully extends StatefulWidget {
-  static const String id = 'successful_pay';
+  static const String id = 'user_created_asuccessfully';
   @override
   _UserCreatedSuccessfullyState createState() => _UserCreatedSuccessfullyState();
 }

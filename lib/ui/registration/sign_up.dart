@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/database/user_db_helper.dart';
+import 'package:householdexecutives_mobile/model/user.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/ui/registration/user_created_successfully.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SignUp extends StatefulWidget {
@@ -51,6 +55,10 @@ class _SignUpState extends State<SignUp> {
   String _password = '';
 
   bool isCheck = false;
+
+  /// A boolean variable to control showing of the progress indicator
+  bool _showSpinner = false;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -105,14 +113,16 @@ class _SignUpState extends State<SignUp> {
                        ),
                        padding: EdgeInsets.only(top:18 ,bottom: 18),
                        onPressed:(){
-                         Navigator.push(context,
-                             CupertinoPageRoute(builder: (_){
-                               return UserCreatedSuccessfully();
-                             })
-                         );
+                      if(isCheck == true && _passwordValidated == true){
+                        if(_formKey.currentState.validate()){
+                          _signUp();
+                        }
+                      }
                        },
                        color: Color(0xFF00A69D),
-                       child: Text(
+                       child:  _showSpinner
+                           ? CupertinoActivityIndicator(radius: 13)
+                           :Text(
                          "Register Account",
                          textAlign: TextAlign.start,
                          style: TextStyle(
@@ -227,6 +237,10 @@ class _SignUpState extends State<SignUp> {
                     if(value.isEmpty){
                       return 'Enter your First Name';
                     }
+                    if (value.length < 3){
+                      return 'Firstname should be at least 3 characters';
+                    }
+                    return null;
                     return null;
                   },
                   style: TextStyle(
@@ -273,6 +287,9 @@ class _SignUpState extends State<SignUp> {
                     if(value.isEmpty){
                       return 'Enter your Surname';
                     }
+                    if (value.length < 3){
+                      return 'Surname should be at least 3 characters';
+                    }
                     return null;
                   },
                   style: TextStyle(
@@ -315,9 +332,12 @@ class _SignUpState extends State<SignUp> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  validator: (value){
-                    if(value.isEmpty){
-                      return 'Enter your email address';
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter your email';
+                    }
+                    if (value.length < 3 && !value.contains("@") && !value.contains(".")){
+                      return 'Invalid email address';
                     }
                     return null;
                   },
@@ -541,7 +561,7 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               IconButton(
-                  icon: isCheck?Icon(
+                  icon: isCheck == false?Icon(
                     Icons.check_box_outline_blank_outlined,
                     size: 25,
                     color:  Color(0xFF9097A5),
@@ -609,20 +629,26 @@ class _SignUpState extends State<SignUp> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
-              height: 4,
-              color: Color(0xFFFA9E3E),
+            Expanded(
+              child: AnimatedContainer(
+                width: SizeConfig.screenWidth,
+                height: 4,
+                color: Color(0xFFFA9E3E), duration:  Duration(milliseconds: 700),
+              ),
             ),
-            Container(
-              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
-              height: 4,
-              color: Color(0xFFFA9E3E),
+            Expanded( 
+              child: AnimatedContainer( 
+                width: SizeConfig.screenWidth,
+                height: 4,
+                color: Color(0xFFFA9E3E), duration:  Duration(milliseconds: 700),
+              ),
             ),
-            Container(
-              width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
-              height: 4,
-              color: Color(0xFFFA9E3E),
+            Expanded(
+              child: AnimatedContainer(
+                width: SizeConfig.screenWidth,
+                height: 4,
+                color: Color(0xFFFA9E3E), duration:  Duration(milliseconds: 700),
+              ),
             ),
           ],
         ),
@@ -637,15 +663,15 @@ class _SignUpState extends State<SignUp> {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
+            AnimatedContainer(
               width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
-              color: Color(0xFFFA9E3E),
+              color: Color(0xFFFA9E3E), duration:  Duration(milliseconds: 700),
             ),
-            Container(
+            AnimatedContainer(
               width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
-              color: Color(0xFFFA9E3E),
+              color: Color(0xFFFA9E3E), duration:  Duration(milliseconds: 700),
             ),
           ],
         ),
@@ -661,10 +687,10 @@ class _SignUpState extends State<SignUp> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
+            AnimatedContainer(
               width: ((SizeConfig.screenWidth - 30) / 3.1 ) - 2,
               height: 4,
-              color: Color(0xFFFA9E3E),
+              color: Color(0xFFFA9E3E), duration:  Duration(milliseconds: 700),
             ),
           ],
         ),
@@ -677,4 +703,48 @@ class _SignUpState extends State<SignUp> {
       return Container();
     }
   }
+
+/// Function that creates a new user by calling
+/// [signUp] in the [AuthRestDataSource] class
+
+  void _signUp(){
+    if(!mounted)return;
+    setState(() {
+      _showSpinner = true;
+    });
+    var api = AuthRestDataSource();
+    api.signUp(_firstController.text,_surnameController.text, _emailController.text,_mobileController.text, _passwordController.text).then((User user)async {
+      _firstController.clear();
+      _surnameController.clear();
+      _emailController.clear();
+      _mobileController.clear();
+      _passwordController.clear();
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+      });
+      var db=DatabaseHelper();
+      await db.initDb();
+      await db.saveUser(user);
+      _addBoolToSF(true,user);
+    }).catchError((e){
+      print(e);
+      _passwordController.clear();
+      if (!mounted) return;
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, e);
+    });
+  }
+
+  /// This function adds a [state] boolean value to the device
+  /// [SharedPreferences] logged in
+  _addBoolToSF(bool state, User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', state);
+    Navigator.pushNamedAndRemoveUntil(context, UserCreatedSuccessfully.id, (route) => false);
+
+  }
+
+
+
 }

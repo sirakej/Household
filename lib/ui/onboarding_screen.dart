@@ -54,7 +54,7 @@ class _OnBoardState extends State<OnBoard> {
       index = 0;
       _pageController.animateToPage(
         0,
-        duration: Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 500),
         curve: Curves.easeIn,
       );
     } else {
@@ -68,7 +68,7 @@ class _OnBoardState extends State<OnBoard> {
 
 
   Widget _indicator = AnimatedContainer(
-    duration: Duration(milliseconds: 150),
+    duration: Duration(milliseconds: 500),
     margin: EdgeInsets.symmetric(horizontal: 5.0),
     height: 8.0,
     width: 8.0,
@@ -220,4 +220,11 @@ class _OnBoardState extends State<OnBoard> {
       ),
     );
   }
-}
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+  }

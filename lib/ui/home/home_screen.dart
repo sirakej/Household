@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find_a_candidate.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
@@ -22,6 +23,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _searchController = TextEditingController();
+
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
+  /// String variable to hold the current name of the user
+  String _firstName = '';
+
+  /// Setting the current user logged in to [_firstName]
+  void _getCurrentUser() async {
+    await futureValue.getCurrentUser().then((user) {
+      if(!mounted)return;
+      setState(() {
+        _firstName = user.firstName;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  @override
+  void initState() {
+    _getCurrentUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -169,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Welcome, Precious",
+                            "Welcome, $_firstName",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,

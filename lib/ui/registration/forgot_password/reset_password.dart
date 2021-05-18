@@ -143,9 +143,12 @@ class _ResetState extends State<Reset> {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
-              validator: (value){
-                if(value.isEmpty){
-                  return 'Enter your email address';
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Enter your email';
+                }
+                if (value.length < 3 || !value.contains("@") || !value.contains(".")){
+                  return 'Invalid email address';
                 }
                 return null;
               },

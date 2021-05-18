@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/database/user_db_helper.dart';
+import 'package:householdexecutives_mobile/model/user.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'forgot_password/reset_password.dart';
 
 
@@ -26,6 +30,8 @@ class _SignInState extends State<SignIn> {
 
   /// A boolean variable to hold whether the password should be shown or hidden
   bool _obscureTextLogin = true;
+
+  bool _showSpinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +87,9 @@ class _SignInState extends State<SignIn> {
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
                         onPressed:(){
-                          Navigator.push(context,
-                              CupertinoPageRoute(builder: (_){
-                                return HomeScreen();
-                              })
-                          );
+                          if(_formKey.currentState.validate()){
+                            _loginUser();
+                          }
                         },
                         color: Color(0xFF00A69D),
                         child: Text(
@@ -196,9 +200,12 @@ class _SignInState extends State<SignIn> {
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
-              validator: (value){
-                if(value.isEmpty){
-                  return 'Enter your email address';
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Enter your email';
+                }
+                if (value.length < 3 || !value.contains("@") || !value.contains(".")){
+                  return 'Invalid email address';
                 }
                 return null;
               },
@@ -313,5 +320,46 @@ class _SignInState extends State<SignIn> {
     setState(() {
       _obscureTextLogin = !_obscureTextLogin;
     });
+  }
+
+  void _loginUser(){
+    if(!mounted) return;
+    setState(() {
+      _showSpinner = true;
+    });
+    var api = AuthRestDataSource();
+    api.signIn(_emailController.text, _passwordController.text).then((User user) async{
+      _emailController.clear();
+      _passwordController.clear();
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+      });
+      var db = DatabaseHelper();
+      await db.initDb();
+      await db.saveUser(user);
+      _addBoolToSF(true, user);
+    }).catchError((e){
+      print(e);
+      _passwordController.clear();
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+
+      });
+      Constants.showError(context,e);
+    });
+  }
+
+  /// This function adds a [state] boolean value to the device
+  /// [SharedPreferences] logged in
+  _addBoolToSF(bool state, User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', state);
+    Navigator.push(context,
+        CupertinoPageRoute(builder: (_){
+          return HomeScreen();
+        })
+    );
   }
 }
