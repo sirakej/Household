@@ -57,352 +57,75 @@ class _FindACandidateState extends State<FindACandidate> {
   }
 
   /// A function to build the list of all the available payments plans
-//  Widget _buildList() {
-//    if(_plans.length > 0 && _plans.isNotEmpty){
-//      _planList.clear();
-//      for (int i = 0; i < _plans.length; i++){
-//        if(_plans[i].freeplan){
-//          _planList.add(
-//              GestureDetector(
-//                onTap: (){
-////                  Navigator.of(context).pushReplacement(
-////                      easeIn(context, Index(currentIndex: 0), Offset(1.0, 0.0))
-////                  );
-//                },
-//                child: Container(
-//                  padding: EdgeInsets.fromLTRB(27, 23, 27, 26),
-//                  margin: EdgeInsets.only(bottom: 16),
-//                  width: SizeConfig.screenWidth - 32,
-//                  decoration: BoxDecoration(
-//                    color: Color(0xFFFFFFFF),
-//                    borderRadius: BorderRadius.all(Radius.circular(10)),
-//                  ),
-//                  child: Column(
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: [
-//                      Text(
-//                        _plans[i].title,
-//                        textAlign: TextAlign.start,
-//                        style: TextStyle(
-//                            fontFamily: 'Graphik',
-//                            fontSize: 16,
-//                            fontWeight: FontWeight.w500,
-//                            color: Color(0xFF06C03A)
-//                        ),
-//                      ),
-//                      SizedBox(height: 8.5),
-//                      Row(
-//                        children: [
-//                          Container(
-//                            width: 6,
-//                            height: 6,
-//                            decoration: BoxDecoration(
-//                              shape: BoxShape.circle,
-//                              color: Color(0xFF002C9D).withOpacity(0.1),
-//                            ),
-//                          ),
-//                          SizedBox(width: 8),
-//                          Container(
-//                            width: SizeConfig.screenWidth - 150,
-//                            child: Text(
-//                              '${_plans[i].noOfBasicAssessment} Basic assessment or ${_plans[i].noOfEnhancedAssessment} enhanced assessment',
-//                              style: TextStyle(
-//                                  fontFamily: 'Graphik',
-//                                  fontSize: 12,
-//                                  color: Color(0xFF000000).withOpacity(0.5)
-//                              ),
-//                            ),
-//                          ),
-//                        ],
-//                      ),
-//                      SizedBox(height: 8),
-//                      Row(
-//                        children: [
-//                          Container(
-//                            width: 6,
-//                            height: 6,
-//                            decoration: BoxDecoration(
-//                              shape: BoxShape.circle,
-//                              color: Color(0xFF002C9D).withOpacity(0.1),
-//                            ),
-//                          ),
-//                          SizedBox(width: 8),
-//                          Container(
-//                            width: SizeConfig.screenWidth - 150,
-//                            child: Text(
-//                              'Valid for ${_plans[i].duration} days',
-//                              style: TextStyle(
-//                                  fontFamily: 'Graphik',
-//                                  fontSize: 12,
-//                                  color: Color(0xFF000000).withOpacity(0.5)
-//                              ),
-//                            ),
-//                          ),
-//                        ],
-//                      ),
-//                    ],
-//                  ),
-//                ),
-//              )
-//          );
-//        }
-//        else if(_plans[i].payAsYouGo){
-//          _planList.add(
-//            GestureDetector(
-//              onTap: (){
-//                Navigator.of(context).pushReplacement(
-//                    easeIn(context, Index(currentIndex: 0), Offset(1.0, 0.0))
-//                );
-//              },
-//              child: Container(
-//                padding: EdgeInsets.fromLTRB(27, 23, 27, 29.51),
-//                margin: EdgeInsets.only(bottom: 16),
-//                width: SizeConfig.screenWidth - 32,
-//                decoration: BoxDecoration(
-//                  color: Color(0xFF00154C),
-//                  borderRadius: BorderRadius.all(Radius.circular(10)),
-//                ),
-//                child: Column(
-//                  crossAxisAlignment: CrossAxisAlignment.start,
-//                  children: [
-//                    Text(
-//                      _plans[i].title,
-//                      textAlign: TextAlign.start,
-//                      style: TextStyle(
-//                          fontFamily: 'Graphik',
-//                          fontSize: 16,
-//                          fontWeight: FontWeight.w500,
-//                          color: Color(0xFF06C03A)
-//                      ),
-//                    ),
-//                    SizedBox(height: 8.5),
-//                    Row(
-//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                      crossAxisAlignment: CrossAxisAlignment.start,
-//                      children: [
-//                        Column(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: [
-//                            Row(
-//                              crossAxisAlignment: CrossAxisAlignment.start,
-//                              children: [
-//                                Container(
-//                                  padding: EdgeInsets.only(top: 4),
-//                                  child: Text(
-//                                    '£',
-//                                    style: TextStyle(
-//                                      fontFamily: 'Graphik',
-//                                      fontSize: 12,
-//                                      fontWeight: FontWeight.w500,
-//                                      color: Color(0xFFFFFFFF),
-//                                    ),
-//                                  ),
-//                                ),
-//                                RichText(
-//                                  textAlign: TextAlign.center,
-//                                  text: TextSpan(
-//                                    text: '${_plans[i].priceOfBasicAssessment}.',
-//                                    style: TextStyle(
-//                                      fontFamily: 'Graphik',
-//                                      fontSize: 25,
-//                                      fontWeight: FontWeight.w600,
-//                                      color: Color(0xFFFFFFFF),
-//                                    ),
-//                                    children: <TextSpan>[
-//                                      TextSpan(
-//                                          text: '00',
-//                                          style: TextStyle(
-//                                            fontFamily: 'Graphik',
-//                                            fontSize: 20,
-//                                            fontWeight: FontWeight.w600,
-//                                            color: Color(0xFFFFFFFF),
-//                                          )
-//                                      ),
-//                                    ],
-//                                  ),
-//                                ),
-//                              ],
-//                            ),
-//                            Text(
-//                              'per basic assessment',
-//                              textAlign: TextAlign.start,
-//                              style: TextStyle(
-//                                fontFamily: 'Graphik',
-//                                fontSize: 8,
-//                                color: Color(0xFFFFFFFF),
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                        Container(
-//                          padding: EdgeInsets.only(top: 8),
-//                          alignment: Alignment.center,
-//                          child: Container(
-//                            width: 1,
-//                            height: 27.95,
-//                            color: Color(0xFF8795B8),
-//                          ),
-//                        ),
-//                        Column(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: [
-//                            Row(
-//                              crossAxisAlignment: CrossAxisAlignment.start,
-//                              children: [
-//                                Container(
-//                                  padding: EdgeInsets.only(top: 4),
-//                                  child: Text(
-//                                    '£',
-//                                    style: TextStyle(
-//                                      fontFamily: 'Graphik',
-//                                      fontSize: 12,
-//                                      fontWeight: FontWeight.w500,
-//                                      color: Color(0xFFFFFFFF),
-//                                    ),
-//                                  ),
-//                                ),
-//                                RichText(
-//                                  textAlign: TextAlign.center,
-//                                  text: TextSpan(
-//                                    text: '${_plans[i].priceOfEnhancedAssessment}.',
-//                                    style: TextStyle(
-//                                      fontFamily: 'Graphik',
-//                                      fontSize: 25,
-//                                      fontWeight: FontWeight.w600,
-//                                      color: Color(0xFFFFFFFF),
-//                                    ),
-//                                    children: <TextSpan>[
-//                                      TextSpan(
-//                                          text: '00',
-//                                          style: TextStyle(
-//                                            fontFamily: 'Graphik',
-//                                            fontSize: 20,
-//                                            fontWeight: FontWeight.w600,
-//                                            color: Color(0xFFFFFFFF),
-//                                          )
-//                                      ),
-//                                    ],
-//                                  ),
-//                                ),
-//                              ],
-//                            ),
-//                            Text(
-//                              'per enhanced assessment',
-//                              textAlign: TextAlign.start,
-//                              style: TextStyle(
-//                                fontFamily: 'Graphik',
-//                                fontSize: 8,
-//                                color: Color(0xFFFFFFFF),
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                      ],
-//                    ),
-//                  ],
-//                ),
-//              ),
-//            ),
-//          );
-//        }
-//        else {
-//          _planList.add(
-//            _buildContainer(_plans[i]),
-//          );
-//        }
-//      }
-//      _planList.add(
-//          Container(
-//            padding: EdgeInsets.fromLTRB(27, 23, 27, 26),
-//            width: SizeConfig.screenWidth - 32,
-//            decoration: BoxDecoration(
-//              color: Color(0xFF00154D),
-//              borderRadius: BorderRadius.all(Radius.circular(10)),
-//            ),
-//            child: Column(
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: [
-//                Text(
-//                  'Custom Package',
-//                  textAlign: TextAlign.start,
-//                  style: TextStyle(
-//                      fontFamily: 'Graphik',
-//                      fontSize: 16,
-//                      fontWeight: FontWeight.w500,
-//                      color: Color(0xFF06C03A)
-//                  ),
-//                ),
-//                SizedBox(height: 8.5),
-//                Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: [
-//                    Container(
-//                      child: Row(
-//                        children: [
-//                          Container(
-//                            width: 6,
-//                            height: 6,
-//                            decoration: BoxDecoration(
-//                                shape: BoxShape.circle,
-//                                color: Color(0xFFFFFFFF).withOpacity(0.4)
-//                            ),
-//                          ),
-//                          SizedBox(width: 8),
-//                          Container(
-//                            width: (SizeConfig.screenWidth - 150) / 2,
-//                            child: Text(
-//                              'Please contact us to discuss',
-//                              style: TextStyle(
-//                                  fontFamily: 'Graphik',
-//                                  fontSize: 12,
-//                                  color: Color(0xFFFFFFFF)
-//                              ),
-//                            ),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
-//                    GestureDetector(
-//                      onTap: (){
-//
-//                      },
-//                      child: Container(
-//                        padding: EdgeInsets.fromLTRB(0, 11, 0, 11),
-//                        width: (SizeConfig.screenWidth - 150) / 2,
-//                        alignment: Alignment.center,
-//                        decoration: BoxDecoration(
-//                          color: Color.fromARGB(19, 255, 255, 255),
-//                          borderRadius: BorderRadius.all(Radius.circular(3)),
-//                        ),
-//                        child: Text(
-//                          'Contact Us',
-//                          textAlign: TextAlign.center,
-//                          style: TextStyle(
-//                              fontFamily: 'Graphik',
-//                              fontSize: 13,
-//                              fontWeight: FontWeight.w500,
-//                              color: Color(0xFFFFFFFF)
-//                          ),
-//                        ),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ],
-//            ),
-//          )
-//      );
-//      return Column(
-//        children: _planList,
-//      );
-//    }
-//    else if(_planLength == 0){
-//      return Container();
-//    }
-//    return Center(child: CupertinoActivityIndicator(radius: 15));
-//  }
+  Widget _buildList() {
+    if(_categories.length > 0 && _categories.isNotEmpty){
+      _categoriesList.clear();
+      for (int i = 0; i < _categories.length; i++){
+        _categoriesList.add(
+            Container(
+              margin: EdgeInsets.only(bottom: 6),
+              child: InkWell(
+                onTap: (){
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_){
+                        return SelectedCandidateList(
+                          category: _categories[i],
+                        );
+                      })
+                  );
+                },
+                child: Container(
+                  width: SizeConfig.screenWidth,
+                  padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFFFFFFF),
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                      border: Border.all(
+                          width: 1,
+                          color: Color(0xFFEBF1F4)
+                      )
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                        ),
+                        child: Image.network("${_categories[i].image}",height: 54,width: 54,fit: BoxFit.contain,),
+                      ),
+                      SizedBox(width:12,),
+                      Text(
+                        "Hire a ${_categories[i].name}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          //letterSpacing: 1,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        );
+      }
 
-  bool _showSpinner = false;
+      return Column(
+        children: _categoriesList,
+      );
+    }
+    else if(_categoriesLength == 0){
+      return Container();
+    }
+    return Center(child: CupertinoActivityIndicator(radius: 15));
+  }
+
+  //bool _showSpinner = false;
 
   @override
   void initState() {
@@ -465,7 +188,7 @@ class _FindACandidateState extends State<FindACandidate> {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-//                        Container(height: 16,),
+                        Container(height: 16,),
 //                        _buildCandidateContainer("Hire a Butler", "assets/icons/butler.png"),
 //                        SizedBox(height: 6,),
 //                        _buildCandidateContainer("Hire a Caregiver", "assets/icons/Caregiver.png"),
@@ -490,6 +213,7 @@ class _FindACandidateState extends State<FindACandidate> {
 //                        SizedBox(height: 6,),
 //                        _buildCandidateContainer("Hire a Plumber", "assets/icons/plumber.png"),
 //                        SizedBox(height: 6,),
+                      _buildList(),
                       ],
                     ),
                   ),
@@ -538,52 +262,52 @@ class _FindACandidateState extends State<FindACandidate> {
     );
   }
 
-  Widget _buildCandidateContainer(String candidateRole , String imagePath){
-    return InkWell(
-      onTap: (){
-        Navigator.push(context,
-            CupertinoPageRoute(builder: (_){
-              return SelectedCandidateList();
-            })
-        );
-      },
-      child: Container(
-        width: SizeConfig.screenWidth,
-        padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.all(Radius.circular(6)),
-          border: Border.all(
-            width: 1,
-            color: Color(0xFFEBF1F4)
-          )
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-              ),
-              child: Image.asset(imagePath,height: 54,width: 54,fit: BoxFit.contain,),
-            ),
-            SizedBox(width:12,),
-            Text(
-              candidateRole,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                //letterSpacing: 1,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Gelion',
-                fontSize: 16,
-                color: Color(0xFF042538),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+//  Widget _buildCandidateContainer(String candidateRole , String imagePath){
+//    return InkWell(
+//      onTap: (){
+//        Navigator.push(context,
+//            CupertinoPageRoute(builder: (_){
+//              return SelectedCandidateList();
+//            })
+//        );
+//      },
+//      child: Container(
+//        width: SizeConfig.screenWidth,
+//        padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
+//        decoration: BoxDecoration(
+//          color: Color(0xFFFFFFFF),
+//          borderRadius: BorderRadius.all(Radius.circular(6)),
+//          border: Border.all(
+//            width: 1,
+//            color: Color(0xFFEBF1F4)
+//          )
+//        ),
+//        child: Row(
+//          crossAxisAlignment: CrossAxisAlignment.center,
+//          mainAxisAlignment: MainAxisAlignment.start,
+//          children: [
+//            Container(
+//              decoration: BoxDecoration(
+//                borderRadius: BorderRadius.all(Radius.circular(6)),
+//              ),
+//              child: Image.asset(imagePath,height: 54,width: 54,fit: BoxFit.contain,),
+//            ),
+//            SizedBox(width:12,),
+//            Text(
+//              candidateRole,
+//              textAlign: TextAlign.start,
+//              style: TextStyle(
+//                //letterSpacing: 1,
+//                fontWeight: FontWeight.w400,
+//                fontFamily: 'Gelion',
+//                fontSize: 16,
+//                color: Color(0xFF042538),
+//              ),
+//            ),
+//          ],
+//        ),
+//      ),
+//    );
+//  }
 
 }

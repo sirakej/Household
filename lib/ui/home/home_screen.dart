@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find_a_candidate.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -737,7 +740,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(height:15,),
                             Center(
                               child: TextButton(
-                                onPressed:(){},
+                                onPressed:(){
+                                  _logout();
+                                },
                                 child: Text(
                                   "Sign Out",
                                   textAlign: TextAlign.start,
@@ -807,5 +812,31 @@ class _HomeScreenState extends State<HomeScreen> {
         }
     );
   }
+
+  /// Function to logout your account
+  void _logout() async {
+    var db = DatabaseHelper();
+    await db.deleteUsers();
+    _getBoolValuesSF();
+  }
+
+  /// Function to get the 'loggedIn' in your SharedPreferences
+  _getBoolValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool boolValue = prefs.getBool('loggedIn') ?? true;
+    if(boolValue == true){
+      _addBoolToSF();
+    }
+  }
+
+  /// Function to set the 'loggedIn' in your SharedPreferences to false
+  _addBoolToSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', false);
+    await prefs.setBool('fullRegistration', false);
+    Navigator.of(context).pushNamedAndRemoveUntil(SignIn.id, (Route<dynamic> route) => false);
+
+  }
+
 
 }

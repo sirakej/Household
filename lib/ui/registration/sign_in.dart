@@ -92,7 +92,9 @@ class _SignInState extends State<SignIn> {
                           }
                         },
                         color: Color(0xFF00A69D),
-                        child: Text(
+                        child:  _showSpinner
+                            ? CupertinoActivityIndicator(radius: 13)
+                            :Text(
                           "Login",
                           textAlign: TextAlign.start,
                           style: TextStyle(

@@ -3,7 +3,6 @@ import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
-
 import 'error-handler.dart';
 import 'network_util.dart';
 
@@ -75,7 +74,6 @@ class AuthRestDataSource {
       errorHandler.handleError(e);
     });
   }
-
 //  /// A function that reset user's password POST with [email]
 //  Future<dynamic> resetPassword(String email) async{
 //    Map<String, String> header = {"Content-Type": "application/json"};

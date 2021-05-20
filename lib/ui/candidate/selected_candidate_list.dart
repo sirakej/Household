@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/custom_slider.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
@@ -7,7 +8,12 @@ import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 class SelectedCandidateList extends StatefulWidget {
 
   static const String id = 'selected_candidate';
+  final Category category;
 
+  const SelectedCandidateList({
+    Key key,
+    @required this.category,
+  }) : super(key: key);
   @override
   _SelectedCandidateListState createState() => _SelectedCandidateListState();
 }
@@ -114,7 +120,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Chef',
+                          '${widget.category.name}',
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -129,7 +135,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                     ),
                     SizedBox(height: 8,),
                     Text(
-                      'These are men and women with the culinary skills to\nprepare special dietary meals and/or Nigerian staples\nto perfection. Every meal will bea delight.',
+                      "${widget.category.description}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,

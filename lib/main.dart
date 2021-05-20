@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         CreateNewPassword.id:(context)=>CreateNewPassword(),
         UserCreatedSuccessfully.id:(context)=>UserCreatedSuccessfully(),
         FindACandidate.id:(context)=>FindACandidate(),
-        SelectedCandidateList.id:(context)=>SelectedCandidateList(),
+        //SelectedCandidateList.id:(context)=>SelectedCandidateList(),
         Packages.id:(context)=>Packages(),
         SuccessfulPay.id:(context)=>SuccessfulPay(),
         HomeScreen.id:(context)=>HomeScreen(),
