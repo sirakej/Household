@@ -1,34 +1,35 @@
-import 'category_class.dart';
-
-class Category {
-  Category({
+class CategoryClass {
+  CategoryClass({
     this.id,
     this.createdAt,
     this.updatedAt,
-    this.category,
-    this.noOfCandidate,
+    this.name,
+    this.description,
+    this.image,
   });
 
   String id;
   DateTime createdAt;
   DateTime updatedAt;
-  CategoryClass category;
-  int noOfCandidate;
+  String name;
+  String description;
+  String image;
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory CategoryClass.fromJson(Map<String, dynamic> json) => CategoryClass(
     id: json["_id"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
-    category: CategoryClass.fromJson(json["category"]),
-    noOfCandidate: json["no_of_candidate"],
+    name: json["name"],
+    description: json["description"],
+    image: json["image"],
   );
 
   Map<String, dynamic> toJson() => {
     "_id": id,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
-    "category": category.toJson(),
-    "no_of_candidate": noOfCandidate,
+    "name": name,
+    "description": description,
+    "image": image,
   };
 }
-

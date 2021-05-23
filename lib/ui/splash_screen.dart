@@ -56,6 +56,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
     Timer(
       Duration(milliseconds: 900),
           () {
+        if(!mounted)return;
         setState(() {
           left = right =true;
         });

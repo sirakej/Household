@@ -12,6 +12,10 @@ class CandidateContainer extends StatelessWidget {
   final String candidateCity;
   final String imagePath;
   final double ratings;
+  final String candidateAge;
+  final String candidateTribe;
+  final String candidateSkill;
+  final String candidateWorkhistory;
 
   const CandidateContainer({
     Key key,
@@ -21,7 +25,11 @@ class CandidateContainer extends StatelessWidget {
     @required this.candidateAvailability,
     @required this.candidateCity,
     @required this.imagePath,
-    @required this.ratings
+    @required this.ratings,
+    @required this.candidateAge,
+    @required this.candidateTribe,
+    @required this.candidateSkill,
+    @required this.candidateWorkhistory,
   }) : super(key: key);
 
   @override
@@ -67,7 +75,7 @@ class CandidateContainer extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  candidateExperienceYears,
+                  "$candidateExperienceYears Years Experience",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     //letterSpacing: 1,
@@ -161,7 +169,7 @@ class CandidateContainer extends StatelessWidget {
                             Align(
                               alignment: Alignment.topCenter,
                               child: Text(
-                                "Aderonke",
+                                "$candidateName",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -230,7 +238,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height: 8),
                                                   Text(
-                                                    "Yoruba",
+                                                    "$candidateTribe",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -288,7 +296,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height:8),
                                                   Text(
-                                                    "28",
+                                                    "$candidateAge",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -384,7 +392,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height:8),
                                                   Text(
-                                                    "Female",
+                                                    "$candidateGender",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -411,7 +419,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height:8),
                                                   Text(
-                                                    "2 Years +",
+                                                    "$candidateExperienceYears Years +",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -448,7 +456,8 @@ class CandidateContainer extends StatelessWidget {
                                               Container(
                                                 width: SizeConfig.screenWidth - 120,
                                                 child: Text(
-                                                  "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
+//                                                  "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
+                                                    "$candidateSkill",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,

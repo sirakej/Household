@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/database/user_db_helper.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   static const String id = 'edit_profile';
@@ -13,6 +17,100 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
+  File _image;
+
+  Future<void> _getImage() async {
+    try{
+      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+
+      if(!mounted)return;
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    } catch (e){
+      print(e);
+      if(e.toString().contains('PlatformException')){
+        _buildImageRequest();
+      }
+      Constants.showInfo(context, 'You haven\'t selected an image');
+    }
+  }
+
+  final _picker = ImagePicker();
+
+  Future<void> _buildImageRequest(){
+    return showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        elevation: 0.0,
+        child: Container(
+          width: 300,
+          height: 165,
+          decoration: BoxDecoration(
+            color: Color(0xFFFFFFFF).withOpacity(0.91),
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+          ),
+          child:  Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: Text(
+                    'Note',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Raleway',
+                        color: Color(0xFF1D1D1D)
+                    ),
+                  )
+              ),
+              Container(
+                width: 260,
+                padding: EdgeInsets.only(top: 12, bottom: 11),
+                child: Text(
+                  "You disabled permission to access your storage. Please enable access to your storage in settings to upload images",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Raleway',
+                  ),
+                ),
+              ),
+              Container(
+                width: 252,
+                height: 1,
+                color: Color(0xFF9C9C9C).withOpacity(0.44),
+              ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(top: 12.0, bottom: 11),
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Raleway',
+                        color: Color(0xFF1FD47D)
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
 
@@ -23,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController _surnameController = TextEditingController();
 
   /// A [TextEditingController] to control the input text for the user's email
-  TextEditingController _emailController = TextEditingController();
+//  TextEditingController _emailController = TextEditingController();
 
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _mobileController = TextEditingController();
@@ -35,6 +133,53 @@ class _EditProfileState extends State<EditProfile> {
   bool _obscureTextLogin = true;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  /// A boolean variable to control showing of the progress indicator
+  bool _showSpinner = false;
+
+
+  /// A String variable to hold the user's first name
+  String _firstName = '';
+
+  /// A String variable to hold the user's first name
+  String _id = '';
+
+  /// A String variable to hold the user's last name
+  String _surName = '';
+
+  /// A String variable to hold the user's email
+  String _email = '';
+
+  /// A String variable to hold the user's phone number
+  String _phoneNumber = '';
+
+  /// A String variable to hold the user's image url
+  String _imageUrl = '';
+
+  /// Setting the current user's details to [_userId], [_fullName],
+  /// [_username] and [_phoneNumber]
+  void _getCurrentUser() async {
+    // await futureValue.updateUser();
+    await futureValue.getCurrentUser().then((user) {
+      if(!mounted)return;
+      setState(() {
+       // _imageUrl = user.profileImage;
+        _id = user.id;
+        _firstName = user.firstName;
+        _surName = user.surName;
+        _email = user.email;
+        _phoneNumber = user.phoneNumber;
+      });
+    }).catchError((Object error) {
+      print(error.toString());
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,14 +371,14 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                                 padding: EdgeInsets.only(top:18 ,bottom: 18),
                                 onPressed:(){
-                                  Navigator.push(context,
-                                      CupertinoPageRoute(builder: (_){
-                                        return HomeScreen();
-                                      })
-                                  );
+                                  if(_formKey.currentState.validate()){
+                                    _updateUser();
+                                  }
                                 },
                                 color: Color(0xFF00A69D),
-                                child: Text(
+                                child:   _showSpinner
+                                    ? CupertinoActivityIndicator(radius: 13)
+                                    :Text(
                                   "Save",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
@@ -257,6 +402,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
   Widget _buildEditProfile() {
     return Form(
         key: _formKey,
@@ -297,7 +443,7 @@ class _EditProfileState extends State<EditProfile> {
                         color: Color(0xFF042538),
                       ),
                       decoration:kFieldDecoration.copyWith(
-                          hintText: 'Precious',
+                          hintText: '$_firstName',
                           hintStyle:TextStyle(
                             color:Color(0xFF717F88),
                             fontSize: 14,
@@ -344,7 +490,7 @@ class _EditProfileState extends State<EditProfile> {
                         color: Color(0xFF042538),
                       ),
                       decoration:kFieldDecoration.copyWith(
-                          hintText: 'Surname',
+                          hintText: '$_surName',
                           hintStyle:TextStyle(
                             color:Color(0xFF717F88),
                             fontSize: 14,
@@ -357,52 +503,52 @@ class _EditProfileState extends State<EditProfile> {
                 ],
               ),
               SizedBox(height: 16,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Email Address",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 14,
-                      color: Color(0xFF042538),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Container(
-                    color: Color(0xFFFFFFFF),
-                    width: SizeConfig.screenWidth,
-                    child: TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      validator: (value){
-                        if(value.isEmpty){
-                          return 'Enter your email address';
-                        }
-                        return null;
-                      },
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        color: Color(0xFF042538),
-                      ),
-                      decoration:kFieldDecoration.copyWith(
-                          hintText: 'placeholder@mail.com',
-                          hintStyle:TextStyle(
-                            color:Color(0xFF717F88),
-                            fontSize: 14,
-                            fontFamily: 'Gelion',
-                            fontWeight: FontWeight.w400,
-                          )
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+//              Column(
+//                crossAxisAlignment: CrossAxisAlignment.start,
+//                children: [
+//                  Text(
+//                    "Email Address",
+//                    textAlign: TextAlign.start,
+//                    style: TextStyle(
+//                      fontWeight: FontWeight.w400,
+//                      fontFamily: 'Gelion',
+//                      fontSize: 14,
+//                      color: Color(0xFF042538),
+//                    ),
+//                  ),
+//                  SizedBox(height: 10,),
+//                  Container(
+//                    color: Color(0xFFFFFFFF),
+//                    width: SizeConfig.screenWidth,
+//                    child: TextFormField(
+//                      controller: _emailController,
+//                      keyboardType: TextInputType.emailAddress,
+//                      textInputAction: TextInputAction.next,
+//                      validator: (value){
+//                        if(value.isEmpty){
+//                          return 'Enter your email address';
+//                        }
+//                        return null;
+//                      },
+//                      style: TextStyle(
+//                        fontSize: 14,
+//                        fontWeight: FontWeight.w400,
+//                        fontFamily: 'Gelion',
+//                        color: Color(0xFF042538),
+//                      ),
+//                      decoration:kFieldDecoration.copyWith(
+//                          hintText: 'placeholder@mail.com',
+//                          hintStyle:TextStyle(
+//                            color:Color(0xFF717F88),
+//                            fontSize: 14,
+//                            fontFamily: 'Gelion',
+//                            fontWeight: FontWeight.w400,
+//                          )
+//                      ),
+//                    ),
+//                  ),
+//                ],
+//              ),
               SizedBox(height: 20,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,7 +584,7 @@ class _EditProfileState extends State<EditProfile> {
                         color: Color(0xFF042538),
                       ),
                       decoration:kFieldDecoration.copyWith(
-                          hintText: '123 4567 890',
+                          hintText: '$_phoneNumber',
                           hintStyle:TextStyle(
                             color:Color(0xFF717F88),
                             fontSize: 14,
@@ -450,74 +596,11 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Password",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 14,
-                      color: Color(0xFF042538),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Container(
-                    color: Color(0xFFFFFFFF),
-                    width: SizeConfig.screenWidth,
-                    child: TextFormField(
-                      obscureText: _obscureTextLogin,
-                      controller: _passwordController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      validator: (value){
-                        if(value.isEmpty){
-                          return 'Enter your password';
-                        }
-                        return null;
-                      },
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        color: Color(0xFF042538),
-                      ),
-                      decoration:kFieldDecoration.copyWith(
-                          suffixIcon: TextButton(
-                            onPressed:_toggleLogin,
-                            child:_obscureTextLogin ?
-                            Text(
-                              "show",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Gelion',
-                                fontSize: 14,
-                                color: Color(0xFF042538),
-                              ),
-                            ): Text(
-                              "Hide",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Gelion',
-                                fontSize: 14,
-                                color: Color(0xFF042538),
-                              ),
-                            ),
-                          )
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ]
         )
     );
   }
+
   /// A function to toggle if to show the password or not by
   /// changing [_obscureTextLogin] value
   void _toggleLogin() {
@@ -708,4 +791,25 @@ class _EditProfileState extends State<EditProfile> {
         }
     );
   }
+
+  void _updateUser() async {
+    if(!mounted)return;
+    setState(() {
+      _showSpinner = true;
+    });
+    var api = AuthRestDataSource();
+    await api.updateProfile(_firstController.text,_surnameController.text, _email,_mobileController.text).then((value) async {
+      await futureValue.updateUser();
+      var db = DatabaseHelper();
+      await db.updateUser(value);
+      if (!mounted) return;
+      setState(() { _showSpinner = false; });
+    }).catchError((e) {
+      print(e);
+      if (!mounted) return;
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, e);
+    });
+  }
+
 }

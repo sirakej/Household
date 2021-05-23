@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/custom_slider.dart';
@@ -86,6 +89,87 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
   ];
 
 
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
+  /// A List to hold the all the available plans
+  List<Candidate> _candidates = List();
+
+  /// An Integer variable to hold the length of [_plans]
+  int _candidatesLength;
+
+  /// A List to hold the widgets of all the plans
+  List<Widget> _candidatesList = [];
+
+  /// Function to fetch all the available plans from the database to
+  /// [allCategories]
+  void _allCandidates() async {
+    Future<List<Candidate>> names = futureValue.getAllCandidateFromDB(widget.category.category.id);
+    await names.then((value) {
+      if(value.isEmpty || value.length == 0){
+        if(!mounted)return;
+        setState(() {
+          _candidatesLength = 0;
+          _candidates = [];
+        });
+      } else if (value.length > 0){
+        if(!mounted)return;
+        setState(() {
+          _candidates.addAll(value);
+          _candidatesLength = value.length;
+        });
+      }
+    }).catchError((error){
+      print(error);
+      Constants.showError(context, error.toString());
+    });
+  }
+
+  /// A function to build the list of all the available payments plans
+  Widget _buildList() {
+    if(_candidates.length > 0 && _candidates.isNotEmpty){
+      _candidatesList.clear();
+      for (int i = 0; i < _candidates.length; i++){
+        _candidatesList.add(
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            child: CandidateContainer(
+              candidateName: '${_candidates[i].firstName}',
+              candidateGender: '${_candidates[i].gender}',
+              candidateExperienceYears: '${_candidates[i].experience}',
+              candidateAvailability: '${_candidates[i].availablity}',
+              candidateCity: '${_candidates[i].residence}',
+              imagePath: 'butler',
+              ratings: 3.5,
+              candidateSkill:'${_candidates[i].skill}',
+              candidateTribe: '${_candidates[i].origin}',
+              candidateWorkhistory: '${_candidates[i].workhistory}',
+              candidateAge: '${_candidates[i].age}',
+            ),
+          ),
+        );
+      }
+
+      return Column(
+        children: _candidatesList,
+      );
+    }
+    else if(_candidatesLength == 0){
+      return Container();
+    }
+    return Center(child: CupertinoActivityIndicator(radius: 15));
+  }
+
+  //bool _showSpinner = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _allCandidates();
+    print(_allCandidates);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -120,7 +204,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '${widget.category.name}',
+                          '${widget.category.category.name}',
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -135,7 +219,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                     ),
                     SizedBox(height: 8,),
                     Text(
-                      "${widget.category.description}",
+                      "${widget.category.category.description}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,
@@ -194,102 +278,103 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                         CandidateContainer(
                           candidateName: 'Aderonke',
                           candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
+                          candidateExperienceYears: '2',
                           candidateAvailability: 'Available Weekdays',
                           candidateCity: 'Lagos',
                           imagePath: 'butler',
                           ratings: 3.5,
                         ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2 Years Experience',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2 Years Experience',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
+                      _buildList(),
                       ],
                     ),
                   ),

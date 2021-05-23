@@ -44,7 +44,7 @@ class DatabaseHelper {
     await db.execute(
         "CREATE TABLE $USER_TABLE("
             "token TEXT NOT NULL,"
-            "_id TEXT PRIMARY KEY NOT NULL,"
+            "id TEXT PRIMARY KEY NOT NULL,"
             "created_at TEXT,"
             "updated_at TEXT,"
             "first_name TEXT,"
@@ -85,6 +85,7 @@ class DatabaseHelper {
         users[0]['surname'],
         users[0]['email'],
         users[0]['phone_number'],
+       // users[0]['profile_image'],
       );
       userVal = user;
     }

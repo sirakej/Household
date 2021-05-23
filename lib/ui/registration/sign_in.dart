@@ -337,6 +337,7 @@ class _SignInState extends State<SignIn> {
       setState(() {
         _showSpinner = false;
       });
+      print(user.toJson());
       var db = DatabaseHelper();
       await db.initDb();
       await db.saveUser(user);

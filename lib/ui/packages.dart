@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/ui/successful_pay.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
@@ -12,17 +13,34 @@ class Packages extends StatefulWidget {
 
 class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin{
   TabController _tabController;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
 
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _cardNumberController = TextEditingController();
 
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
+  /// String variable to hold the current name of the user
+  String _firstName = '';
+
+  /// Setting the current user logged in to [_firstName]
+  void _getCurrentUser() async {
+    await futureValue.getCurrentUser().then((user) {
+      if(!mounted)return;
+      setState(() {
+        _firstName = user.firstName;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _getCurrentUser();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -73,7 +91,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
               ),
               SizedBox(height: 32,),
               Text(
-                'Precious',
+                '$_firstName',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,

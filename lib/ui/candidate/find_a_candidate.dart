@@ -93,11 +93,11 @@ class _FindACandidateState extends State<FindACandidate> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
                         ),
-                        child: Image.network("${_categories[i].image}",height: 54,width: 54,fit: BoxFit.contain,),
+                        child: Image.network("${_categories[i].category.image}",height: 54,width: 54,fit: BoxFit.contain,),
                       ),
                       SizedBox(width:12,),
                       Text(
-                        "Hire a ${_categories[i].name}",
+                        "Hire a ${_categories[i].category.name}",
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           //letterSpacing: 1,

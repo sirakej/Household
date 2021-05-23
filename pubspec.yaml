@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^1.6.24
   shared_preferences: ^0.5.12+4
   shimmer: ^1.1.2
+  image_picker: ^0.6.7+21
 
 
 dev_dependencies:

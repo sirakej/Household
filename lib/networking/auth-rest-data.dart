@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
@@ -25,10 +26,14 @@ class AuthRestDataSource {
   static final RESET_PASSWORD_URL = BASE_URL + "user/resetpassword";
   static final CHANGE_PASSWORD = BASE_URL + "user/resetpassword/change";
 
-  static final UPDATE_USER_PROFILE = BASE_URL + "user/proifle";
-  static final UPDATE_USER_PASSWORD = BASE_URL + "user/proifle";
+  static final UPDATE_USER_PROFILE = BASE_URL + "user/profile";
+  static final UPDATE_USER_PASSWORD = BASE_URL + "user/profile";
 
   static final GET_CATEGORY = BASE_URL + "category";
+  static final GET_CANDIDATE = BASE_URL + "candidate";
+  static final GET_USER = BASE_URL + "user";
+
+
 
   static final LIST_USER = "";
 
@@ -227,8 +232,9 @@ class AuthRestDataSource {
 //    });
 //  }
 
-  Future<dynamic> updateProfile(String email, String firstName, String surname, String phone) async {
+  Future<dynamic> updateProfile(String firstName, String surName,String email,String phoneNumber) async {
     String userId;
+    String token;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
@@ -236,21 +242,23 @@ class AuthRestDataSource {
         throw ("No user logged in");
       }
       userId = value.id;
+      token = value.token;
       header = {
-        "Authorization": "Bearer ${value.token}",
+        "Authorization": "Bearer $token",
         "Content-Type": "application/json",
       };
     });
     String UPDATE_USER_PROFILE_URL = UPDATE_USER_PROFILE + '/$userId';
     return _netUtil.put(UPDATE_USER_PROFILE_URL, headers: header, body: {
-      "email": email,
-      "first_name": firstName,
-      "surname": surname,
-      "phone_number": phone
+      "first_name": firstName.trim(),
+      "surname": surName.trim(),
+      "email": email.trim(),
+      "phone_number": phoneNumber.trim(),
     }).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
       } else {
+        res["data"]["token"] = token;
         return User.map(res["data"]);
       }
     }).catchError((e) {
@@ -258,7 +266,7 @@ class AuthRestDataSource {
     });
   }
 
-  /// A function that fetches all the payments plan GET
+  /// A function that fetches all categories
   Future<List<Category>> getCategory() async {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
@@ -281,6 +289,70 @@ class AuthRestDataSource {
         return categories;
       }
     }).catchError((e){
+      errorHandler.handleError(e);
+    });
+  }
+
+
+  Future<List<Candidate>> getCandidate(String id) async {
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      header = {
+        "Authorization": "Bearer ${value.token}",
+        "Content-Type": "application/json",
+      };
+    });
+
+    List<Candidate> candidates;
+    String GET_CANDIDATE_URL = GET_CANDIDATE + "/$id";
+    return _netUtil.get(GET_CANDIDATE_URL, headers: header).then((dynamic res) {
+      if(res["error"]){
+        throw res["msg"];
+      }else{
+        var rest = res["data"] as List;
+        candidates = rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
+        return candidates;
+      }
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
+  }
+
+  /// A function that fetches the particular current logged in user
+  /// into a model of [User] GET.
+  Future<dynamic> getCurrentUser() async {
+    String userId;
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    String token;
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      userId = value.id;
+      token = value.token;
+      header = {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      };
+    });
+    String GET_USER_URL = GET_USER + '/$userId';
+    return _netUtil.get(GET_USER_URL, headers: header).then((dynamic res) {
+      if(res["error"] == true){
+        throw (res["message"]);
+      }else{
+        Map result = {
+          'user': User.map(res["data"]),
+          'token': token
+        };
+        return result;
+      }
+    }).catchError((e){
+      print(e);
       errorHandler.handleError(e);
     });
   }

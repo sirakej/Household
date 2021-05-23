@@ -23,9 +23,11 @@ class User {
 
   /// This variable holds the user phone number
   String _phoneNumber;
+
+  // _profileImage;
+
   /// Setting constructor for [User] class
-  User(
-      this._token,
+  User(this._token,
       this._id,
       this._createdAt,
       this._updatedAt,
@@ -33,31 +35,35 @@ class User {
       this._surName,
       this._email,
       this._phoneNumber,
+    //  this._profileImage
       );
 
   /// Creating getters for my [_token] value
-  String get token =>_token;
+  String get token => _token;
 
   /// Creating getters for my [_id] value
-  String get id =>_id;
+  String get id => _id;
 
   /// Creating getters for my [_createdAt] value
-  DateTime get createdAt =>_createdAt;
+  DateTime get createdAt => _createdAt;
 
   /// Creating getters for my [_updatedAt] value
-  DateTime get updatedAt =>_updatedAt;
+  DateTime get updatedAt => _updatedAt;
 
   /// Creating getters for my [_firstName] value
-  String get firstName =>_firstName;
+  String get firstName => _firstName;
 
   /// Creating getters for my [_surName] value
-  String get surName =>_surName;
+  String get surName => _surName;
 
   /// Creating getters for my [_email] value
-  String get email=>_email;
+  String get email => _email;
 
   /// Creating getters for my [_phoneNumber] value
-  String get phoneNumber =>_phoneNumber;
+  String get phoneNumber => _phoneNumber;
+
+ // String get profileImage => _profileImage;
+
   /// Function to map user's details from a JSON object
   User.map(dynamic obj) {
     this._token = obj["token"];
@@ -68,19 +74,21 @@ class User {
     this._surName = obj["surname"];
     this._email = obj["email"];
     this._phoneNumber = obj["phone_number"];
+    //this._profileImage = obj["profile_image"];
   }
 
   /// Function to map user's details to a JSON object
   Map<String, dynamic> toJson() {
     var map = new Map<String, dynamic>();
     map["token"] = _token;
-    map["_id"] = _id;
+    map["id"] = _id;
     map["created_at"] = _createdAt.toString();
     map["updated_at"] = _updatedAt.toString();
     map["first_name"] = _firstName;
     map["surname"] = _surName;
     map["email"] = _email;
     map["phone_number"] = _phoneNumber;
+   // map["profile_image"] = _profileImage;
     return map;
   }
 

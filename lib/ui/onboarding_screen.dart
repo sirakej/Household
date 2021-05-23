@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/registration/register_candidate.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
@@ -196,7 +197,9 @@ class _OnBoardState extends State<OnBoard> {
                       SizedBox(height: 30,),
                       Center(
                         child: TextButton(
-                          onPressed:(){},
+                          onPressed:(){
+                            Navigator.pushNamed(context, RegisterCandidate.id);
+                          },
                           child: Text(
                               "Register As A Candidate",
                               textAlign: TextAlign.start,
