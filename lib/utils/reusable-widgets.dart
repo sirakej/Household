@@ -555,110 +555,126 @@ class CandidateContainer extends StatelessWidget {
                                             ],
                                           ),
                                           SizedBox(height: 18),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Reports Available:",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Gelion',
-                                                  fontSize: 14,
-                                                  color: Color(0xFF042538),
+                                          Container(
+                                            width:100,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Verifications:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
                                                 ),
+                                                SizedBox(height: 8),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Identity",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Colors.redAccent,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          "Residence",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Colors.redAccent,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                                      children: [
+                                                        Text(
+                                                          "Guarantors",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Colors.redAccent,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                                      children: [
+                                                        Text(
+                                                          "Health Status",
+                                                          textAlign: TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'Gelion',
+                                                            fontSize: 14,
+                                                            color: Color(0xFF717F88),
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          Icons.check,
+                                                          size:12,
+                                                          color: Colors.redAccent,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 5,),
+                                          TextButton(
+                                            onPressed: () {  },
+                                            child:  Text(
+                                              "view official HE Report",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                decoration: TextDecoration.underline,
+                                                fontFamily: 'Gelion',
+                                                fontSize: 14,
+                                                color: Colors.blueAccent,
                                               ),
-                                              SizedBox(height: 8),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.check,
-                                                        size:12,
-                                                        color: Color(0xFF717F88),
-                                                      ),
-                                                      SizedBox(width:8),
-                                                      Text(
-                                                        "Identity Verification Report",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.check,
-                                                        size:12,
-                                                        color: Color(0xFF717F88),
-                                                      ),
-                                                      SizedBox(width:8),
-                                                      Text(
-                                                        "Background Check Report",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.check,
-                                                        size:12,
-                                                        color: Color(0xFF717F88),
-                                                      ),
-                                                      SizedBox(width:8),
-                                                      Text(
-                                                        "Medical Screening Report",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.check,
-                                                        size:12,
-                                                        color: Color(0xFF717F88),
-                                                      ),
-                                                      SizedBox(width:8),
-                                                      Text(
-                                                        "Guarantors Verification Report",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                           SizedBox(height: 15),
                                         ],

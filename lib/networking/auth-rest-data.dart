@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
+import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'error-handler.dart';
@@ -31,8 +34,12 @@ class AuthRestDataSource {
 
   static final GET_CATEGORY = BASE_URL + "category";
   static final GET_CANDIDATE = BASE_URL + "candidate";
-  static final GET_USER = BASE_URL + "user";
 
+  static final GET_USER = BASE_URL + "user";
+  static final GET_PLANS = BASE_URL + "plan";
+
+  static final INITIALIZE_PAYMENT = BASE_URL + 'plan/payment';
+  static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
 
 
   static final LIST_USER = "";
@@ -356,4 +363,98 @@ class AuthRestDataSource {
       errorHandler.handleError(e);
     });
   }
+
+  Future<List<Plan>> getPlans() async {
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    String token;
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      token = value.token;
+      header = {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      };
+    });
+    List<Plan> plans;
+    return _netUtil.get(GET_PLANS, headers: header).then((dynamic res) {
+      if(res["error"]){
+        throw res["msg"];
+      }else{
+        var rest = res["data"] as List;
+        plans = rest.map<Plan>((json) => Plan.fromJson(json)).toList();
+        return plans;
+      }
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
+  }
+
+  /// A function that initializes payment POST.
+  /// with [amount]
+  Future<dynamic> initializePayment(Plan plan) async{
+    String userId;
+    Map<dynamic, dynamic> data = Map();
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "content-Type": "application/json"};
+    });
+    String INITIALIZE_PAYMENT_URL = INITIALIZE_PAYMENT + '/$userId';
+    return _netUtil.post(INITIALIZE_PAYMENT_URL, headers: header, body: {
+      "plan": plan.toJson()
+    }).then((dynamic res) {
+      if(res["error"]){
+        throw (res["msg"]);
+      }else{
+        data['access_code'] = res['data']['access_code'];
+        data['checkout'] = res['data']['checkout'];
+        data['reference'] = res['data']['reference'];
+        return data;
+      }
+    }).catchError((e){
+      print(e);
+      if(e is SocketException){
+        throw ("Unable to connect to the server, check your internet connection");
+      }
+      throw (e);
+    });
+  }
+
+  /// A function that verifies payment POST with [reference]
+  /// It returns a model of [Data]
+  Future<dynamic> verifyPayment(String reference) async{
+    String userId;
+    Map<dynamic, dynamic> data = Map();
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "content-Type": "application/json"};
+    });
+    String VERIFY_PAYMENT_URL = VERIFY_PAYMENT + "/$userId/$reference";
+    return _netUtil.get(VERIFY_PAYMENT_URL, headers: header).then((dynamic res) {
+      if(res["error"]){
+        throw (res["msg"]);
+      }else{
+        return res["msg"];
+      }
+    }).catchError((e){
+      print(e);
+      if(e is SocketException){
+        throw ("Unable to connect to the server, check your internet connection");
+      }
+      throw (e);
+    });
+  }
+
 }

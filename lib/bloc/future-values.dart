@@ -1,6 +1,7 @@
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
+import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 
@@ -45,7 +46,13 @@ class FutureValues{
 
   /// Function to get all available plans in the database with
   /// the help of [AuthRestDataSource]
-  /// It returns a list of [Category]
+  /// It returns a list of [Plan]
+  Future<List<Plan>> getAllPlansDB() {
+    var data = AuthRestDataSource();
+    Future<List<Plan>> plans = data.getPlans();
+    return plans;
+  }
+
   Future<List<Category>> getAllCategoryFromDB() {
     var data = AuthRestDataSource();
     Future<List<Category>> categories = data.getCategory();
