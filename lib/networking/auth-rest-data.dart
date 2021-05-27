@@ -42,7 +42,7 @@ class AuthRestDataSource {
   static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
 
 
-  static final LIST_USER = "";
+  //static final LIST_USER = "";
 
 
   /// A function that creates a new user with [name], [email]
@@ -86,22 +86,23 @@ class AuthRestDataSource {
       errorHandler.handleError(e);
     });
   }
-//  /// A function that reset user's password POST with [email]
-//  Future<dynamic> resetPassword(String email) async{
-//    Map<String, String> header = {"Content-Type": "application/json"};
-//    return _netUtil.post(RESET_PASSWORD_URL, headers: header, body: {
-//      "email": email
-//    }).then((dynamic res) {
-//      if(res["error"]){
-//        throw res["msg"];
-//      }else{
-//        return res["msg"];
-//      }
-//    }).catchError((e){
-//      errorHandler.handleError(e);
-//    });
-//  }
-//
+
+  /// A function that reset user's password POST with [email]
+  Future<dynamic> resetPassword(String email) async{
+    Map<String, String> header = {"Content-Type": "application/json"};
+    return _netUtil.post(RESET_PASSWORD_URL, headers: header, body: {
+      "email": email
+    }).then((dynamic res) {
+      if(res["error"]){
+        throw res["msg"];
+      }else{
+        return res["msg"];
+      }
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
+  }
+
 //  /// A function that changes user's password with [password] PUT
 //  Future<dynamic> changePassword(String password) async {
 //    String userId;

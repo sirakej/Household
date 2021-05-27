@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/ui/registration/forgot_password/sent_link_page.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
+import 'package:householdexecutives_mobile/model/user.dart';
 
 
 class Reset extends StatefulWidget {
@@ -19,7 +21,7 @@ class _ResetState extends State<Reset> {
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _emailController = TextEditingController();
 
-
+  bool _showSpinner = false;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -73,15 +75,11 @@ class _ResetState extends State<Reset> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){
-                          Navigator.push(context,
-                              CupertinoPageRoute(builder: (_){
-                                return SentLinkPage();
-                              })
-                          );
-                        },
+                        onPressed:_resetUser,
                         color: Color(0xFF00A69D),
-                        child: Text(
+                        child:  _showSpinner
+                            ? CupertinoActivityIndicator(radius: 13)
+                            : Text(
                           "Send Instructions",
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -172,5 +170,29 @@ class _ResetState extends State<Reset> {
         ],
       ),
     );
+  }
+
+  void _resetUser(){
+    if(!mounted) return;
+    setState(() {
+      _showSpinner = true;
+    });
+    var api = AuthRestDataSource();
+    api.resetPassword(_emailController.text).then((dynamic) async{
+      _emailController.clear();
+      if(!mounted) return;
+      setState(() {
+        _showSpinner = true;
+      });
+      Navigator.pushNamedAndRemoveUntil(context, SentLinkPage.id, (route) => false);
+    }).catchError((e){
+      print(e);
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+
+      });
+      Constants.showError(context,e);
+    });
   }
 }
