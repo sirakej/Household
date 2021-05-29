@@ -30,7 +30,7 @@ class AuthRestDataSource {
   static final CHANGE_PASSWORD = BASE_URL + "user/resetpassword/change";
 
   static final UPDATE_USER_PROFILE = BASE_URL + "user/profile";
-  static final UPDATE_USER_PASSWORD = BASE_URL + "user/profile";
+  static final UPDATE_USER_PASSWORD = BASE_URL + "user/profile/password";
 
   static final GET_CATEGORY = BASE_URL + "category";
   static final GET_CANDIDATE = BASE_URL + "candidate";
@@ -267,6 +267,35 @@ class AuthRestDataSource {
         throw res["msg"];
       } else {
         res["data"]["token"] = token;
+        return User.map(res["data"]);
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
+  Future<dynamic> updatePassword(String oldPassword, String currentPassword) async{
+    String userId;
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      userId = value.id;
+      header = {
+        "Authorization": "Bearer ${value.token}",
+        "Content-Type": "application/json",
+      };
+    });
+    String UPDATE_USER_PASSWORD_URL = UPDATE_USER_PASSWORD + '/$userId';
+    return _netUtil.put(UPDATE_USER_PASSWORD_URL, headers: header, body: {
+      "old_password": oldPassword,
+      "password":currentPassword
+    }).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
         return User.map(res["data"]);
       }
     }).catchError((e) {

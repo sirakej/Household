@@ -12,15 +12,6 @@ class MyListCandidate extends StatefulWidget {
 }
 
 class _MyListCandidateState extends State<MyListCandidate> {
-
-  /// A list of string variables holding a list of all countries
-  List<String> _category = [
-    "Butlers","Caregivers","Carpenters","Chauffeurs","Chefs","Doormen","Electricians","Gardeners","GateKeepers","Housekeepers","Nannies","Plumbers"
-  ];
-
-  /// A string variable holding the selected country value
-  String _selectedCategory;
-
   bool isPressed = true;
 
   @override
@@ -92,68 +83,6 @@ class _MyListCandidateState extends State<MyListCandidate> {
                         fontFamily: 'Gelion',
                         fontSize: 14,
                         color: Color(0xFF57565C),
-                      ),
-                    ),
-                    SizedBox(height: 24,),
-                    Container(
-                      color: Color(0xFF717F88).withOpacity(0.1),
-                      child: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        style: TextStyle(
-                          color: Color(0xFF000000),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Gelion',
-                        ),
-                        value: _selectedCategory,
-                        onChanged: (String value){
-                          if(!mounted)return;
-                          setState(() {
-                            _selectedCategory = value;
-                          });
-                        },
-                        validator: (value){
-                          if (_selectedCategory == null || _selectedCategory.isEmpty){
-                            return 'Pick your option';
-                          }
-                          return null;
-                        },
-                        decoration: kFieldDecoration.copyWith(
-                          hintText: 'Please select category',
-                          hintStyle: TextStyle(
-                            color: Color(0xFF717F88),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                          ),
-                        ),
-                        selectedItemBuilder: (BuildContext context){
-                          return _category.map((value){
-                            return Text(
-                              value,
-                              style: TextStyle(
-                                color: Color(0xFF1C2D55),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Gelion',
-                              ),
-                            );
-                          }).toList();
-                        },
-                        items: _category.map((String value){
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                color: Color(0xFF666666),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Gelion',
-                              ),
-                            ),
-                          );
-                        }).toList(),
                       ),
                     ),
                     SizedBox(height: 12,),

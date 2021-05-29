@@ -4,6 +4,7 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'home_screen.dart';
 
 class PasswordAndSecurity extends StatefulWidget {
@@ -16,15 +17,20 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
 
+  /// A [TextEditingController] to control the input text for the user's old password
+  TextEditingController _oldPasswordController = TextEditingController();
+
   /// A [TextEditingController] to control the input text for the user's password
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _newPasswordController = TextEditingController();
 
   /// A [TextEditingController] to control the input text for the user's password
   TextEditingController _confirmPasswordController = TextEditingController();
 
   /// A boolean variable to hold whether the password should be shown or hidden
+  bool _obscureOldTextLogin = true;
   bool _obscureTextLogin = true;
-
+  bool _obscureConfirmTextLogin = true;
+  bool _showSpinner = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -202,14 +208,14 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                           ),
                           padding: EdgeInsets.only(top:18 ,bottom: 18),
                           onPressed:(){
-                            Navigator.push(context,
-                                CupertinoPageRoute(builder: (_){
-                                  return HomeScreen();
-                                })
-                            );
+                            if(_formKey.currentState.validate()){
+                              _changePassword();
+                            }
                           },
                           color: Color(0xFF00A69D),
-                          child: Text(
+                          child: _showSpinner
+                              ? CupertinoActivityIndicator(radius: 13)
+                              :Text(
                             "Save",
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -241,7 +247,7 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "New Password",
+                    "Old Password",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -255,8 +261,8 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                     color: Color(0xFFFFFFFF),
                     width: SizeConfig.screenWidth,
                     child: TextFormField(
-                      obscureText: _obscureTextLogin,
-                      controller: _passwordController,
+                      obscureText: _obscureOldTextLogin,
+                      controller: _oldPasswordController,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       validator: (value){
@@ -273,7 +279,71 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                       ),
                       decoration:kFieldDecoration.copyWith(
                           suffixIcon: TextButton(
-                            onPressed:_toggleLogin,
+                            onPressed:_toggleOldPassLogin,
+                            child:_obscureTextLogin ?
+                            Text(
+                              "show",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ): Text(
+                              "Hide",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                          )
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height:16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "New Password",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Gelion',
+                      fontSize: 14,
+                      color: Color(0xFF042538),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Container(
+                    color: Color(0xFFFFFFFF),
+                    width: SizeConfig.screenWidth,
+                    child: TextFormField(
+                      obscureText: _obscureTextLogin,
+                      controller: _newPasswordController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      validator: (value){
+                        if(value.isEmpty){
+                          return 'Enter your password';
+                        }
+                        return null;
+                      },
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        color: Color(0xFF042538),
+                      ),
+                      decoration:kFieldDecoration.copyWith(
+                          suffixIcon: TextButton(
+                            onPressed:_togglePassLogin,
                             child:_obscureTextLogin ?
                             Text(
                               "show",
@@ -319,13 +389,16 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                     color: Color(0xFFFFFFFF),
                     width: SizeConfig.screenWidth,
                     child: TextFormField(
-                      obscureText: _obscureTextLogin,
+                      obscureText: _obscureConfirmTextLogin,
                       controller: _confirmPasswordController,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       validator: (value){
-                        if(value.isEmpty){
-                          return 'Enter your password';
+                        if (value.isEmpty) {
+                          return 'Confirm your password';
+                        }
+                        if (_confirmPasswordController.text != _newPasswordController.text) {
+                          return 'Password Mismatch';
                         }
                         return null;
                       },
@@ -337,7 +410,7 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                       ),
                       decoration:kFieldDecoration.copyWith(
                           suffixIcon: TextButton(
-                            onPressed:_toggleLogin,
+                            onPressed:_toggleConfirmPassLogin,
                             child:_obscureTextLogin ?
                             Text(
                               "show",
@@ -368,13 +441,29 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
         )
     );
   }
+
   /// A function to toggle if to show the password or not by
-  /// changing [_obscureTextLogin] value
-  void _toggleLogin() {
+  /// changing [_obscurePassTextLogin] value
+  void _toggleOldPassLogin() {
+    setState(() {
+      _obscureOldTextLogin = !_obscureOldTextLogin;
+    });
+  }
+
+  void _togglePassLogin() {
     setState(() {
       _obscureTextLogin = !_obscureTextLogin;
     });
   }
+
+  /// A function to toggle if to show the password or not by
+  /// changing [_obscureConfirmPassTextLogin] value
+  void _toggleConfirmPassLogin() {
+    setState(() {
+      _obscureConfirmTextLogin = !_obscureConfirmTextLogin;
+    });
+  }
+
   _buildModalSheet(BuildContext context){
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -556,6 +645,31 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
           });
         }
     );
+  }
+
+  /// Function that changes a user's password by calling
+  /// [changePassword] in the [RestDataSource] class
+  void _changePassword() async{
+    var api =AuthRestDataSource();
+    await api.updatePassword(_oldPasswordController.text, _newPasswordController.text).then((value) {
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+      });
+      _oldPasswordController.clear();
+      _newPasswordController.clear();
+      Constants.showSuccess(context, 'Password changed successfully');
+      Navigator.pushNamed(context , HomeScreen.id);
+    }).catchError((e){
+      if(!mounted)return;
+      setState(() {
+        _showSpinner= false;
+      });
+      _oldPasswordController.clear();
+      _newPasswordController.clear();
+      print(e);
+      Constants.showError(context, e);
+    });
   }
 
 }

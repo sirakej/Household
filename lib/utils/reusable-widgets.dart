@@ -52,11 +52,13 @@ class CandidateContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                ),
+                child: Image.asset("assets/icons/$imagePath.png",height: 57,width: 72,fit: BoxFit.contain,),
               ),
-              child: Image.asset("assets/icons/$imagePath.png",height: 57,width: 72,fit: BoxFit.contain,),
             ),
             SizedBox(width:12,),
             Column(

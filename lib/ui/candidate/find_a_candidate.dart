@@ -46,7 +46,7 @@ class _FindACandidateState extends State<FindACandidate> {
       } else if (value.length > 0){
         if(!mounted)return;
         setState(() {
-          _categories.addAll(value);
+          _categories.addAll(value.reversed);
           _categoriesLength = value.length;
         });
       }
