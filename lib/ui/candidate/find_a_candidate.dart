@@ -5,6 +5,7 @@ import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_candidate_list.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+import 'package:shimmer/shimmer.dart';
 
 class FindACandidate extends StatefulWidget {
   static const String id = 'find_a_candidate';
@@ -122,7 +123,51 @@ class _FindACandidateState extends State<FindACandidate> {
     else if(_categoriesLength == 0){
       return Container();
     }
-    return Center(child: CupertinoActivityIndicator(radius: 15));
+    return Shimmer.fromColors(
+      direction: ShimmerDirection.ltr,
+      period: Duration(seconds: 3),
+      baseColor: Colors.grey[300],
+      highlightColor: Colors.grey,
+      child:  Container(
+        margin: EdgeInsets.only(bottom: 6),
+        child: Container(
+          width: SizeConfig.screenWidth,
+          padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              border: Border.all(
+                  width: 1,
+                  color: Color(0xFFEBF1F4)
+              )
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                ),
+                child: Image.network("",height: 54,width: 54,fit: BoxFit.contain,),
+              ),
+              SizedBox(width:12,),
+              Text(
+                "Hire a ",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gelion',
+                  fontSize: 16,
+                  color: Color(0xFF042538),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   //bool _showSpinner = false;

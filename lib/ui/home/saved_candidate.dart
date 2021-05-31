@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 class SavedCandidate extends StatefulWidget {
@@ -10,11 +9,7 @@ class SavedCandidate extends StatefulWidget {
 }
 
 class _SavedCandidateState extends State<SavedCandidate> {
-  /// A [GlobalKey] to hold the form state of my form widget for form validation
-  final _formKey = GlobalKey<FormState>();
 
-  /// A [TextEditingController] to control the input text for the user's email
-  TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -69,7 +64,7 @@ class _SavedCandidateState extends State<SavedCandidate> {
                     child: Column(
                       children: [
                         SizedBox(height:22),
-
+                        _savedCandidateContainer()
                       ],
                     ),
                   ),
@@ -85,12 +80,10 @@ class _SavedCandidateState extends State<SavedCandidate> {
   Widget _savedCandidateContainer(){
     return Container(
       width: SizeConfig.screenWidth,
+      padding: EdgeInsets.only(left: 21,top: 23,right: 20,bottom: 24),
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF),
         borderRadius: BorderRadius.all(Radius.circular( 10.295)) ,
-        boxShadow:[
-
-        ]
       ),
       child: Column(
         children: [
@@ -99,23 +92,24 @@ class _SavedCandidateState extends State<SavedCandidate> {
               Column(
                 children: [
                   Text(
-                    "Saved Candidates",
+                    "Aderonke",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF000000),
+                      fontSize: 14,
+                      color: Color(0xFF042538),
                     ),
                   ),
+                  SizedBox(height:8.51),
                   Text(
-                    "Saved Candidates",
+                    "2 Years Experience",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF000000),
+                      fontSize: 12,
+                      color: Color(0xFF7B7977),
                     ),
                   ),
                 ],
@@ -129,33 +123,30 @@ class _SavedCandidateState extends State<SavedCandidate> {
                   child: Image.asset("",width:49,height:49,fit: BoxFit.contain,))
             ],
           ),
-          Column(
-            children: [
-
-          ],),
+          SizedBox(height:29),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
                   Text(
-                    "Saved Candidates",
+                    "AVAILABILITY",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF000000),
+                      fontSize: 12,
+                      color: Color(0xFF717F88),
                     ),
                   ),
                   Text(
-                    "Saved Candidates",
+                    "Weekdays Only",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF000000),
+                      fontSize: 14,
+                      color: Color(0xFF717F88),
                     ),
                   ),
                 ],
@@ -163,34 +154,66 @@ class _SavedCandidateState extends State<SavedCandidate> {
               Column(
                 children: [
                   Text(
-                    "Saved Candidates",
+                    "LOCATION",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF000000),
+                      fontSize: 12,
+                      color: Color(0xFF717F88),
                     ),
                   ),
                   Text(
-                    "Saved Candidates",
+                    "Lagos",
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                       fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF000000),
+                      fontSize: 14,
+                      color: Color(0xFF717F88),
                     ),
                   ),
                 ],
               ),
             ],
           ),
-          SizedBox(height:23.4),
+          SizedBox(height:24.4),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              
+              FlatButton(
+                minWidth: 106.76,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)
+                ),
+                padding: EdgeInsets.only(top:18 ,bottom: 18),
+                onPressed:(){},
+                color: Color(0xFF00A69D),
+                child:Text(
+                  "Hire Now",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Gelion',
+                    fontSize: 16,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+              SizedBox(width:5),
+              TextButton(
+                onPressed:(){},
+                child: Text(
+                  "Remove from list",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    fontSize: 16,
+                    color: Color(0xFFE93E3A),
+                  ),
+                ),
+              ),
           ],
           )
         ],
