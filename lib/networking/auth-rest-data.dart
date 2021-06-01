@@ -41,6 +41,8 @@ class AuthRestDataSource {
   static final INITIALIZE_PAYMENT = BASE_URL + 'plan/payment';
   static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
 
+  static final SAVED_CANDIDATE = BASE_URL + 'candidate/saved';
+
 
   //static final LIST_USER = "";
 
@@ -486,5 +488,39 @@ class AuthRestDataSource {
       throw (e);
     });
   }
+
+  Future<dynamic> saveCandidate(String candidateId,String categoryId) async{
+    String userId;
+    String token;
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value.token == null){
+        throw ("No user logged in");
+      }
+      userId = value.id;
+      token = value.token;
+      header = {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      };
+    });
+    String SAVED_CANDIDATE_URL = SAVED_CANDIDATE + '/$userId';
+    return _netUtil.put(SAVED_CANDIDATE_URL, headers: header, body: {
+      "user":userId,
+      "candidate":[candidateId],
+      "category":categoryId
+    }).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        res["data"]["token"] = token;
+        return User.map(res["data"]);
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
 
 }

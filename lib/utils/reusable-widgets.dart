@@ -1,36 +1,56 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/ui/candidate/my_list.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
+import 'package:householdexecutives_mobile/model/category.dart';
+import 'package:householdexecutives_mobile/ui/packages.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
-class CandidateContainer extends StatelessWidget {
+class CandidateContainer extends StatefulWidget {
 
-  final String candidateName;
-  final String candidateGender;
-  final String candidateExperienceYears;
-  final String candidateAvailability;
-  final String candidateCity;
-  final String imagePath;
-  final double ratings;
-  final String candidateAge;
-  final String candidateTribe;
-  final String candidateSkill;
-  final String candidateWorkhistory;
+  final Category category;
+  final Candidate candidate;
 
   const CandidateContainer({
     Key key,
-    @required this.candidateName,
-    @required this.candidateGender,
-    @required this.candidateExperienceYears,
-    @required this.candidateAvailability,
-    @required this.candidateCity,
-    @required this.imagePath,
-    @required this.ratings,
-    @required this.candidateAge,
-    @required this.candidateTribe,
-    @required this.candidateSkill,
-    @required this.candidateWorkhistory,
+    @required this.category,
+    @required this.candidate,
   }) : super(key: key);
+
+  @override
+  _CandidateContainerState createState() => _CandidateContainerState();
+}
+
+class _CandidateContainerState extends State<CandidateContainer> {
+  bool isPressed = false;
+  bool isShow = false;
+
+
+//  Widget _buildList() {
+//    if(_candidates.length > 0 && _candidates.isNotEmpty){
+//      _candidatesList.clear();
+//      for (int i = 0; i < _candidates.length; i++){
+//        if(!_selectedCandidate[_candidates[i]]) {
+//          _candidatesList.add(
+//            Container(
+//              margin: EdgeInsets.only(bottom: 8),
+//              child: CandidateContainer(
+//                candidate: _candidates[i],
+//                category: widget.category,
+//              ),
+//            ),
+//          );
+//        }
+//      }
+//
+//      return Column(
+//        children: _candidatesList,
+//      );
+//    }
+//    else if(_candidatesLength == 0){
+//      return Container();
+//    }
+//    return Center(child: CupertinoActivityIndicator(radius: 15));
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +72,11 @@ class CandidateContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                ),
-                child: Image.asset("assets/icons/$imagePath.png",height: 57,width: 72,fit: BoxFit.contain,),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
+              child: Image.asset("assets/icons/butler.png",height: 57,width: 72,fit: BoxFit.contain,),
             ),
             SizedBox(width:12,),
             Column(
@@ -66,7 +84,7 @@ class CandidateContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "$candidateName($candidateGender)",
+                  "${widget.candidate.firstName}(${widget.candidate.gender})",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     //letterSpacing: 1,
@@ -77,7 +95,7 @@ class CandidateContainer extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "$candidateExperienceYears Years Experience",
+                  "${widget.candidate.experience} Years Experience",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     //letterSpacing: 1,
@@ -88,7 +106,7 @@ class CandidateContainer extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "$candidateAvailability . $candidateCity",
+                  "${widget.candidate.availablity} . ${widget.candidate.resedential}",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     //letterSpacing: 1,
@@ -110,7 +128,7 @@ class CandidateContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "$ratings",
+                  "3.5",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     //letterSpacing: 1,
@@ -171,7 +189,7 @@ class CandidateContainer extends StatelessWidget {
                             Align(
                               alignment: Alignment.topCenter,
                               child: Text(
-                                "$candidateName",
+                                "${widget.candidate.firstName}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -240,7 +258,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height: 8),
                                                   Text(
-                                                    "$candidateTribe",
+                                                    "${widget.candidate.origin}",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -298,7 +316,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height:8),
                                                   Text(
-                                                    "$candidateAge",
+                                                    "${widget.candidate.age}",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -394,7 +412,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height:8),
                                                   Text(
-                                                    "$candidateGender",
+                                                    "${widget.candidate.gender}",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -421,7 +439,7 @@ class CandidateContainer extends StatelessWidget {
                                                   ),
                                                   SizedBox(height:8),
                                                   Text(
-                                                    "$candidateExperienceYears Years +",
+                                                    "${widget.candidate.experience} Years +",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w400,
@@ -459,7 +477,7 @@ class CandidateContainer extends StatelessWidget {
                                                 width: SizeConfig.screenWidth - 120,
                                                 child: Text(
 //                                                  "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
-                                                    "$candidateSkill",
+                                                    "${widget.candidate.skill}",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,
@@ -703,11 +721,8 @@ class CandidateContainer extends StatelessWidget {
                                         viewProfile = true;
                                       });
                                     }else if(viewProfile == true){
-                                      Navigator.push(context,
-                                          CupertinoPageRoute(builder: (_){
-                                            return MyListCandidate();
-                                          })
-                                      );
+                                      Navigator.pop(context);
+                                      _buildMyList(context);
                                     }
                                   },
                                   color: Color(0xFF00A69D),
@@ -798,4 +813,282 @@ class CandidateContainer extends StatelessWidget {
     );
   }
 
+  _buildMyList(BuildContext context){
+    bool isPressed = false;
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        elevation: 100,
+        isScrollControlled: true,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: true,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState){
+            return Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 24),
+                    child: SingleChildScrollView(
+                      physics:BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 50,),
+                          _buildListContainer(widget.category.category.name,setState),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 24),
+                  alignment: Alignment.bottomCenter,
+                  child: FlatButton(
+                    minWidth: SizeConfig.screenWidth,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    padding: EdgeInsets.only(top:18 ,bottom: 18),
+                    onPressed:(){
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_){
+                            return Packages();
+                          })
+                      );
+                    },
+                    color: Color(0xFF00A69D),
+                    child: Text(
+                      "Proceed To Payment",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          });
+        }
+    );
+  }
+
+  Widget _buildListContainer(String categoryName,dynamic setState){
+    return Container(
+      child: Column(
+        children: [
+          InkWell(
+            onTap: (){
+              setState(() {
+                isShow = !isShow;
+              });
+            },
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 250),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Hire a ${widget.category.category.name}",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Gelion',
+                              fontSize: 16,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                          Container(
+                            width: 14,
+                            height: 14,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFE93E3A)
+                            ),
+                            child: Center(
+                              child: Text(
+                                "1",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 8,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],),
+                      AnimatedCrossFade(
+                        firstChild: Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 19,
+                          color: Color(0xFF000000),
+                        ),
+                        secondChild: Icon(
+                          Icons.keyboard_arrow_up,
+                          size: 19,
+                          color: Color(0xFF000000),
+                        ),
+                        crossFadeState: isShow == true ?CrossFadeState.showSecond:CrossFadeState.showFirst,
+                        duration: Duration(milliseconds: 1000),
+                        firstCurve: Curves.easeOutCirc,
+                        secondCurve: Curves.easeOutCirc,
+                      )
+
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: Container(
+              child: Column(
+                children: [
+                  _buildCandidateContainer("Aderonke","female","2 Years Experience","Available Weekdays","Lagos" ,"assets/icons/butler.png",3.5,setState),
+                  Center(
+                    child:IconButton(
+                      iconSize: 22,
+                      onPressed: () {  },
+                      icon: Icon(
+                        Icons.add_circle,
+                        color: Color(0xFF00A69D),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            secondChild: Container(),
+            crossFadeState: isShow == true ?CrossFadeState.showSecond:CrossFadeState.showFirst,
+            duration: Duration(milliseconds: 500),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCandidateContainer(String candidateName ,String candidateGender ,String candidateExperienceYears,String candidateAvailability ,String candidateCity, String imagePath , double ratings,dynamic setState){
+    return Container(
+      width: SizeConfig.screenWidth,
+      padding: EdgeInsets.only(left:8 ,top:19,bottom: 22,right: 8 ),
+      decoration: BoxDecoration(
+          color: isPressed?Color(0xFFFFFFFF):Color(0xFFF7941D).withOpacity(0.1),
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          border: Border.all(
+            width: 1,
+            color: isPressed?Color(0xFFEBF1F4):Color(0xFFF7941D),
+          )
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+            ),
+            child: Image.asset(imagePath,height: 57,width: 72,fit: BoxFit.contain,),
+          ),
+          SizedBox(width:12,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "$candidateName($candidateGender)",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Gelion',
+                  fontSize: 16,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              Text(
+                candidateExperienceYears,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Gelion',
+                  fontSize: 12,
+                  color: Color(0xFFF7941D),
+                ),
+              ),
+              Text(
+                "$candidateAvailability . $candidateCity",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  //letterSpacing: 1,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gelion',
+                  fontSize: 12,
+                  color: Color(0xFF717F88),
+                ),
+              ),
+            ],
+          ),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Container(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "$ratings",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      //letterSpacing: 1,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Gelion',
+                      fontSize: 11,
+                      color: Color(0xFF717F88),
+                    ),
+                  ),
+                  Image.asset(
+                      'assets/icons/star.png',
+                      width: 18,
+                      height: 15,
+                      color: Color(0xFFF7941D),
+                      fit: BoxFit.contain
+                  )
+                ],
+              ),
+              IconButton(
+                  icon: isPressed?Icon(
+                    Icons.check_box_outline_blank_outlined,
+                    size: 25,
+                    color:  Color(0xFFF7941D),
+                  ):Icon(
+                    Icons.check_box_outlined,
+                    size: 25,
+                    color:  Color(0xFFF7941D),
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      isPressed =! isPressed;
+                    });
+                  }),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }

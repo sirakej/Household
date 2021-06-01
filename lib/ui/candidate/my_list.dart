@@ -1,11 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
+import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 import '../packages.dart';
 
 class MyListCandidate extends StatefulWidget {
   static const String id = 'my_list';
+  final Category category;
+  final Candidate candidate;
+  const MyListCandidate({
+    Key key,
+    @required this.category,
+    @required this.candidate,
+  }) : super(key: key);
   @override
   _MyListCandidateState createState() => _MyListCandidateState();
 }
@@ -81,13 +90,7 @@ class _MyListCandidateState extends State<MyListCandidate> {
                     child: Column(
                       children: [
                         SizedBox(height: 50,),
-                        _buildListContainer("Butler"),
-                        SizedBox(height: 15,),
-                        _buildListContainer("Chef"),
-                        SizedBox(height: 15,),
-                        _buildListContainer("Chaffeur"),
-                        SizedBox(height: 15,),
-                        _buildListContainer("Doorman"),
+                        _buildListContainer(widget.category.category.name),
                       ],
                     ),
                   ),

@@ -8,6 +8,8 @@ import 'package:householdexecutives_mobile/utils/custom_slider.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 
+import '../packages.dart';
+
 class SelectedCandidateList extends StatefulWidget {
 
   static const String id = 'selected_candidate';
@@ -22,6 +24,9 @@ class SelectedCandidateList extends StatefulWidget {
 }
 
 class _SelectedCandidateListState extends State<SelectedCandidateList> {
+
+  bool isPressed = false;
+  bool isShow = false;
   /// A string variable holding the selected state value
   String _selectedTribe;
 
@@ -95,6 +100,8 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
   /// A List to hold the all the available plans
   List<Candidate> _candidates = List();
 
+  Map<Candidate,bool> _selectedCandidate= {};
+
   /// An Integer variable to hold the length of [_plans]
   int _candidatesLength;
 
@@ -111,11 +118,15 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
         setState(() {
           _candidatesLength = 0;
           _candidates = [];
+          _selectedCandidate = {};
         });
       } else if (value.length > 0){
         if(!mounted)return;
         setState(() {
           _candidates.addAll(value);
+          for(int i = 0 ; i < value.length ; i++){
+            _selectedCandidate[value[i]] = false;
+          }
           _candidatesLength = value.length;
         });
       }
@@ -130,24 +141,17 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
     if(_candidates.length > 0 && _candidates.isNotEmpty){
       _candidatesList.clear();
       for (int i = 0; i < _candidates.length; i++){
-        _candidatesList.add(
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            child: CandidateContainer(
-              candidateName: '${_candidates[i].firstName}',
-              candidateGender: '${_candidates[i].gender}',
-              candidateExperienceYears: '${_candidates[i].experience}',
-              candidateAvailability: '${_candidates[i].availablity}',
-              candidateCity: '${_candidates[i].residence}',
-              imagePath: 'butler',
-              ratings: 3.5,
-              candidateSkill:'${_candidates[i].skill}',
-              candidateTribe: '${_candidates[i].origin}',
-              candidateWorkhistory: '${_candidates[i].workhistory}',
-              candidateAge: '${_candidates[i].age}',
+        if(!_selectedCandidate[_candidates[i]]) {
+          _candidatesList.add(
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: CandidateContainer(
+                candidate: _candidates[i],
+                category: widget.category,
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
 
       return Column(
@@ -275,15 +279,15 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        CandidateContainer(
-                          candidateName: 'Aderonke',
-                          candidateGender: 'female',
-                          candidateExperienceYears: '2',
-                          candidateAvailability: 'Available Weekdays',
-                          candidateCity: 'Lagos',
-                          imagePath: 'butler',
-                          ratings: 3.5,
-                        ),
+//                        CandidateContainer(
+//                          candidateName: 'Aderonke',
+//                          candidateGender: 'female',
+//                          candidateExperienceYears: '2',
+//                          candidateAvailability: 'Available Weekdays',
+//                          candidateCity: 'Lagos',
+//                          imagePath: 'butler',
+//                          ratings: 3.5,
+//                        ),
 //                        CandidateContainer(
 //                          candidateName: 'Aderonke',
 //                          candidateGender: 'female',
@@ -386,6 +390,7 @@ class _SelectedCandidateListState extends State<SelectedCandidateList> {
       ),
     );
   }
+
 
   _buildFilterModalSheet(BuildContext context){
     bool male = true;
