@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
+import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
+import 'package:householdexecutives_mobile/model/savedCandidates.dart';
 import 'package:householdexecutives_mobile/ui/successful_pay.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
@@ -10,6 +13,13 @@ import 'package:householdexecutives_mobile/networking/paystack_webview.dart';
 
 class Packages extends StatefulWidget {
   static const String id = 'packages';
+
+  final  Map<Category, List<Candidate>> candidates;
+
+  const Packages({
+    Key key,
+    @required this.candidates,
+  }) : super(key: key);
   @override
   _PackagesState createState() => _PackagesState();
 }
@@ -227,6 +237,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
     super.dispose();
     _tabController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -776,6 +787,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       ),
     );
   }
+
   Future<void> _buildPaymentDialog(){
     return showDialog(
       context: context,
@@ -925,6 +937,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       ),
     );
   }
+
   Widget _buildSignIn() {
     return Form(
       key: _formKey,
@@ -1029,6 +1042,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       ),
     );
   }
+
   /// Function that initializes payment by calling
   /// [initializePayment] in the [RestDataSource] class
   void _initializePayment() async {
@@ -1077,10 +1091,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
     });
     var api = AuthRestDataSource();
     await api.verifyPayment(reference).then((value) {
-
-      if(!mounted)return;
-      setState(() { _showSpinner = false; });
-      Navigator.pushReplacementNamed(context, SuccessfulPay.id);
+      _saveCandidate();
     }).catchError((error) {
       if(!mounted)return;
       setState(() {
@@ -1089,5 +1100,32 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       Constants.showError(context, error.toString());
     });
   }
+
+void _saveCandidate() async{
+  List<Saved> saved = [];
+  widget.candidates.forEach((key, value) {
+    if(value.length > 0){
+      var val = Saved();
+      val.category = key.id;
+      List<String> id = [];
+      for(int i = 0; i < value.length; i++){
+        id.add(value[i].id);
+      }
+      val.candidate = id;
+    }
+  });
+  var api = AuthRestDataSource();
+  await api.saveCandidate(saved).then((value) {
+    if(!mounted)return;
+    setState(() { _showSpinner = false; });
+    Navigator.pushReplacementNamed(context, SuccessfulPay.id);
+  }).catchError((error) {
+    if(!mounted)return;
+    setState(() {
+      _showSpinner = false;
+    });
+    Constants.showError(context, error.toString());
+  });
+}
 
 }

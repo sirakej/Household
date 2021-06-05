@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
-import 'package:householdexecutives_mobile/ui/candidate/find_a_candidate.dart';
+import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/my_list.dart';
-import 'package:householdexecutives_mobile/ui/candidate/pickedList.dart';
-import 'package:householdexecutives_mobile/ui/candidate/selected_candidate_list.dart';
+import 'package:householdexecutives_mobile/ui/candidate/selected_category.dart';
 import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
 import 'package:householdexecutives_mobile/ui/packages.dart';
 import 'package:householdexecutives_mobile/ui/registration/forgot_password/create_new_password.dart';
@@ -52,7 +51,7 @@ class MyApp extends StatelessWidget {
         SentLinkPage.id:(context)=>SentLinkPage(),
         CreateNewPassword.id:(context)=>CreateNewPassword(),
         UserCreatedSuccessfully.id:(context)=>UserCreatedSuccessfully(),
-        FindACandidate.id:(context)=>FindACandidate(),
+        FindACategory.id:(context)=>FindACategory(),
         //SelectedCandidateList.id:(context)=>SelectedCandidateList(),
         Packages.id:(context)=>Packages(),
         SuccessfulPay.id:(context)=>SuccessfulPay(),
@@ -61,7 +60,6 @@ class MyApp extends StatelessWidget {
         PasswordAndSecurity.id:(context)=>PasswordAndSecurity(),
         SavedCandidate.id:(context)=>SavedCandidate(),
         MyListCandidate.id:(context)=>MyListCandidate(),
-        PickedList.id:(context)=>PickedList(),
       },
     );
   }

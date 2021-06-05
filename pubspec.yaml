@@ -23,7 +23,7 @@ dependencies:
   image_picker: ^0.6.7+21
   webview_flutter: ^1.0.4
   flutter_paystack: ^1.0.4+1
-
+  skeleton_loader: ^1.0.2+3
 
 dev_dependencies:
 

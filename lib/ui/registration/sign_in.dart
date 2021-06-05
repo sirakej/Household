@@ -292,7 +292,7 @@ class _SignInState extends State<SignIn> {
             children: [
               TextButton(
                 onPressed:(){
-                  Navigator.push(context,
+                  Navigator.pushReplacement(context,
                       CupertinoPageRoute(builder: (_){
                         return Reset();
                       })

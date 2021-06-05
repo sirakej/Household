@@ -2,18 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
-import 'package:householdexecutives_mobile/ui/candidate/selected_candidate_list.dart';
+import 'package:householdexecutives_mobile/ui/candidate/selected_category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:shimmer/shimmer.dart';
 
-class FindACandidate extends StatefulWidget {
-  static const String id = 'find_a_candidate';
+class FindACategory extends StatefulWidget {
+
+  static const String id = 'find_a_category';
+
   @override
-  _FindACandidateState createState() => _FindACandidateState();
+  _FindACategoryState createState() => _FindACategoryState();
 }
 
-class _FindACandidateState extends State<FindACandidate> {
+class _FindACategoryState extends State<FindACategory> {
 
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
@@ -63,53 +65,51 @@ class _FindACandidateState extends State<FindACandidate> {
       _categoriesList.clear();
       for (int i = 0; i < _categories.length; i++){
         _categoriesList.add(
-            Container(
-              margin: EdgeInsets.only(bottom: 6),
-              child: InkWell(
-                onTap: (){
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (_){
-                        return SelectedCandidateList(
-                          category: _categories[i],
-                        );
-                      })
-                  );
-                },
-                child: Container(
-                  width: SizeConfig.screenWidth,
-                  padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
-                  decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.all(Radius.circular(6)),
-                      border: Border.all(
-                          width: 1,
-                          color: Color(0xFFEBF1F4)
-                      )
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                        ),
-                        child: Image.network("${_categories[i].category.image}",height: 54,width: 54,fit: BoxFit.contain,),
+            InkWell(
+              onTap: (){
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (_){
+                      return SelectedCategory(
+                        category: _categories[i],
+                      );
+                    })
+                );
+              },
+              child: Container(
+                width: SizeConfig.screenWidth,
+                padding: EdgeInsets.only(left: 8, top: 9, bottom: 9),
+                margin: EdgeInsets.only(bottom: 6),
+                decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    border: Border.all(
+                        width: 1,
+                        color: Color(0xFFEBF1F4)
+                    )
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
                       ),
-                      SizedBox(width:12,),
-                      Text(
-                        "Hire a ${_categories[i].category.name}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          //letterSpacing: 1,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 16,
-                          color: Color(0xFF042538),
-                        ),
+                      child: Image.network("${_categories[i].category.image}",height: 54,width: 54,fit: BoxFit.contain,),
+                    ),
+                    SizedBox(width:12,),
+                    Text(
+                      "Hire a ${_categories[i].category.name}",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        //letterSpacing: 1,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF042538),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -306,53 +306,5 @@ class _FindACandidateState extends State<FindACandidate> {
       ),
     );
   }
-
-//  Widget _buildCandidateContainer(String candidateRole , String imagePath){
-//    return InkWell(
-//      onTap: (){
-//        Navigator.push(context,
-//            CupertinoPageRoute(builder: (_){
-//              return SelectedCandidateList();
-//            })
-//        );
-//      },
-//      child: Container(
-//        width: SizeConfig.screenWidth,
-//        padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
-//        decoration: BoxDecoration(
-//          color: Color(0xFFFFFFFF),
-//          borderRadius: BorderRadius.all(Radius.circular(6)),
-//          border: Border.all(
-//            width: 1,
-//            color: Color(0xFFEBF1F4)
-//          )
-//        ),
-//        child: Row(
-//          crossAxisAlignment: CrossAxisAlignment.center,
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: [
-//            Container(
-//              decoration: BoxDecoration(
-//                borderRadius: BorderRadius.all(Radius.circular(6)),
-//              ),
-//              child: Image.asset(imagePath,height: 54,width: 54,fit: BoxFit.contain,),
-//            ),
-//            SizedBox(width:12,),
-//            Text(
-//              candidateRole,
-//              textAlign: TextAlign.start,
-//              style: TextStyle(
-//                //letterSpacing: 1,
-//                fontWeight: FontWeight.w400,
-//                fontFamily: 'Gelion',
-//                fontSize: 16,
-//                color: Color(0xFF042538),
-//              ),
-//            ),
-//          ],
-//        ),
-//      ),
-//    );
-//  }
 
 }
