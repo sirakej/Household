@@ -242,10 +242,10 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Color(0xFF050729),
       body: SafeArea(
+        top: false,
+        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left: 24,right: 24),

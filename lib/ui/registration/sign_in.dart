@@ -37,10 +37,10 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
       backgroundColor: Color(0xFFFFFFFF),
       body: SafeArea(
+        top: false,
+        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, right: 24),
