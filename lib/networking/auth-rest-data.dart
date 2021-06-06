@@ -34,6 +34,7 @@ class AuthRestDataSource {
 
   static final GET_CATEGORY = BASE_URL + "category";
   static final GET_CANDIDATE = BASE_URL + "candidate";
+  static final GET_SAVED_CANDIDATE = BASE_URL + "user/savedcandidate";
 
   static final GET_USER = BASE_URL + "user";
   static final GET_PLANS = BASE_URL + "plan";

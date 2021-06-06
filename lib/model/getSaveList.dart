@@ -1,5 +1,5 @@
-class GetSaveCandidate {
-  GetSaveCandidate({
+class GetSaveList {
+  GetSaveList({
     this.candidate,
     this.user,
     this.category,
@@ -9,7 +9,7 @@ class GetSaveCandidate {
   String user;
   Category category;
 
-  factory GetSaveCandidate.fromJson(Map<String, dynamic> json) => GetSaveCandidate(
+  factory GetSaveList.fromJson(Map<String, dynamic> json) => GetSaveList(
     candidate: List<Candidate>.from(json["candidate"].map((x) => Candidate.fromJson(x))),
     user: json["user"],
     category: Category.fromJson(json["category"]),
