@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 class SuccessfulPay extends StatefulWidget {
+
   static const String id = 'successful_pay';
+
   @override
   _SuccessfulPayState createState() => _SuccessfulPayState();
 }
 
 class _SuccessfulPayState extends State<SuccessfulPay> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +18,18 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
     return Scaffold(
       backgroundColor: Color(0xFF050729),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, right: 24),
           child: Column(
             children: [
-              SizedBox(height: SizeConfig.screenHeight/5,),
-              Image.asset("assets/icons/circle check full.png",height:70,width:70,fit: BoxFit.contain,),
+              SizedBox(height: SizeConfig.screenHeight / 5),
+              Image.asset(
+                "assets/icons/circle check full.png",
+                height: 70,
+                width:70,
+                fit: BoxFit.contain
+              ),
               SizedBox(height: 16,),
               Text(
                 'Payment Successful!',

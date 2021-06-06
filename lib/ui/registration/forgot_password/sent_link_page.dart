@@ -19,8 +19,6 @@ class _SentLinkPageState extends State<SentLinkPage> {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, right: 24),

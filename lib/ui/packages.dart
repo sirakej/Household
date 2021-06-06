@@ -39,7 +39,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
   var publicKey = 'pk_live_f2db20f827f2de9c8646547ee71da0f51fa88483';
 
   /// A List to hold the all the available plans
-  List<Plan> _plans = List();
+  List<Plan> _plans = [];
 
   Plan _selectedPlan;
 
@@ -87,7 +87,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       _plansList.clear();
       for (int i = 0; i < _plans.length; i++) {
         /// A List to hold the all the available details
-        List<Widget> details = List();
+        List<Widget> details = [];
 
         for (int j = 0; j < _plans[i].details.length; j++) {
           details.add(
@@ -115,84 +115,83 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                       ),
                     ),
                   ),
-                ],),
+                ]
+              ),
             ),
           );
         }
         _plansList.add(
-          Column(
-            children: [
-              InkWell(
-                onTap: (){
-                 setState(() {
-                   _selectedPlan = _plans[i];
-                   _change[_plans[i].title] = true;
-                   _change.forEach((key, value) {
-                     if(key != _plans[i].title){
-                       _change[key] = false;
-                     }
-                   });
-                 });
-                },
-                child: Container(
-                  //margin: EdgeInsets.only(bottom: 20),
-                  padding: EdgeInsets.only(left: 22, top: 16, bottom: 34),
-                  width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(
-                      color: !_change[_plans[i].title]
-                          ? Color(0xFFF7941D).withOpacity(0.06)
-                          : Color(0xFF00A69D).withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                          width: 1,
-                          color:  !_change[_plans[i].title]
-                              ? Color(0xFFF7941D)
-                              : Color(0xFF00A69D)
-                      )
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${_plans[i].title}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 14,
-                          color: Color(0xFF99B9CF),
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: InkWell(
+              onTap: (){
+                setState(() {
+                  _selectedPlan = _plans[i];
+                  _change[_plans[i].title] = true;
+                  _change.forEach((key, value) {
+                    if(key != _plans[i].title){
+                      _change[key] = false;
+                    }
+                  });
+                });
+              },
+              child: Container(
+                //margin: EdgeInsets.only(bottom: 20),
+                padding: EdgeInsets.only(left: 22, top: 16, bottom: 34),
+                width: SizeConfig.screenWidth,
+                decoration: BoxDecoration(
+                    color: !_change[_plans[i].title]
+                        ? Color(0xFFF7941D).withOpacity(0.06)
+                        : Color(0xFF00A69D).withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                        width: 1,
+                        color:  !_change[_plans[i].title]
+                            ? Color(0xFFF7941D)
+                            : Color(0xFF00A69D)
+                    )
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${_plans[i].title}",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF99B9CF),
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Image.asset(
+                            "assets/icons/currency_icon.png",
+                            width: 17,
+                            height: 17,
+                            fit: BoxFit.contain
                         ),
-                      ),
-                      SizedBox(height: 6,),
-                      Row(
-                        children: [
-                          Image.asset("assets/icons/currency_icon.png", width: 17,
-                              height: 17,
-                              fit: BoxFit.contain),
-                          SizedBox(width: 9,),
-                          Text(
-                            "${_plans[i].price}",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              //letterSpacing: 1,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Gelion',
-                              fontSize: 24,
-                              color: Color(0xFFF7941D),
-                            ),
+                        SizedBox(width: 9),
+                        Text(
+                          "${Constants.money(double.parse(_plans[i].price), '')}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Gelion',
+                            fontSize: 24,
+                            color: Color(0xFFF7941D),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 17,),
-                      Column(
-                        children: details
-                      )
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 17,),
+                    Column(children: details)
+                  ],
                 ),
               ),
-              SizedBox(height: 20,)
-            ],
+            )
           ),
         );
       }
@@ -244,11 +243,9 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
     return Scaffold(
       backgroundColor: Color(0xFF050729),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
-          padding: EdgeInsets.only(left: 24,right: 24),
+          padding: EdgeInsets.only(left: 24, right: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -307,484 +304,50 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                   physics: BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      SizedBox(height: 26,),
+                      SizedBox(height: 26),
                       _buildList(),
-//                      Container(
-//                        padding: EdgeInsets.only(left:22,top:16 , bottom:34 ),
-//                        width: SizeConfig.screenWidth,
-//                        decoration: BoxDecoration(
-//                           color: Color(0xFF00A69D).withOpacity(0.08),
-//                            borderRadius: BorderRadius.circular(6),
-//                            border: Border.all(
-//                                width: 1,
-//                                color: Color(0xFF00A69D)
-//                            )
-//                        ),
-//                        child: Column(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: [
-//                            Text(
-//                              "Premium Package",
-//                              textAlign: TextAlign.start,
-//                              style: TextStyle(
-//                                fontWeight: FontWeight.w400,
-//                                fontFamily: 'Gelion',
-//                                fontSize: 14,
-//                                color: Color(0xFF99B9CF),
-//                              ),
-//                            ),
-//                            SizedBox(height: 6,),
-//                            Row(
-//                              children: [
-//                                Image.asset("assets/icons/currency_icon.png",width:17,height:17 ,fit:BoxFit.contain),
-//                                SizedBox(width: 9,),
-//                                Text(
-//                                  "89,500.00",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w700,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 24,
-//                                    color: Color(0xFFF7941D),
-//                                  ),
-//                                ),
-//                              ],
-//                            ),
-//                            SizedBox(height: 17,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "3 Candidate Profiles for Interview l\n1 Preferred Candidate Selection",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Primary Due Diligence",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Background Check Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Guarantors Verification Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Identity Verification Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Medical Screening Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Basic Etiquette Training",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "1 Month Handholding Period",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "1 Free Post-Employment Replacement",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                          ],
-//                        ),
-//                      ),
-//                      SizedBox(height: 24,),
-//                      Container(
-//                        padding: EdgeInsets.only(left:22,top:16 , bottom:34 ),
-//                        width: SizeConfig.screenWidth,
-//                        decoration: BoxDecoration(
-//                            color: Color(0xFFF7941D).withOpacity(0.06),
-//                            borderRadius: BorderRadius.circular(6),
-//                            border: Border.all(
-//                                width: 1,
-//                                color: Color(0xFFF7941D)
-//                            )
-//                        ),
-//                        child: Column(
-//                          crossAxisAlignment: CrossAxisAlignment.start,
-//                          children: [
-//                            Text(
-//                              "Standard Package",
-//                              textAlign: TextAlign.start,
-//                              style: TextStyle(
-//                                fontWeight: FontWeight.w400,
-//                                fontFamily: 'Gelion',
-//                                fontSize: 14,
-//                                color: Color(0xFF99B9CF),
-//                              ),
-//                            ),
-//                            SizedBox(height: 6,),
-//                            Row(
-//                              children: [
-//                                Image.asset("assets/icons/currency_icon.png",width:17,height:17 ,fit:BoxFit.contain),
-//                                SizedBox(width: 9,),
-//                                Text(
-//                                  "44,500.00",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w700,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 24,
-//                                    color: Color(0xFFF7941D),
-//                                  ),
-//                                ),
-//                              ],
-//                            ),
-//                            SizedBox(height: 17,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "3 Candidate Profiles for Interview l\n1 Preferred Candidate Selection",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Primary Due Diligence",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Background Check Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Guarantors Verification Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Identity Verification Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Medical Screening Report",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                            SizedBox(height: 12,),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.start,
-//                              children: [
-//                                Icon(
-//                                  Icons.arrow_forward_outlined,
-//                                  size: 15,
-//                                  color: Color(0xFFFFFFFF),
-//                                ),
-//                                SizedBox(width: 34,),
-//                                Text(
-//                                  "Basic Etiquette Training",
-//                                  textAlign: TextAlign.start,
-//                                  style: TextStyle(
-//                                    //letterSpacing: 1,
-//                                    fontWeight: FontWeight.w400,
-//                                    fontFamily: 'Gelion',
-//                                    fontSize: 14,
-//                                    color: Color(0xFFEBF1F4),
-//                                  ),
-//                                ),
-//                              ],),
-//                          ],
-//                        ),
-//                      ),
-                      SizedBox(height: 42,),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){
-                          if(_change.containsValue(true)){
-                            _initializePayment();
-                          }
-                        },
-                        color: Color(0xFF00A69D),
-                        child: Text(
-                          "Continue",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFFFFFFFF),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30,),
+                      SizedBox(height: 42),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: InkWell(
+        onTap:(){
+          if(_change.containsValue(true)){
+            _initializePayment();
+          }
+        },
+        child: Container(
+          width: SizeConfig.screenWidth,
+          height: 60,
+          margin: EdgeInsets.only(left: 35, right: 35),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: _change.containsValue(true)
+                ? Color(0xFF00A69D)
+                : Color(0xFFF9F9F9),
+          ),
+          child: Center(
+            child: Text(
+              "Continue",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Gelion',
+                fontSize: 16,
+                color: _change.containsValue(true)
+                    ? Color(0xFFFFFFFF)
+                    : Color(0xFF717F88),
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -1101,31 +664,31 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
     });
   }
 
-void _saveCandidate() async{
-  List<Saved> saved = [];
-  widget.candidates.forEach((key, value) {
-    if(value.length > 0){
-      var val = Saved();
-      val.category = key.id;
-      List<String> id = [];
-      for(int i = 0; i < value.length; i++){
-        id.add(value[i].id);
+  void _saveCandidate() async{
+    List<Saved> saved = [];
+    widget.candidates.forEach((key, value) {
+      if(value.length > 0){
+        var val = Saved();
+        val.category = key.id;
+        List<String> id = [];
+        for(int i = 0; i < value.length; i++){
+          id.add(value[i].id);
+        }
+        val.candidate = id;
       }
-      val.candidate = id;
-    }
-  });
-  var api = AuthRestDataSource();
-  await api.saveCandidate(saved).then((value) {
-    if(!mounted)return;
-    setState(() { _showSpinner = false; });
-    Navigator.pushReplacementNamed(context, SuccessfulPay.id);
-  }).catchError((error) {
-    if(!mounted)return;
-    setState(() {
-      _showSpinner = false;
     });
-    Constants.showError(context, error.toString());
-  });
-}
+    var api = AuthRestDataSource();
+    await api.saveCandidate(saved).then((value) {
+      if(!mounted)return;
+      setState(() { _showSpinner = false; });
+      Navigator.pushReplacementNamed(context, SuccessfulPay.id);
+    }).catchError((error) {
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+      });
+      Constants.showError(context, error.toString());
+    });
+  }
 
 }

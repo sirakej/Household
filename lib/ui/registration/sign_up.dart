@@ -65,8 +65,6 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, right: 24),
@@ -113,11 +111,16 @@ class _SignUpState extends State<SignUp> {
                        ),
                        padding: EdgeInsets.only(top:18 ,bottom: 18),
                        onPressed:(){
-                      if(isCheck == true && _passwordValidated == true){
-                        if(_formKey.currentState.validate()){
-                          _signUp();
-                        }
-                      }
+                         if(isCheck){
+                           if(_formKey.currentState.validate()){
+                             if(_passwordValidated){
+                               _signUp();
+                             }
+                           }
+                         }
+                         else {
+                           Constants.showError(context, 'Agree to our terms and conditions');
+                         }
                        },
                        color: Color(0xFF00A69D),
                        child:  _showSpinner
@@ -240,7 +243,6 @@ class _SignUpState extends State<SignUp> {
                     if (value.length < 3){
                       return 'Firstname should be at least 3 characters';
                     }
-                    return null;
                     return null;
                   },
                   style: TextStyle(
@@ -474,98 +476,100 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-        SizedBox(height: 9),
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _conditionsPassed(),
-              SizedBox(height: 6),
-              Row(
-                children: [
-                  Container(
-                    child: _condition1 == false ? Icon(
-                      Icons.circle,
-                      color: Color(0xFF9097A5),
-                      size: 12,
-                    ):Icon(
-                      Icons.check_circle,
-                      size: 12,
-                      color: Color(0xFF00A69D),),
-                  ),
-                  SizedBox(width: 6),
-                  Text(
-                    'Minimum of 8 characters',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      fontFamily: 'Gelion',
-                      color:Color(0xFF717F88),
+          SizedBox(height: 9),
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _conditionsPassed(),
+                SizedBox(height: 6),
+                Row(
+                  children: [
+                    Container(
+                      child: _condition1 == false ? Icon(
+                        Icons.circle,
+                        color: Color(0xFF9097A5),
+                        size: 12,
+                      ):Icon(
+                        Icons.check_circle,
+                        size: 12,
+                        color: Color(0xFF00A69D),),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Row(
-                children: [
-                  Container(
-                    child: _condition2 == false ? Icon(
-                      Icons.circle,
-                      color: Color(0xFF9097A5),
-                      size: 12,
-                    ):Icon(
-                      Icons.check_circle,
-                      size: 12,
-                      color: Color(0xFF00A69D),),
-                  ),
-                  SizedBox(width: 6),
-                  Text(
-                    'One UPPERCASE character',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      fontFamily: 'Gelion',
-                      color: Color(0xFF717F88),
+                    SizedBox(width: 6),
+                    Text(
+                      'Minimum of 8 characters',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        color:Color(0xFF717F88),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Row(
-                children: [
-                  Container(
-                    child: _condition3 == false ? Icon(
-                      Icons.circle,
-                      color: Color(0xFF9097A5),
-                      size: 12,
-                    ):Icon(
-                      Icons.check_circle,
-                      size: 12,
-                      color: Color(0xFF00A69D),),
-                  ),
-                  SizedBox(width: 6),
-                  Text(
-                    'One number or unique character',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      fontFamily: 'Gelion',
-                      color:Color(0xFF717F88),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Container(
+                      child: _condition2 == false ? Icon(
+                        Icons.circle,
+                        color: Color(0xFF9097A5),
+                        size: 12,
+                      ):Icon(
+                        Icons.check_circle,
+                        size: 12,
+                        color: Color(0xFF00A69D),),
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(width: 6),
+                    Text(
+                      'One UPPERCASE character',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        color: Color(0xFF717F88),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Container(
+                      child: _condition3 == false ? Icon(
+                        Icons.circle,
+                        color: Color(0xFF9097A5),
+                        size: 12,
+                      ):Icon(
+                        Icons.check_circle,
+                        size: 12,
+                        color: Color(0xFF00A69D),),
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      'One number or unique character',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        color:Color(0xFF717F88),
+                      ),
+                    ),
+                  ],
+                ),
               ]
-        ),
+          ),
           SizedBox(height: 28,),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                  icon: isCheck == false?Icon(
+                  icon: isCheck == false
+                      ? Icon(
                     Icons.check_box_outline_blank_outlined,
                     size: 25,
                     color:  Color(0xFF9097A5),
-                  ):Icon(
+                  )
+                      : Icon(
                     Icons.check_box_outlined,
                     size: 25,
                     color:  Color(0xFF9097A5),
@@ -574,7 +578,8 @@ class _SignUpState extends State<SignUp> {
                     setState(() {
                       isCheck =! isCheck;
                     });
-                  }),
+                  }
+              ),
               RichText(
                 text:TextSpan(
                     text: "I agree to the ",
@@ -601,7 +606,7 @@ class _SignUpState extends State<SignUp> {
               )
             ],
           )
-  ]
+        ]
       )
     );
   }
@@ -613,6 +618,7 @@ class _SignUpState extends State<SignUp> {
       _obscureTextLogin = !_obscureTextLogin;
     });
   }
+
   /// Function to build the widget of conditions passed
   Widget _conditionsPassed(){
     bool two = _condition2 = (_password.contains(RegExp(r'[A-Z]'))  && _password.contains(RegExp(r'[a-z]')));
@@ -704,9 +710,8 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-/// Function that creates a new user by calling
-/// [signUp] in the [AuthRestDataSource] class
-
+  /// Function that creates a new user by calling
+  /// [signUp] in the [AuthRestDataSource] class
   void _signUp(){
     if(!mounted)return;
     setState(() {
@@ -744,7 +749,5 @@ class _SignUpState extends State<SignUp> {
     Navigator.pushNamedAndRemoveUntil(context, UserCreatedSuccessfully.id, (route) => false);
 
   }
-
-
 
 }

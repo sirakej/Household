@@ -113,11 +113,9 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
-          padding: EdgeInsets.only(left:24, right: 24),
+          padding: EdgeInsets.only(left:24, right: 24, top: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +221,6 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                         if (value.length < 3){
                           return 'Firstname should be at least 3 characters';
                         }
-                        return null;
                         return null;
                       },
                       style: TextStyle(

@@ -5,7 +5,6 @@ import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/my_list.dart';
-import 'package:householdexecutives_mobile/ui/candidate/selected_category.dart';
 import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
 import 'package:householdexecutives_mobile/ui/packages.dart';
 import 'package:householdexecutives_mobile/ui/registration/forgot_password/create_new_password.dart';
@@ -39,7 +38,6 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Color(0xFF1A60CD),
       ),
-
       initialRoute: Splash.id,
       routes: {
         Splash.id: (context) => Splash(),

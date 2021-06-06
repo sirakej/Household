@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
 import 'package:householdexecutives_mobile/ui/onboarding_screen.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   static const String id = 'splash_screen_page';
@@ -12,17 +14,20 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
+
   /// Calling [navigate()] before the page loads
-  ///
   AnimationController _controller;
+
   Animation _animation;
+
   bool left = false;
+
   bool right = false;
+
   @override
   void initState() {
     super.initState();
    navigate();
-
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds:1),
@@ -36,20 +41,14 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   /// A function to set a 3 seconds timer for my splash screen to show
-  /// and navigate to my [welcome] screen after
+  /// and navigate to my [OnBoard] screen after
   void navigate() {
-    Timer(
-      Duration(seconds: 5),
-          () {
-       Navigator.pushNamed(context, OnBoard.id);
-      },
-    );
+    Timer(Duration(seconds: 2), () { getBoolValuesSF(); });
   }
 
   void time() {
@@ -58,7 +57,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
           () {
         if(!mounted)return;
         setState(() {
-          left = right =true;
+          left = right = true;
         });
       },
     );
@@ -79,7 +78,6 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
             duration: Duration(milliseconds: 250),
             child: Image.asset("assets/icons/blur_right.png", height: 689, width: 689,fit: BoxFit.contain,),
           ),
-
           AnimatedPositioned(
             top: 0,
             right: left == false ?-100:30,
@@ -136,16 +134,22 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
       ),
     );
   }
-//
-//  void getBoolValuesSF() async {
-//    SharedPreferences prefs = await SharedPreferences.getInstance();
-//    bool boolValue = prefs.getBool('loggedIn');
-//    if (boolValue == true) {
-//      Navigator.of(context).pushReplacementNamed(Index.id);
-//    } else if (boolValue == false) {
-//      Navigator.of(context).pushReplacementNamed(Sliders.id);
-//    } else {
-//      Navigator.of(context).pushReplacementNamed(Sliders.id);
-//    }
-//  }
+
+  void getBoolValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool boolValue = prefs.getBool('loggedIn');
+    if (boolValue == true) {
+      Navigator.pushReplacement(context,
+          CupertinoPageRoute(builder: (_){
+            return HomeScreen();
+          })
+      );
+    }
+    else if (boolValue == false) {
+      Navigator.of(context).pushReplacementNamed(OnBoard.id);
+    }
+    else {
+      Navigator.of(context).pushReplacementNamed(OnBoard.id);
+    }
+  }
 }

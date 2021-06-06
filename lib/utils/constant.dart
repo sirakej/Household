@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Constants {
 
@@ -18,7 +19,7 @@ class Constants {
 
     else {
       List<String> values = string.split(' ');
-      List<String> valuesToJoin = new List();
+      List<String> valuesToJoin = [];
 
       if (values.length == 1) {
         result = string[0].toUpperCase() + string.substring(1);
@@ -50,7 +51,7 @@ class Constants {
 
     else {
       List<String> values = string.split(' ');
-      List<String> valuesToJoin = List();
+      List<String> valuesToJoin = [];
 
       if (values.length == 1) {
         result = string[0];
@@ -62,6 +63,12 @@ class Constants {
       }
     }
     return result;
+  }
+
+  /// Convert a double [value] to a currency
+  static String money(double value, String currency){
+    final nf = NumberFormat("#,##0.00", "en_US");
+    return '$currency${nf.format(value)}';
   }
 
   /// Function to show success message with [_showAlert]

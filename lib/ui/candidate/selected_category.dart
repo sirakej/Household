@@ -102,7 +102,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   var futureValue = FutureValues();
 
   /// A List to hold the all the available plans
-  List<Candidate> _candidates = List();
+  List<Candidate> _candidates = [];
 
   /// An Integer variable to hold the length of [_plans]
   int _candidatesLength;
@@ -140,28 +140,34 @@ class _SelectedCategoryState extends State<SelectedCategory> {
     if(_candidates.length > 0 && _candidates.isNotEmpty){
       _candidatesList.clear();
       for (int i = 0; i < _candidates.length; i++){
-        _candidatesList.add(
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            child: CandidateContainer(
-              candidate: _candidates[i],
-              category: widget.category,
-              onPressed: (){
-                if(widget.candidates != null){
-                  print(_candidates[i]);
-                  if(widget.candidates.any((element) => element.id == _candidates[i].id)){
-                    //_buildProfileModalSheet(context, _candidates[i]);
-                  }else {
-                    _buildProfileModalSheet(context, _candidates[i]);
-                  }
-                }
-                else {
-                  _buildProfileModalSheet(context, _candidates[i]);
-                }
-              },
+        if (widget.candidates.any((element) => element.id == _candidates[i].id)) {
+          _candidatesList.add(
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: CandidateContainer(
+                candidate: _candidates[i],
+                category: widget.category,
+                onPressed: (){  },
+                selected: true,
+              ),
             ),
-          ),
-        );
+          );
+        }
+        else {
+          _candidatesList.add(
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: CandidateContainer(
+                candidate: _candidates[i],
+                category: widget.category,
+                onPressed: (){
+                  _buildProfileModalSheet(context, _candidates[i]);
+                },
+                selected: false,
+              ),
+            ),
+          );
+        }
       }
       return Column(
         children: _candidatesList,
@@ -1978,305 +1984,105 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   }
 
   Widget _buildCandidateContainer(Candidate candidate){
-    if(widget.candidates == null){
-      return Container(
-        width: SizeConfig.screenWidth,
-        padding: EdgeInsets.only(left:8, top: 19, bottom: 22, right: 8),
-        margin: EdgeInsets.only(bottom: 15),
-        decoration: BoxDecoration(
-            color: true ? Color(0xFFFFFFFF) : Color(0xFFF7941D).withOpacity(0.1),
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            border: Border.all(
-              width: 1,
-              color: true ? Color(0xFFEBF1F4) : Color(0xFFF7941D),
-            )
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
-                  child: Image.asset(
-                      'assets/icons/butler.png',
-                      height: 57,
-                      width: 72,
-                      fit: BoxFit.contain
-                  ),
+    return Container(
+      width: SizeConfig.screenWidth,
+      padding: EdgeInsets.only(left:8, top: 19, bottom: 22, right: 8),
+      margin: EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(
+          color: true ? Color(0xFFFFFFFF) : Color(0xFFF7941D).withOpacity(0.1),
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          border: Border.all(
+            width: 1,
+            color: true ? Color(0xFFEBF1F4) : Color(0xFFF7941D),
+          )
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
                 ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${candidate.firstName} (${candidate.gender})",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 16,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    Text(
-                      '${candidate.experience}',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFFF7941D),
-                      ),
-                    ),
-                    Text(
-                      "${candidate.availablity} . ${candidate.resedential}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFF717F88),
-                      ),
-                    ),
-                  ],
+                child: Image.asset(
+                    'assets/icons/butler.png',
+                    height: 57,
+                    width: 72,
+                    fit: BoxFit.contain
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Text(
-                    "3.5",
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${candidate.firstName} (${candidate.gender})",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      //letterSpacing: 1,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Gelion',
+                      fontSize: 16,
+                      color: Color(0xFF042538),
+                    ),
+                  ),
+                  Text(
+                    '${candidate.experience}',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      //letterSpacing: 1,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Gelion',
+                      fontSize: 12,
+                      color: Color(0xFFF7941D),
+                    ),
+                  ),
+                  Text(
+                    "${candidate.availablity} . ${candidate.resedential}",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       //letterSpacing: 1,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Gelion',
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Color(0xFF717F88),
                     ),
                   ),
-                ),
-                Image.asset(
-                    'assets/icons/star.png',
-                    width: 18,
-                    height: 15,
-                    color: Color(0xFFF7941D),
-                    fit: BoxFit.contain
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    }
-    if(widget.candidates.contains(candidate)){
-      return Container(
-        width: SizeConfig.screenWidth,
-        padding: EdgeInsets.only(left:8, top: 19, bottom: 22, right: 8),
-        margin: EdgeInsets.only(bottom: 15),
-        decoration: BoxDecoration(
-            color: Color(0xFFF9F9F9),
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
-                  child: Image.asset(
-                      'assets/icons/butler.png',
-                      height: 57,
-                      width: 72,
-                      fit: BoxFit.contain
+                ],
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Text(
+                  "3.5",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    //letterSpacing: 1,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    fontSize: 11,
+                    color: Color(0xFF717F88),
                   ),
                 ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${candidate.firstName} (${candidate.gender})",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 16,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    Text(
-                      '${candidate.experience}',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFF717F88),
-                      ),
-                    ),
-                    Text(
-                      "${candidate.availablity} . ${candidate.resedential}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFF717F88),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Text(
-                    "3.5",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      //letterSpacing: 1,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 11,
-                      color: Color(0xFF717F88),
-                    ),
-                  ),
-                ),
-                Image.asset(
-                    'assets/icons/star.png',
-                    width: 18,
-                    height: 15,
-                    color: Color(0xFFF7941D),
-                    fit: BoxFit.contain
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    }
-    else {
-      return Container(
-        width: SizeConfig.screenWidth,
-        padding: EdgeInsets.only(left:8, top: 19, bottom: 22, right: 8),
-        margin: EdgeInsets.only(bottom: 15),
-        decoration: BoxDecoration(
-            color: true ? Color(0xFFFFFFFF) : Color(0xFFF7941D).withOpacity(0.1),
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            border: Border.all(
-              width: 1,
-              color: true ? Color(0xFFEBF1F4) : Color(0xFFF7941D),
-            )
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
-                  child: Image.asset(
-                      'assets/icons/butler.png',
-                      height: 57,
-                      width: 72,
-                      fit: BoxFit.contain
-                  ),
-                ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${candidate.firstName} (${candidate.gender})",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 16,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    Text(
-                      '${candidate.experience}',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFFF7941D),
-                      ),
-                    ),
-                    Text(
-                      "${candidate.availablity} . ${candidate.resedential}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 12,
-                        color: Color(0xFF717F88),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Text(
-                    "3.5",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      //letterSpacing: 1,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 11,
-                      color: Color(0xFF717F88),
-                    ),
-                  ),
-                ),
-                Image.asset(
-                    'assets/icons/star.png',
-                    width: 18,
-                    height: 15,
-                    color: Color(0xFFF7941D),
-                    fit: BoxFit.contain
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    }
+              ),
+              Image.asset(
+                  'assets/icons/star.png',
+                  width: 18,
+                  height: 15,
+                  color: Color(0xFFF7941D),
+                  fit: BoxFit.contain
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
-
 
 }

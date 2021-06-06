@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
-import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_list.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_list.dart';
 import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
-import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 
 
@@ -20,8 +19,6 @@ class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, top:50 ,right: 24),

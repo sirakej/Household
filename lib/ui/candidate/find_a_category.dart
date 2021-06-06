@@ -27,7 +27,7 @@ class _FindACategoryState extends State<FindACategory> {
   var futureValue = FutureValues();
 
   /// A List to hold the all the available plans
-  List<Category> _categories = List();
+  List<Category> _categories = [];
 
   /// An Integer variable to hold the length of [_plans]
   int _categoriesLength;

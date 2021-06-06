@@ -39,8 +39,6 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: SafeArea(
-        top: false,
-        bottom: false,
         child: Container(
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(left:24, right: 24),
@@ -326,18 +324,13 @@ class _SignInState extends State<SignIn> {
 
   void _loginUser(){
     if(!mounted) return;
-    setState(() {
-      _showSpinner = true;
-    });
+    setState(() { _showSpinner = true; });
     var api = AuthRestDataSource();
     api.signIn(_emailController.text, _passwordController.text).then((User user) async{
       _emailController.clear();
       _passwordController.clear();
       if(!mounted)return;
-      setState(() {
-        _showSpinner = false;
-      });
-      print(user.toJson());
+      setState(() {  _showSpinner = false; });
       var db = DatabaseHelper();
       await db.initDb();
       await db.saveUser(user);
@@ -346,11 +339,8 @@ class _SignInState extends State<SignIn> {
       print(e);
       _passwordController.clear();
       if(!mounted)return;
-      setState(() {
-        _showSpinner = false;
-
-      });
-      Constants.showError(context,e);
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, e);
     });
   }
 
@@ -359,10 +349,14 @@ class _SignInState extends State<SignIn> {
   _addBoolToSF(bool state, User user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('loggedIn', state);
-    Navigator.push(context,
+    Navigator.pushReplacement(context,
         CupertinoPageRoute(builder: (_){
           return HomeScreen();
         })
     );
   }
+
+  // Oluwaseunakkande@gmail.com
+  // Theplace800
+
 }

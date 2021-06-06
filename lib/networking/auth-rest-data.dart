@@ -55,7 +55,7 @@ class AuthRestDataSource {
     return _netUtil.post(SIGN_UP_URL, headers: header, body: {
       "first_name": firstName.trim(),
       "surname": surName.trim(),
-      "email": email.trim(),
+      "email": email.toLowerCase().trim(),
       "phone_number": phoneNumber.trim(),
       "password": password
     }).then((dynamic res) {
@@ -75,7 +75,7 @@ class AuthRestDataSource {
   Future<User> signIn(String email, String password) async {
     Map<String, String> header = {"Content-Type": "application/json"};
     return _netUtil.post(LOGIN_URL, headers: header, body: {
-      "email": email,
+      "email": email.toLowerCase().trim(),
       "password": password
     }).then((dynamic res) {
       print(res["data"]);

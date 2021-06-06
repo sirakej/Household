@@ -31,7 +31,7 @@ class _SelectedListState extends State<SelectedList> {
   Map<Category, bool> _categoriesSelection = {};
 
   /// A List to hold the all the available categories
-  List<Category> _categories = List();
+  List<Category> _categories = [];
 
   /// An Integer variable to hold the length of [_categories]
   int _categoriesLength;
@@ -281,6 +281,7 @@ class _SelectedListState extends State<SelectedList> {
                 CupertinoPageRoute(builder: (_){
                   return SelectedCategory(
                     category: category,
+                    candidates: [],
                   );
                 })
             ).then((value) {
@@ -336,90 +337,94 @@ class _SelectedListState extends State<SelectedList> {
       backgroundColor: Color(0xFFFFFFFF),
       body: Container(
         padding: EdgeInsets.fromLTRB(25, 65, 25, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 20,
-                      color: Color(0xFF000000),
-                    ),
-
-                  ),
-                  Text(
-                    'My List',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Gelion',
-                      fontSize: 19,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                  Container(),
-                ],
-              ),
-              SizedBox(height: 14),
-              Text(
-                'You’re only allowed to select a maximmum of 3\ncandidates per category',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 12.6829,
-                  color: Color(0xFF57565C),
-                ),
-              ),
-              SizedBox(height: 29.39),
-              Container(
-                width: SizeConfig.screenWidth,
-                height: 0.5,
-                color: Color(0xFFC4CDD5),
-              ),
-              SizedBox(height: 15),
-              _buildAllCategoriesList(),
-              SizedBox(height: 30,),
-              Container(
-                padding: EdgeInsets.only(left: 24,right:24),
-                alignment: Alignment.bottomCenter,
-                child: FlatButton(
-                  minWidth: SizeConfig.screenWidth,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)
-                  ),
-                  padding: EdgeInsets.only(top:18 ,bottom: 18),
-                  onPressed:(){
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (_){
-                          return Packages(
-                            candidates: _candidates,
-                          );
-                        })
-                    );
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
                   },
-                  color: Color(0xFF00A69D),
-                  child: Text(
-                    "Proceed To Payment",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFFFFFFFF),
-                    ),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    size: 20,
+                    color: Color(0xFF000000),
+                  ),
+
+                ),
+                Text(
+                  'My List',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Gelion',
+                    fontSize: 19,
+                    color: Color(0xFF000000),
+                  ),
+                ),
+                Container(),
+              ],
+            ),
+            SizedBox(height: 14),
+            Text(
+              'You’re only allowed to select a maximmum of 3\ncandidates per category',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 12.6829,
+                color: Color(0xFF57565C),
+              ),
+            ),
+            SizedBox(height: 29.39),
+            Container(
+              width: SizeConfig.screenWidth,
+              height: 0.5,
+              color: Color(0xFFC4CDD5),
+            ),
+            SizedBox(height: 15),
+            Container(
+              height: SizeConfig.screenHeight - 280,
+              child: SingleChildScrollView(
+                child: _buildAllCategoriesList()
+              )
+            ),
+            SizedBox(height: 30),
+            Container(
+              padding: EdgeInsets.only(left: 24,right:24),
+              alignment: Alignment.bottomCenter,
+              child: FlatButton(
+                minWidth: SizeConfig.screenWidth,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)
+                ),
+                padding: EdgeInsets.only(top:18 ,bottom: 18),
+                onPressed:(){
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_){
+                        return Packages(
+                          candidates: _candidates,
+                        );
+                      })
+                  );
+                },
+                color: Color(0xFF00A69D),
+                child: Text(
+                  "Proceed To Payment",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    fontSize: 16,
+                    color: Color(0xFFFFFFFF),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 15),
+          ],
         ),
       ),
     );
