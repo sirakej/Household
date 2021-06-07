@@ -61,11 +61,10 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
                 ),
                 padding: EdgeInsets.only(top:18 ,bottom: 18),
                 onPressed:(){
-                  Navigator.push(context,
+                  Navigator.pushAndRemoveUntil(context,
                       CupertinoPageRoute(builder: (_){
-                        return GetSavedList();
-                      })
-                  );
+                    return GetSavedList();
+                  }), (route) => false);
                 },
                 color: Color(0xFF00A69D),
                 child: Text(

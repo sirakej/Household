@@ -311,14 +311,14 @@ class _EditProfileState extends State<EditProfile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                      onPressed: () {
-                        _buildModalSheet(context);
-                      },
-                      icon:Icon(
-                        Icons.menu,
-                        size: 20,
-                        color: Color(0xFF000000),
-                      )
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_outlined,
+                      size: 20,
+                      color: Color(0xFF000000),
+                    ),
                   ),
                   InkWell(
                       onTap: (){},

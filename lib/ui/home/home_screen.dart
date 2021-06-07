@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// String variable to hold the current name of the user
   String _firstName = '';
+  String _surName = '';
 
   /// Setting the current user logged in to [_firstName]
   void _getCurrentUser() async {
@@ -39,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if(!mounted)return;
       setState(() {
         _firstName = user.firstName;
+        _surName = user.surName;
       });
     }).catchError((e) {
       print(e);
@@ -65,106 +67,151 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 20,
             child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height:55 ,),
-                    Image.asset("assets/icons/profile.png",width: 64, height: 64, fit:BoxFit.contain,),
-                  ],
-                ),
-
-                Container(
-                  padding: EdgeInsets.only(left:75,),
-                  child: Column(
-                      children:[
-                        SizedBox(height:52),
-                        InkWell(
-                          onTap: (){
-                            Navigator.push(context,
-                            CupertinoPageRoute(builder: (_){
-                              return EditProfile();
-                            })
-                            );
-                          },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Image.asset("assets/icons/pen_icon.png",width: 16.67, height:16.67, fit:BoxFit.contain,),
-                                SizedBox(width: 21.67,),
-                                Text(
-                                  "Edit Profile",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF00A69D),
+                Expanded(
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height:55 ,),
+                            Center(child: Image.asset("assets/icons/profile.png",width: 64, height: 64, fit:BoxFit.contain,)),
+                            SizedBox(height:5),
+                            Center(
+                              child: Text(
+                              "$_firstName $_surName",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFF042538),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left:75,),
+                          child: Column(
+                              children:[
+                                SizedBox(height:52),
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                    CupertinoPageRoute(builder: (_){
+                                      return EditProfile();
+                                    })
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Image.asset("assets/icons/pen_icon.png",width: 16.67, height:16.67, fit:BoxFit.contain,),
+                                        SizedBox(width: 21.67,),
+                                        Text(
+                                          "Edit Profile",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 16,
+                                            color: Color(0xFF00A69D),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height:30),
-                        InkWell(
-                          onTap: (){
-                            Navigator.push(context,
-                                CupertinoPageRoute(builder: (_){
-                                  return PasswordAndSecurity();
-                                })
-                            );
-                          },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Image.asset("assets/icons/security_icon.png",width: 15, height:18.33, fit:BoxFit.contain,),
-                                SizedBox(width: 21.67,),
-                                Text(
-                                  "Password & Security",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF5D6970),
+                                SizedBox(height:30),
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return PasswordAndSecurity();
+                                        })
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Image.asset("assets/icons/security_icon.png",width: 15, height:18.33, fit:BoxFit.contain,),
+                                        SizedBox(width: 21.67,),
+                                        Text(
+                                          "Password & Security",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 16,
+                                            color: Color(0xFF5D6970),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height:30),
-                        InkWell(
-                          onTap: (){
-                            Navigator.push(context,
-                                CupertinoPageRoute(builder: (_){
-                                  return SavedCandidate();
-                                })
-                            );
-                          },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Image.asset("assets/icons/saved_candidate_icon.png",width: 19.09, height:16.86, fit:BoxFit.contain,),
-                                SizedBox(width: 21.67,),
-                                Text(
-                                  "Saved Candidates",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF5D6970),
+                                SizedBox(height:30),
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return SavedCandidate();
+                                        })
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Image.asset("assets/icons/saved_candidate_icon.png",width: 19.09, height:16.86, fit:BoxFit.contain,),
+                                        SizedBox(width: 21.67,),
+                                        Text(
+                                          "Saved Candidates",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 16,
+                                            color: Color(0xFF5D6970),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ]
                           ),
                         ),
-                      ]
+                      ],
+                    ),
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Align(
+                    alignment: FractionalOffset.bottomLeft,
+                    child: TextButton(
+                      onPressed:(){
+                        _logout();
+                      },
+                      child: Text(
+                        "Sign Out",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Gelion',
+                          fontSize: 18,
+                          color: Color(0xFFE36D45),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30,)
               ],
             ),
           ),
@@ -185,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          _buildModalSheet(context);
+                          _scaffoldKey.currentState.openDrawer();
                         },
                         icon:Icon(
                           Icons.menu,
@@ -675,8 +722,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             Center(
                               child: TextButton(
                                 onPressed:(){
-                                  Navigator.pop(context);
-                                  _scaffoldKey.currentState.openDrawer();
                                   },
                                 child: Text(
                                   "Update profile information",
