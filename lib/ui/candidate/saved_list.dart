@@ -214,8 +214,8 @@ class _GetSavedListState extends State<GetSavedList> {
         );
       }
       return Column(
-        children: _savedListContainer,
-      );
+          children: _savedListContainer,
+        );
     }
     else if(_mySavedListLength == 0){
       return Container();
@@ -335,130 +335,132 @@ class _GetSavedListState extends State<GetSavedList> {
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  'My List',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Gelion',
-                    fontSize: 19,
-                    color: Color(0xFF000000),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Center(
+                  child: Text(
+                    'My List',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Gelion',
+                      fontSize: 19,
+                      color: Color(0xFF000000),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height:29),
-              Container(
-                width: SizeConfig.screenWidth,
-                height: 0.5,
-                color: Color(0xFFC4CDD5),
-              ),
-              SizedBox(height: 15),
-              _buildAllSavedList(),
-              /*Container(
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(color: Color(0xFFC4CDD5), width: 0.5, style: BorderStyle.solid)
-                    )
+                SizedBox(height:29),
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: 0.5,
+                  color: Color(0xFFC4CDD5),
                 ),
-                padding: EdgeInsets.only(top: 15),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        setState(() {
-                          isClick = !isClick;
-                        });
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 250),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                                children: [
-                                  Text(
-                                    "Hire a Butler",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Gelion',
-                                      fontSize: 16,
-                                      color: Color(0xFF000000),
-                                    ),
-                                  ),
-                                  count > 0
-                                      ? Container(
-                                    width: 14,
-                                    height: 14,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xFFE93E3A)
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '$count',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 8,
-                                          color: Color(0xFFFFFFFF),
-                                        ),
+                SizedBox(height: 15),
+                _buildAllSavedList(),
+                /*Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Color(0xFFC4CDD5), width: 0.5, style: BorderStyle.solid)
+                      )
+                  ),
+                  padding: EdgeInsets.only(top: 15),
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+                            isClick = !isClick;
+                          });
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 250),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                  children: [
+                                    Text(
+                                      "Hire a Butler",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 16,
+                                        color: Color(0xFF000000),
                                       ),
                                     ),
-                                  )
-                                      : Container(),
-                                ]
-                            ),
-                            AnimatedCrossFade(
-                              firstChild: Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 19,
-                                color: Color(0xFF000000),
+                                    count > 0
+                                        ? Container(
+                                      width: 14,
+                                      height: 14,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFFE93E3A)
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '$count',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 8,
+                                            color: Color(0xFFFFFFFF),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                        : Container(),
+                                  ]
                               ),
-                              secondChild: Icon(
-                                Icons.keyboard_arrow_up,
-                                size: 19,
-                                color: Color(0xFF000000),
-                              ),
-                              crossFadeState: isClick == true
-                                  ? CrossFadeState.showSecond
-                                  : CrossFadeState.showFirst,
-                              duration: Duration(milliseconds: 1000),
-                              firstCurve: Curves.easeOutCirc,
-                              secondCurve: Curves.easeOutCirc,
-                            )
-                          ],
+                              AnimatedCrossFade(
+                                firstChild: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 19,
+                                  color: Color(0xFF000000),
+                                ),
+                                secondChild: Icon(
+                                  Icons.keyboard_arrow_up,
+                                  size: 19,
+                                  color: Color(0xFF000000),
+                                ),
+                                crossFadeState: isClick == true
+                                    ? CrossFadeState.showSecond
+                                    : CrossFadeState.showFirst,
+                                duration: Duration(milliseconds: 1000),
+                                firstCurve: Curves.easeOutCirc,
+                                secondCurve: Curves.easeOutCirc,
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 22),
-                    AnimatedCrossFade(
-                      firstChild: Container(
-                        child: Column(
-                          children: [
-                            InkWell(
-                              onTap:(){
-                                _buildProfileModalSheet(context);
-                      },
-                                child: _buildCandidateContainer("Seun", "Female", "2", "Weekdays", "Lagos"
-                                ))
-                          ]
+                      SizedBox(height: 22),
+                      AnimatedCrossFade(
+                        firstChild: Container(
+                          child: Column(
+                            children: [
+                              InkWell(
+                                onTap:(){
+                                  _buildProfileModalSheet(context);
+                        },
+                                  child: _buildCandidateContainer("Seun", "Female", "2", "Weekdays", "Lagos"
+                                  ))
+                            ]
+                          ),
                         ),
+                        secondChild: Container(),
+                        crossFadeState:  isClick == true
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
+                        duration: Duration(milliseconds: 500),
                       ),
-                      secondChild: Container(),
-                      crossFadeState:  isClick == true
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      duration: Duration(milliseconds: 500),
-                    ),
-                  ],
-                ),
-              )*/
-            ],
+                    ],
+                  ),
+                )*/
+              ],
+            ),
           ),
         ),
       ),

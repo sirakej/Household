@@ -660,12 +660,15 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
     widget.candidates.forEach((key, value) {
       if(value.length > 0){
         var val = Saved();
-        val.category = key.id;
+        val.category = key.category.id;
+        print("val.category: ${val.category}");
         List<String> id = [];
         for(int i = 0; i < value.length; i++){
           id.add(value[i].id);
         }
         val.candidate = id;
+        print("valCandidate:${val.candidate}");
+        saved.add(val);
       }
     });
     var api = AuthRestDataSource();
