@@ -1,8 +1,10 @@
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
+import 'package:householdexecutives_mobile/model/mySavedList.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
+import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 
 
@@ -68,5 +70,10 @@ class FutureValues{
     return candidates;
   }
 
+  Future<List<MySavedList>> getAllSavedListFromDB() {
+    var data = RestDataSource();
+    Future<List<MySavedList>> savedList = data.getSavedList();
+    return savedList;
+  }
 
 }

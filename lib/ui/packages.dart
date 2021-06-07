@@ -332,7 +332,9 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                 : Color(0xFFF9F9F9),
           ),
           child: Center(
-            child: Text(
+            child: _showSpinner
+                ? CupertinoActivityIndicator(radius: 10)
+                : Text(
               "Continue",
               textAlign: TextAlign.start,
               style: TextStyle(
@@ -610,12 +612,9 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
   /// [initializePayment] in the [RestDataSource] class
   void _initializePayment() async {
     if(!mounted) return;
-    setState(() {
-      _showSpinner = true;
-    });
+    setState(() { _showSpinner = true; });
     var api = AuthRestDataSource();
     await api.initializePayment(_selectedPlan).then((value) {
-
       if(!mounted)return;
       setState(() { _showSpinner = false; });
       Navigator.push(
@@ -628,9 +627,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       ).then((val) {
         if(val == 'success'){
           if(!mounted)return;
-          setState(() {
-            _showSpinner = true;
-          });
+          setState(() { _showSpinner = true; });
          _verifyPayment(value['reference'].toString());
         }
         else {
@@ -640,27 +637,21 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       });
     }).catchError((error) {
       if(!mounted)return;
-      setState(() {
-        _showSpinner = false;
-      });
-      Constants.showError(context, error.toString());
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, error);
     });
   }
 
   void _verifyPayment(String reference) async {
     if(!mounted) return;
-    setState(() {
-      _showSpinner = true;
-    });
+    setState(() { _showSpinner = true; });
     var api = AuthRestDataSource();
     await api.verifyPayment(reference).then((value) {
       _saveCandidate();
     }).catchError((error) {
       if(!mounted)return;
-      setState(() {
-        _showSpinner = false;
-      });
-      Constants.showError(context, error.toString());
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, error);
     });
   }
 
@@ -684,10 +675,8 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
       Navigator.pushReplacementNamed(context, SuccessfulPay.id);
     }).catchError((error) {
       if(!mounted)return;
-      setState(() {
-        _showSpinner = false;
-      });
-      Constants.showError(context, error.toString());
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, error);
     });
   }
 
