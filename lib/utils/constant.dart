@@ -118,7 +118,7 @@ class Constants {
         transitionDuration: const Duration(milliseconds: 700),
         pageBuilder: (BuildContext buildContext, Animation animation, Animation secondaryAnimation) {
           if(shouldDismiss){
-            Future.delayed(const Duration(seconds: 1), () {
+            Future.delayed(const Duration(seconds: 2), () {
               Navigator.of(context, rootNavigator: true).pop();
             }).then((value) {
               if(whereTo != null){

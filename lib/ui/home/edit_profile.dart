@@ -10,6 +10,8 @@ import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'home_screen.dart';
+
 class EditProfile extends StatefulWidget {
   static const String id = 'edit_profile';
   @override
@@ -804,11 +806,19 @@ class _EditProfileState extends State<EditProfile> {
       await db.updateUser(value);
       if (!mounted) return;
       setState(() { _showSpinner = false; });
+      _firstController.clear();
+      _surnameController.clear();
+      _mobileController.clear();
+      Constants.showSuccess(context, 'Password changed successfully');
+      Navigator.pushNamedAndRemoveUntil(context,  HomeScreen.id, (route) => false);
     }).catchError((e) {
       print(e);
       if (!mounted) return;
       setState(() { _showSpinner = false; });
       Constants.showError(context, e);
+      _firstController.clear();
+      _surnameController.clear();
+      _mobileController.clear();
     });
   }
 

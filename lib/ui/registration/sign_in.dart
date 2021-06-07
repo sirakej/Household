@@ -4,6 +4,7 @@ import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/ui/home/home_screen.dart';
+import 'package:householdexecutives_mobile/ui/registration/register_candidate.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_up.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
@@ -142,8 +143,10 @@ class _SignInState extends State<SignIn> {
                       Container(
                         alignment: Alignment.center,
                         child: Center(
-                          child: FlatButton(
-                              onPressed: null,
+                          child: TextButton(
+                              onPressed: (){
+                                Navigator.pushNamed(context, RegisterCandidate.id);
+                              },
                               child:Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

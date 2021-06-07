@@ -111,7 +111,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: Color(0xFFF3F6F8),
       body: SafeArea(
         child: Container(
           width: SizeConfig.screenWidth,
@@ -312,6 +312,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                         ),
                         SizedBox(height: 10,),
                         Container(
+                          height: 60,
                           width: SizeConfig.screenWidth,
                           child: TextFormField(
                             controller: _mobileController,
@@ -319,7 +320,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                             //textInputAction: TextInputAction.next,
                             validator: (value){
                               if(value.isEmpty){
-                                return 'Enter your Mobile Number';
+                                return 'Enter age';
                               }
                               return null;
                             },
@@ -330,7 +331,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                               color: Color(0xFF042538),
                             ),
                             decoration:kFieldDecoration.copyWith(
-                                hintText: '123 4567 890',
+                                hintText: '',
                                 hintStyle:TextStyle(
                                   color:Color(0xFF717F88),
                                   fontSize: 14,
@@ -361,7 +362,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                            //height: 45,
+                            height: 60,
                             width: SizeConfig.screenWidth / 2.4,
                             child: DropdownButtonFormField<String>(
                               isExpanded: true,

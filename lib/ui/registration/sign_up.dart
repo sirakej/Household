@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
+import 'package:householdexecutives_mobile/ui/registration/register_candidate.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/ui/registration/user_created_successfully.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
@@ -175,8 +176,10 @@ class _SignUpState extends State<SignUp> {
                      Container(
                        alignment: Alignment.center,
                        child: Center(
-                         child: FlatButton(
-                             onPressed: null,
+                         child: TextButton(
+                             onPressed: (){
+                               Navigator.pushNamed(context, RegisterCandidate.id);
+                             },
                              child:Row(
                                mainAxisAlignment: MainAxisAlignment.center,
                                children: [
@@ -384,8 +387,11 @@ class _SignUpState extends State<SignUp> {
                   keyboardType: TextInputType.number,
                   //textInputAction: TextInputAction.next,
                   validator: (value){
-                    if(value.isEmpty){
+                    if(value.isEmpty ){
                       return 'Enter your Mobile Number';
+                    }
+                    if(value.length < 11 || value.length > 11){
+                      return 'incorrect mobile number';
                     }
                     return null;
                   },
@@ -396,7 +402,7 @@ class _SignUpState extends State<SignUp> {
                     color: Color(0xFF042538),
                   ),
                   decoration:kFieldDecoration.copyWith(
-                      hintText: '123 4567 890',
+                      hintText: '',
                       hintStyle:TextStyle(
                         color:Color(0xFF717F88),
                         fontSize: 14,
@@ -438,6 +444,13 @@ class _SignUpState extends State<SignUp> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Enter your password';
+                    }
+                    if(_condition1 == false){
+                      Constants.showError(context, "password must be at least 8 characters long");
+                    }if(_condition2 == false){
+                      Constants.showError(context, "password needs to include upper case character");
+                    }if(_condition3 == false){
+                      Constants.showError(context, "password needs to include a number or unique character");
                     }
                     return null;
                   },

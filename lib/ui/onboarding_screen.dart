@@ -198,7 +198,7 @@ class _OnBoardState extends State<OnBoard> {
                       Center(
                         child: TextButton(
                           onPressed:(){
-//                            Navigator.pushNamed(context, RegisterCandidate.id);
+                            Navigator.pushNamed(context, RegisterCandidate.id);
                           },
                           child: Text(
                               "Register As A Candidate",

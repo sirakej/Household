@@ -73,7 +73,11 @@ class _ResetState extends State<Reset> {
                             borderRadius: BorderRadius.circular(8)
                         ),
                         padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:_resetUser,
+                        onPressed:(){
+                          if(_formKey.currentState.validate()){
+                            _resetUser();
+                          }
+                        },
                         color: Color(0xFF00A69D),
                         child:  _showSpinner
                             ? CupertinoActivityIndicator(radius: 13)

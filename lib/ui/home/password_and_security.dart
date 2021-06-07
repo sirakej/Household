@@ -659,7 +659,7 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
       _oldPasswordController.clear();
       _newPasswordController.clear();
       Constants.showSuccess(context, 'Password changed successfully');
-      Navigator.pushNamed(context , HomeScreen.id);
+      Navigator.pushNamedAndRemoveUntil(context,  HomeScreen.id, (route) => false);
     }).catchError((e){
       if(!mounted)return;
       setState(() {

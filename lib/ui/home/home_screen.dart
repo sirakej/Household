@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
+import 'package:householdexecutives_mobile/ui/candidate/saved_list.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_list.dart';
 import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
@@ -202,9 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         "Sign Out",
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                           fontFamily: 'Gelion',
-                          fontSize: 18,
+                          fontSize: 16,
                           color: Color(0xFFE36D45),
                         ),
                       ),
@@ -495,7 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed:(){
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
-                                      return SelectedList();
+                                      return GetSavedList();
                                     })
                                 );
                               },
