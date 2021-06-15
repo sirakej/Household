@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
-import 'package:householdexecutives_mobile/ui/candidate/saved_list.dart';
-import 'package:householdexecutives_mobile/ui/candidate/selected_list.dart';
-import 'package:householdexecutives_mobile/ui/home/edit_profile.dart';
-import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
-import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
+import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
@@ -63,158 +59,232 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(topRight: Radius.circular(30))
         ),
-        child: SafeArea(
-          child: Drawer(
-            elevation: 20,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height:55 ,),
-                            Center(child: Image.asset("assets/icons/profile.png",width: 64, height: 64, fit:BoxFit.contain,)),
-                            SizedBox(height:5),
-                            Center(
-                              child: Text(
-                              "$_firstName $_surName",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFF042538),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left:75,),
-                          child: Column(
-                              children:[
-                                SizedBox(height:52),
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.pop(context);
-                                    Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return EditProfile();
-                                    })
-                                    );
-                                  },
-                                  child: Container(
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/icons/pen_icon.png",width: 16.67, height:16.67, fit:BoxFit.contain,),
-                                        SizedBox(width: 21.67,),
-                                        Text(
-                                          "Edit Profile",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 16,
-                                            color: Color(0xFF00A69D),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height:30),
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.pop(context);
-                                    Navigator.push(context,
-                                        CupertinoPageRoute(builder: (_){
-                                          return PasswordAndSecurity();
-                                        })
-                                    );
-                                  },
-                                  child: Container(
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/icons/security_icon.png",width: 15, height:18.33, fit:BoxFit.contain,),
-                                        SizedBox(width: 21.67,),
-                                        Text(
-                                          "Password & Security",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 16,
-                                            color: Color(0xFF5D6970),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height:30),
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.pop(context);
-                                    Navigator.push(context,
-                                        CupertinoPageRoute(builder: (_){
-                                          return SavedCandidate();
-                                        })
-                                    );
-                                  },
-                                  child: Container(
-                                    child: Row(
-                                      children: [
-                                        Image.asset("assets/icons/saved_candidate_icon.png",width: 19.09, height:16.86, fit:BoxFit.contain,),
-                                        SizedBox(width: 21.67,),
-                                        Text(
-                                          "Saved Candidates",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 16,
-                                            color: Color(0xFF5D6970),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ]
-                          ),
-                        ),
+        child: Drawer(
+          elevation: 20,
+          child: Column(
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF006838),
+                        Color(0xFF00A69D),
                       ],
-                    ),
-                  ),
+                    )
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Align(
-                    alignment: FractionalOffset.bottomLeft,
-                    child: TextButton(
-                      onPressed:(){
-                        _logout();
-                      },
+                child: Row(
+                  children: [
+                    Center(child: Image.asset("assets/icons/profile.png",width: 64, height: 64, fit:BoxFit.contain,)),
+                    SizedBox(width: 13,),
+                    Center(
                       child: Text(
-                        "Sign Out",
+                        "$_firstName $_surName",
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontFamily: 'Gelion',
                           fontSize: 16,
-                          color: Color(0xFFE36D45),
+                          color: Color(0xFFFFFFFF),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: ListView(
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left:24,right:24),
+                        child: Column(
+                            children:[
+//                              InkWell(
+//                                onTap: (){
+//                                  Navigator.pop(context);
+//                                  Navigator.push(context,
+//                                  CupertinoPageRoute(builder: (_){
+//                                    return EditProfile();
+//                                  })
+//                                  );
+//                                },
+//                                child: Container(
+//                                  child: Row(
+//                                    children: [
+//                                      Image.asset("assets/icons/pen_icon.png",width: 16.67, height:16.67, fit:BoxFit.contain,),
+//                                      SizedBox(width: 21.67,),
+//                                      Text(
+//                                        "Edit Profile",
+//                                        textAlign: TextAlign.start,
+//                                        style: TextStyle(
+//                                          fontWeight: FontWeight.w400,
+//                                          fontFamily: 'Gelion',
+//                                          fontSize: 16,
+//                                          color: Color(0xFF00A69D),
+//                                        ),
+//                                      ),
+//                                    ],
+//                                  ),
+//                                ),
+//                              ),
+//                              SizedBox(height:30),
+//                              InkWell(
+//                                onTap: (){
+//                                  Navigator.pop(context);
+//                                  Navigator.push(context,
+//                                      CupertinoPageRoute(builder: (_){
+//                                        return PasswordAndSecurity();
+//                                      })
+//                                  );
+//                                },
+//                                child: Container(
+//                                  child: Row(
+//                                    children: [
+//                                      Image.asset("assets/icons/security_icon.png",width: 15, height:18.33, fit:BoxFit.contain,),
+//                                      SizedBox(width: 21.67,),
+//                                      Text(
+//                                        "Password & Security",
+//                                        textAlign: TextAlign.start,
+//                                        style: TextStyle(
+//                                          fontWeight: FontWeight.w400,
+//                                          fontFamily: 'Gelion',
+//                                          fontSize: 16,
+//                                          color: Color(0xFF5D6970),
+//                                        ),
+//                                      ),
+//                                    ],
+//                                  ),
+//                                ),
+//                              ),
+//                              SizedBox(height:30),
+//                              InkWell(
+//                                onTap: (){
+//                                  Navigator.pop(context);
+//                                  Navigator.push(context,
+//                                      CupertinoPageRoute(builder: (_){
+//                                        return SavedCandidate();
+//                                      })
+//                                  );
+//                                },
+//                                child: Container(
+//                                  child: Row(
+//                                    children: [
+//                                      Image.asset("assets/icons/saved_candidate_icon.png",width: 19.09, height:16.86, fit:BoxFit.contain,),
+//                                      SizedBox(width: 21.67,),
+//                                      Text(
+//                                        "Saved Candidates",
+//                                        textAlign: TextAlign.start,
+//                                        style: TextStyle(
+//                                          fontWeight: FontWeight.w400,
+//                                          fontFamily: 'Gelion',
+//                                          fontSize: 16,
+//                                          color: Color(0xFF5D6970),
+//                                        ),
+//                                      ),
+//                                    ],
+//                                  ),
+//                                ),
+//                              ),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return null;
+                                        }
+                                        )
+                                    );
+                                    },
+                                  child: _drawerContainer("My Account", "account")
+                              ),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return null;
+                                        }
+                                        )
+                                    );
+                                  },
+                                  child: _drawerContainer("Hired Candidates", "hired_candidates")),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return null;
+                                        }
+                                        )
+                                    );
+                                  },
+                                  child: _drawerContainer("My List", "my_list")),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return null;
+                                        }
+                                        )
+                                    );
+                                  },
+                                  child: _drawerContainer("Transactions & Payments", "transactions")),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return null;
+                                        }
+                                        )
+                                    );
+                                  },
+                                  child: _drawerContainer("My Purchases", "my_purchases")),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (_){
+                                          return null;
+                                        }
+                                        )
+                                    );
+                                  },
+                                  child: _drawerContainer("Scheduled Interview", "scheduled_interview")),
+                            ]
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: TextButton(
+                    onPressed:(){
+                      _logout();
+                    },
+                    child: Text(
+                      "Log Out",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFFE36D45),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 30,)
-              ],
-            ),
+              ),
+              SizedBox(height: 30,)
+            ],
           ),
         ),
       ),
@@ -496,7 +566,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed:(){
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
-                                      return GetSavedList();
+                                      return FindACategory();
                                     })
                                 );
                               },
@@ -567,6 +637,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildSearch() {
     return Form(
       key: _formKey,
@@ -602,6 +673,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget _buildRecommendedContainer(String imagePath,String category,String candidateName, double ratings ){
     return FittedBox(
       child: Container(
@@ -676,6 +748,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   _buildModalSheet(BuildContext context){
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -859,6 +932,28 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _drawerContainer(String title,String imageName){
+    return Container(
+      padding: EdgeInsets.only(top:16,bottom:16),
+      child: Row(
+        children: [
+          Image.asset("assets/icons/$imageName.png",width:16, height:16, fit:BoxFit.contain,),
+          SizedBox(width: 10,),
+          Text(
+            title,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Gelion',
+              fontSize: 16,
+              color: Color(0xFF5D6970),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// Function to logout your account
   void _logout() async {
     var db = DatabaseHelper();
@@ -883,6 +978,4 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).pushNamedAndRemoveUntil(SignIn.id, (Route<dynamic> route) => false);
 
   }
-
-
 }

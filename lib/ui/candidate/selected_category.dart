@@ -2040,17 +2040,17 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                       color: Color(0xFFF7941D),
                     ),
                   ),
-                  Text(
-                    "${candidate.availablity} . ${candidate.resedential}",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      //letterSpacing: 1,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 12,
-                      color: Color(0xFF717F88),
-                    ),
-                  ),
+//                  Text(
+//                    "${candidate.availablity} . ${candidate.resedential}",
+//                    textAlign: TextAlign.start,
+//                    style: TextStyle(
+//                      //letterSpacing: 1,
+//                      fontWeight: FontWeight.w400,
+//                      fontFamily: 'Gelion',
+//                      fontSize: 12,
+//                      color: Color(0xFF717F88),
+//                    ),
+//                  ),
                 ],
               ),
             ],

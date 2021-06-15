@@ -272,16 +272,16 @@ class _SavedCandidateState extends State<SavedCandidate> {
                       color: Color(0xFF717F88),
                     ),
                   ),
-                  Text(
-                    "${candidate.availablity}",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 14,
-                      color: Color(0xFF717F88),
-                    ),
-                  ),
+//                  Text(
+//                    "${candidate.availablity}",
+//                    textAlign: TextAlign.start,
+//                    style: TextStyle(
+//                      fontWeight: FontWeight.w400,
+//                      fontFamily: 'Gelion',
+//                      fontSize: 14,
+//                      color: Color(0xFF717F88),
+//                    ),
+//                  ),
                 ],
               ),
               Column(
