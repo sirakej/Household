@@ -4,10 +4,16 @@ import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
+import 'package:householdexecutives_mobile/ui/candidate/selected_list.dart';
+import 'package:householdexecutives_mobile/ui/home/drawer_page/schedue_interview.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'drawer_page/account.dart';
+import 'drawer_page/hired_candidate.dart';
+import 'drawer_page/transaction_details.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
@@ -193,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.pop(context);
                                     Navigator.push(context,
                                         CupertinoPageRoute(builder: (_){
-                                          return null;
+                                          return Account();
                                         }
                                         )
                                     );
@@ -205,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.pop(context);
                                     Navigator.push(context,
                                         CupertinoPageRoute(builder: (_){
-                                          return null;
+                                          return HireCandidate();
                                         }
                                         )
                                     );
@@ -227,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.pop(context);
                                     Navigator.push(context,
                                         CupertinoPageRoute(builder: (_){
-                                          return null;
+                                          return TransactionAndPayments();
                                         }
                                         )
                                     );
@@ -249,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.pop(context);
                                     Navigator.push(context,
                                         CupertinoPageRoute(builder: (_){
-                                          return null;
+                                          return ScheduledCandidates();
                                         }
                                         )
                                     );
@@ -566,6 +572,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed:(){
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
+                                      //return SelectedList();
                                       return FindACategory();
                                     })
                                 );

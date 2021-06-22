@@ -7,6 +7,7 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/custom_slider.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
+import 'package:householdexecutives_mobile/ui/candidate/short_listed_candidate.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import '../packages.dart';
 
@@ -147,7 +148,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
               child: CandidateContainer(
                 candidate: _candidates[i],
                 category: widget.category,
-                onPressed: (){  },
+                onPressed: (){},
                 selected: true,
               ),
             ),
@@ -1161,434 +1162,110 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   }
 
   _buildProfileModalSheet(BuildContext context, Candidate candidate){
-    bool viewProfile = false;
     showModalBottomSheet<void>(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xFFFFFFFF),
         isScrollControlled: true,
         barrierColor: Color(0xFF07072B).withOpacity(0.81),
         isDismissible: false,
         context: context,
         builder: (BuildContext context){
           return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: SizeConfig.screenWidth,
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.fromLTRB(24, 0, 24, 38),
-                        margin: EdgeInsets.only(top: 34),
-                        width: SizeConfig.screenWidth,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              topLeft: Radius.circular(30)
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: SizeConfig.screenWidth,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(24, 0, 24, 38),
+                          margin: EdgeInsets.only(top: 34),
+                          width: SizeConfig.screenWidth,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
                           ),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 89),
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: Text(
-                                "${candidate.firstName}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFF042538),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed:(){
+                                      Navigator.pop(context);
+                                    },
+                                    icon:Icon(
+                                      Icons.chevron_left,
+                                      size: 16,
+                                      color: Color(0xFF000000),
+                                    )
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "Candidates Details",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 19,
+                                        color: Color(0xFF042538),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(),
+                                  Container()
+                                ],
+                              ),
+                              SizedBox(height:31),
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: Container(
+                                  width: 74,
+                                  height: 74,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    "assets/icons/profile.png",
+                                    width:74,
+                                    height:74,
+                                    fit:BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 27),
-                            Container(
-                              height: viewProfile ? SizeConfig.screenHeight - 400 : 220,
-                              child: Scrollbar(
-                                thickness: 3,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "ID Number:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Text(
-                                                    "HE55778",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 18),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Tribe",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Text(
-                                                    "${candidate.origin}",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 18),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Availability:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Text(
-                                                    "Live Out",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Age:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height:8),
-                                                  Text(
-                                                    "${candidate.age}",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 18),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Residence:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height:8),
-                                                  Text(
-                                                    "Lagos",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 18),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Rating:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "3.5 ",
-                                                        textAlign: TextAlign.start,
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          fontFamily: 'Gelion',
-                                                          fontSize: 14,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                      ),
-                                                      Image.asset(
-                                                          'assets/icons/star.png',
-                                                          width: 18,
-                                                          height: 15,
-                                                          color: Color(0xFFF7941D),
-                                                          fit: BoxFit.contain
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Gender:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height:8),
-                                                  Text(
-                                                    "${candidate.gender}",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 18),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Experience:",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF042538),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height:8),
-                                                  Text(
-                                                    "${candidate.experience} Years +",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontFamily: 'Gelion',
-                                                      fontSize: 14,
-                                                      color: Color(0xFF717F88),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      viewProfile
-                                          ? Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 30),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Unique Skill(s):",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Gelion',
-                                                  fontSize: 14,
-                                                  color: Color(0xFF042538),
-                                                ),
-                                              ),
-                                              SizedBox(height: 8),
-                                              Container(
-                                                width: SizeConfig.screenWidth - 120,
-                                                child: Text(
-//                                                  "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
-                                                  "${candidate.skill}",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontFamily: 'Gelion',
-                                                    fontSize: 14,
-                                                    color: Color(0xFF717F88),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 18),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Work History:",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Gelion',
-                                                  fontSize: 14,
-                                                  color: Color(0xFF042538),
-                                                ),
-                                              ),
-                                              SizedBox(height:8),
-                                              Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          "8 months at Radisson BLU Anchorage Hote",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          " 4 months at Best Western Hotel Ikeja",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Color(0xFF717F88),
-                                                        ),
-                                                        SizedBox(width:8),
-                                                        Text(
-                                                          "12 months at Southern SUN Ikoyi.",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ]
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 18),
-                                          Container(
-                                            width:100,
-                                            child: Column(
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  "${candidate.firstName}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFF042538),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 27),
+                              Container(
+                                //height:SizeConfig.screenHeight - 220,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "Verifications:",
+                                                  "ID Number:",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,
@@ -1598,223 +1275,625 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 8),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                Text(
+                                                  "HE55778",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 18),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Tribe",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text(
+                                                  "${candidate.origin}",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 18),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Availability:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text(
+                                                  "Live Out",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Age:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height:8),
+                                                Text(
+                                                  "${candidate.age}",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 18),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Residence:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height:8),
+                                                Text(
+                                                  "Lagos",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 18),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Rating:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Row(
                                                   children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          "Identity",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Colors.redAccent,
-                                                        ),
-                                                      ],
+                                                    Text(
+                                                      "3.5 ",
+                                                      textAlign: TextAlign.start,
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: 'Gelion',
+                                                        fontSize: 14,
+                                                        color: Color(0xFF717F88),
+                                                      ),
                                                     ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          "Residence",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Colors.redAccent,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                                                      children: [
-                                                        Text(
-                                                          "Guarantors",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Colors.redAccent,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                                                      children: [
-                                                        Text(
-                                                          "Health Status",
-                                                          textAlign: TextAlign.start,
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w400,
-                                                            fontFamily: 'Gelion',
-                                                            fontSize: 14,
-                                                            color: Color(0xFF717F88),
-                                                          ),
-                                                        ),
-                                                        Icon(
-                                                          Icons.check,
-                                                          size:12,
-                                                          color: Colors.redAccent,
-                                                        ),
-                                                      ],
-                                                    ),
+                                                    Image.asset(
+                                                        'assets/icons/star.png',
+                                                        width: 18,
+                                                        height: 15,
+                                                        color: Color(0xFFF7941D),
+                                                        fit: BoxFit.contain
+                                                    )
                                                   ],
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                          SizedBox(height: 5,),
-                                          TextButton(
-                                            onPressed: () {  },
-                                            child:  Text(
-                                              "view official HE Report",
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Gender:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height:8),
+                                                Text(
+                                                  "${candidate.gender}",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 18),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Experience:",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF042538),
+                                                  ),
+                                                ),
+                                                SizedBox(height:8),
+                                                Text(
+                                                  "${candidate.experience} Years +",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Gelion',
+                                                    fontSize: 14,
+                                                    color: Color(0xFF717F88),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 30),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Unique Skill(s):",
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w400,
-                                                decoration: TextDecoration.underline,
                                                 fontFamily: 'Gelion',
                                                 fontSize: 14,
-                                                color: Colors.blueAccent,
+                                                color: Color(0xFF042538),
                                               ),
                                             ),
+                                            SizedBox(height: 8),
+                                            Container(
+                                              width: SizeConfig.screenWidth - 120,
+                                              child: Text(
+//                                                  "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
+                                                "${candidate.skill}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF717F88),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 18),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Work History:",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'Gelion',
+                                                fontSize: 14,
+                                                color: Color(0xFF042538),
+                                              ),
+                                            ),
+                                            SizedBox(height:8),
+                                            Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Color(0xFF717F88),
+                                                      ),
+                                                      SizedBox(width:8),
+                                                      Text(
+                                                        "8 months at Radisson BLU Anchorage Hote",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Color(0xFF717F88),
+                                                      ),
+                                                      SizedBox(width:8),
+                                                      Text(
+                                                        " 4 months at Best Western Hotel Ikeja",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Color(0xFF717F88),
+                                                      ),
+                                                      SizedBox(width:8),
+                                                      Text(
+                                                        "12 months at Southern SUN Ikoyi.",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 18),
+                                        Container(
+                                          width:100,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Verifications:",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF042538),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Identity",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Residence",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                                    children: [
+                                                      Text(
+                                                        "Guarantors",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                                    children: [
+                                                      Text(
+                                                        "Health Status",
+                                                        textAlign: TextAlign.start,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          fontFamily: 'Gelion',
+                                                          fontSize: 14,
+                                                          color: Color(0xFF717F88),
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.check,
+                                                        size:12,
+                                                        color: Colors.redAccent,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(height: 15),
-                                        ],
-                                      )
-                                          : Container(),
-                                    ],
+                                        ),
+                                        SizedBox(height: 5,),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child:  Text(
+                                            "view official HE Report",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              decoration: TextDecoration.underline,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    FlatButton(
+                                      minWidth: SizeConfig.screenWidth,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8)
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
+                                      onPressed:(){
+                                        setModalState(() {
+                                          widget.candidates.add(candidate);
+                                        });
+                                        // Navigator.pop(context,candidate);
+                                        Navigator.pop(context);
+                                        _buildAddCandidateSheet(context);
+                                      },
+                                      color: Color(0xFF00A69D),
+                                      child: Text(
+                                        "Add Candidate to List",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 16,
+                                          color: Color(0xFFFFFFFF),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        }
+    );
+  }
+
+  _buildAddCandidateSheet(BuildContext context){
+    showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: false,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: SizeConfig.screenWidth,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(24, 30, 24, 38),
+                          margin: EdgeInsets.only(top: 34),
+                          width: SizeConfig.screenWidth,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight:Radius.circular(30)),
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[
+                              Center(
+                                child:Image.asset("assets/icons/circle check full.png",height:60.5,width:60.5,fit: BoxFit.contain,),
+                              ),
+                              SizedBox(height:24.75),
+                              Center(
+                                child: Text(
+                                  "Candidate Added",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFF042538),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                FlatButton(
-                                  minWidth: SizeConfig.screenWidth - 150,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)
+                              SizedBox(height:13),
+                              Center(
+                                child: Text(
+                                  "Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF57565C),
                                   ),
-                                  padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
-                                  onPressed:(){
-                                    if(!viewProfile){
-                                      setModalState(() {
-                                        viewProfile = true;
-                                      });
-                                    }
-                                    else if(viewProfile == true){
-                                      Navigator.pop(context);
-                                      Navigator.pop(context, candidate);
-                                    }
-                                  },
-                                  color: Color(0xFF00A69D),
-                                  child: Text(
-                                    !viewProfile
-                                        ? "View Full Profile"
-                                        : "Add Candidate to List",
+                                ),
+                              ),
+                              SizedBox(height:30),
+                              FlatButton(
+                                minWidth: SizeConfig.screenWidth,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
+                                onPressed:(){
+                                  Navigator.pop(context);
+                                  Navigator.push(context,
+                                      CupertinoPageRoute(builder: (_){
+                                    return ShortListedCandidate(
+                                      category: widget.category,
+                                      candidates: widget.candidates,
+                                    );
+                                  })
+                                  );
+                                },
+                                color: Color(0xFF00A69D),
+                                child: Text(
+                                  "Check Out",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 16,
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height:5),
+                              Center(
+                                child: TextButton(
+                                  onPressed: () {},
+                                  child:Text(
+                                    "View Other Candidates",
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontFamily: 'Gelion',
                                       fontSize: 16,
-                                      color: Color(0xFFFFFFFF),
+                                      color: Color(0xFF00A69D),
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 14),
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6),
-                                      side: BorderSide(color: Color(0xFF00A69D),width: 1.4)
-                                  ),
-                                  padding: EdgeInsets.fromLTRB(24, 16, 24, 16),
-                                  onPressed:(){},
-                                  color: Color(0xFF00A69D).withOpacity(0.2),
-                                  child: Image.asset(
-                                      'assets/icons/heart.png',
-                                      height: 24,
-                                      width: 24,
-                                      fit: BoxFit.contain
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Container(
-                              width: 120,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: Image.asset(
-                                "assets/icons/profile.png",
-                                // width: 90,
-                                // height: 90,
-                                fit:BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                                padding: EdgeInsets.only(right: 24),
-                                child: Container(
-                                  width: 26,
-                                  height: 26,
-                                  child: FloatingActionButton(
-                                      elevation: 30,
-                                      backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
-                                      shape: CircleBorder(),
-                                      onPressed: (){
-                                        Navigator.pop(context);
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Color(0xFFFFFFFF),
-                                        size:13,
-                                      )
-                                  ),
-                                )
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           });
         }

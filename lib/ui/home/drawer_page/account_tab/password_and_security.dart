@@ -1,187 +1,38 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/database/user_db_helper.dart';
-import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
-import 'package:householdexecutives_mobile/ui/home/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 
-import 'home_screen.dart';
+import '../../home_screen.dart';
+import 'edit_profile.dart';
 
-class EditProfile extends StatefulWidget {
-  static const String id = 'edit_profile';
+class PasswordAndSecurity extends StatefulWidget {
+  static const String id = 'password_and_security';
   @override
-  _EditProfileState createState() => _EditProfileState();
+  _PasswordAndSecurityState createState() => _PasswordAndSecurityState();
 }
 
-class _EditProfileState extends State<EditProfile> {
-  /// Instantiating a class of the [FutureValues]
-  var futureValue = FutureValues();
-
-  File _image;
-
-  Future<void> _getImage() async {
-    try{
-      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-
-      if(!mounted)return;
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    } catch (e){
-      print(e);
-      if(e.toString().contains('PlatformException')){
-        _buildImageRequest();
-      }
-      Constants.showInfo(context, 'You haven\'t selected an image');
-    }
-  }
-
-  final _picker = ImagePicker();
-
-  Future<void> _buildImageRequest(){
-    return showDialog(
-      context: context,
-      builder: (_) => Dialog(
-        elevation: 0.0,
-        child: Container(
-          width: 300,
-          height: 165,
-          decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF).withOpacity(0.91),
-            borderRadius: BorderRadius.all(Radius.circular(14)),
-          ),
-          child:  Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Text(
-                    'Note',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Raleway',
-                        color: Color(0xFF1D1D1D)
-                    ),
-                  )
-              ),
-              Container(
-                width: 260,
-                padding: EdgeInsets.only(top: 12, bottom: 11),
-                child: Text(
-                  "You disabled permission to access your storage. Please enable access to your storage in settings to upload images",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF333333),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Raleway',
-                  ),
-                ),
-              ),
-              Container(
-                width: 252,
-                height: 1,
-                color: Color(0xFF9C9C9C).withOpacity(0.44),
-              ),
-              GestureDetector(
-                onTap: (){
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(top: 12.0, bottom: 11),
-                  child: Text(
-                    'Ok',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Raleway',
-                        color: Color(0xFF1FD47D)
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
 
-  /// A [TextEditingController] to control the input text for the user's email
-  TextEditingController _firstController = TextEditingController();
-
-  /// A [TextEditingController] to control the input text for the user's email
-  TextEditingController _surnameController = TextEditingController();
-
-  /// A [TextEditingController] to control the input text for the user's email
-//  TextEditingController _emailController = TextEditingController();
-
-  /// A [TextEditingController] to control the input text for the user's email
-  TextEditingController _mobileController = TextEditingController();
+  /// A [TextEditingController] to control the input text for the user's old password
+  TextEditingController _oldPasswordController = TextEditingController();
 
   /// A [TextEditingController] to control the input text for the user's password
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _newPasswordController = TextEditingController();
+
+  /// A [TextEditingController] to control the input text for the user's password
+  TextEditingController _confirmPasswordController = TextEditingController();
 
   /// A boolean variable to hold whether the password should be shown or hidden
+  bool _obscureOldTextLogin = true;
   bool _obscureTextLogin = true;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  /// A boolean variable to control showing of the progress indicator
+  bool _obscureConfirmTextLogin = true;
   bool _showSpinner = false;
-
-
-  /// A String variable to hold the user's first name
-  String _firstName = '';
-
-  /// A String variable to hold the user's first name
-  String _id = '';
-
-  /// A String variable to hold the user's last name
-  String _surName = '';
-
-  /// A String variable to hold the user's email
-  String _email = '';
-
-  /// A String variable to hold the user's phone number
-  String _phoneNumber = '';
-
-  /// A String variable to hold the user's image url
-  String _imageUrl = '';
-
-  /// Setting the current user's details to [_userId], [_fullName],
-  /// [_username] and [_phoneNumber]
-  void _getCurrentUser() async {
-    // await futureValue.updateUser();
-    await futureValue.getCurrentUser().then((user) {
-      if(!mounted)return;
-      setState(() {
-       // _imageUrl = user.profileImage;
-        _id = user.id;
-        _firstName = user.firstName;
-        _surName = user.surName;
-        _email = user.email;
-        _phoneNumber = user.phoneNumber;
-      });
-    }).catchError((Object error) {
-      print(error.toString());
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentUser();
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -218,6 +69,7 @@ class _EditProfileState extends State<EditProfile> {
                                 })
                             );
                           },
+
                           child: Container(
                             child: Row(
                               children: [
@@ -308,96 +160,45 @@ class _EditProfileState extends State<EditProfile> {
           padding: EdgeInsets.only(left: 24,right: 24),
           child: Column(
             children: [
-              SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios_outlined,
-                      size: 20,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                  InkWell(
-                      onTap: (){},
-                      child: Image.asset("assets/icons/notification_baseline.png",height: 24,width:24,fit: BoxFit.contain,)
-                  )
-                ],
-              ),
-              Center(
-                child: Container(
-                  height: 85,
-                  width: 80,
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: Color(0xFF00A69D).withOpacity(0.91),
-                          ),
-                          shape: BoxShape.circle
-                        ),
-                        child: Image.asset("assets/icons/profile.png",width:74,height:74,fit: BoxFit.contain,),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: InkWell
-                          (
-                          onTap: (){},
-                            child: Image.asset("assets/icons/pencil.png",fit:BoxFit.contain,height: 40,width:40,)),
-                      )
-                    ],
-                  ),
-                ),
-              ),
               SizedBox(height: 10,),
               Expanded(
-                  child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                      child: Container(
-                          child: Column(
-                            children: [
-                              SizedBox(height: 22,),
-                              _buildEditProfile(),
-                              SizedBox(height: 61,),
-                              FlatButton(
-                                minWidth: SizeConfig.screenWidth,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
-                                padding: EdgeInsets.only(top:18 ,bottom: 18),
-                                onPressed:(){
-                                  if(_formKey.currentState.validate()){
-                                    _updateUser();
-                                  }
-                                },
-                                color: Color(0xFF00A69D),
-                                child:   _showSpinner
-                                    ? CupertinoActivityIndicator(radius: 13)
-                                    :Text(
-                                  "Save",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFFFFFFFF),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height:20),
-                            ],
-                          )
-                      )
-                  )
-              ),
-
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 22,),
+                        _buildEditProfile(),
+                        SizedBox(height: 64,),
+                        FlatButton(
+                          minWidth: SizeConfig.screenWidth,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)
+                          ),
+                          padding: EdgeInsets.only(top:18 ,bottom: 18),
+                          onPressed:(){
+                            if(_formKey.currentState.validate()){
+                              _changePassword();
+                            }
+                          },
+                          color: Color(0xFF00A69D),
+                          child: _showSpinner
+                              ? CupertinoActivityIndicator(radius: 13)
+                              :Text(
+                            "Save",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Gelion',
+                              fontSize: 16,
+                              color: Color(0xFFFFFFFF),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -415,7 +216,7 @@ class _EditProfileState extends State<EditProfile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "First Name",
+                    "Old Password",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -429,12 +230,13 @@ class _EditProfileState extends State<EditProfile> {
                     color: Color(0xFFFFFFFF),
                     width: SizeConfig.screenWidth,
                     child: TextFormField(
-                      controller: _firstController,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.next,
+                      obscureText: _obscureOldTextLogin,
+                      controller: _oldPasswordController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
                       validator: (value){
                         if(value.isEmpty){
-                          return 'Enter your First Name';
+                          return 'Enter your password';
                         }
                         return null;
                       },
@@ -445,24 +247,40 @@ class _EditProfileState extends State<EditProfile> {
                         color: Color(0xFF042538),
                       ),
                       decoration:kFieldDecoration.copyWith(
-                          hintText: '$_firstName',
-                          hintStyle:TextStyle(
-                            color:Color(0xFF717F88),
-                            fontSize: 14,
-                            fontFamily: 'Gelion',
-                            fontWeight: FontWeight.w400,
+                          suffixIcon: TextButton(
+                            onPressed:_toggleOldPassLogin,
+                            child:_obscureTextLogin ?
+                            Text(
+                              "show",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ): Text(
+                              "Hide",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
                           )
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16,),
+              SizedBox(height:16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Surname",
+                    "New Password",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -476,12 +294,13 @@ class _EditProfileState extends State<EditProfile> {
                     color: Color(0xFFFFFFFF),
                     width: SizeConfig.screenWidth,
                     child: TextFormField(
-                      controller: _surnameController,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.next,
+                      obscureText: _obscureTextLogin,
+                      controller: _newPasswordController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
                       validator: (value){
                         if(value.isEmpty){
-                          return 'Enter your Surname';
+                          return 'Enter your password';
                         }
                         return null;
                       },
@@ -492,71 +311,40 @@ class _EditProfileState extends State<EditProfile> {
                         color: Color(0xFF042538),
                       ),
                       decoration:kFieldDecoration.copyWith(
-                          hintText: '$_surName',
-                          hintStyle:TextStyle(
-                            color:Color(0xFF717F88),
-                            fontSize: 14,
-                            fontFamily: 'Gelion',
-                            fontWeight: FontWeight.w400,
+                          suffixIcon: TextButton(
+                            onPressed:_togglePassLogin,
+                            child:_obscureTextLogin ?
+                            Text(
+                              "show",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ): Text(
+                              "Hide",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
                           )
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16,),
-//              Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: [
-//                  Text(
-//                    "Email Address",
-//                    textAlign: TextAlign.start,
-//                    style: TextStyle(
-//                      fontWeight: FontWeight.w400,
-//                      fontFamily: 'Gelion',
-//                      fontSize: 14,
-//                      color: Color(0xFF042538),
-//                    ),
-//                  ),
-//                  SizedBox(height: 10,),
-//                  Container(
-//                    color: Color(0xFFFFFFFF),
-//                    width: SizeConfig.screenWidth,
-//                    child: TextFormField(
-//                      controller: _emailController,
-//                      keyboardType: TextInputType.emailAddress,
-//                      textInputAction: TextInputAction.next,
-//                      validator: (value){
-//                        if(value.isEmpty){
-//                          return 'Enter your email address';
-//                        }
-//                        return null;
-//                      },
-//                      style: TextStyle(
-//                        fontSize: 14,
-//                        fontWeight: FontWeight.w400,
-//                        fontFamily: 'Gelion',
-//                        color: Color(0xFF042538),
-//                      ),
-//                      decoration:kFieldDecoration.copyWith(
-//                          hintText: 'placeholder@mail.com',
-//                          hintStyle:TextStyle(
-//                            color:Color(0xFF717F88),
-//                            fontSize: 14,
-//                            fontFamily: 'Gelion',
-//                            fontWeight: FontWeight.w400,
-//                          )
-//                      ),
-//                    ),
-//                  ),
-//                ],
-//              ),
-              SizedBox(height: 20,),
+              SizedBox(height:16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Mobile Number",
+                    "Re-enter Password",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -570,12 +358,16 @@ class _EditProfileState extends State<EditProfile> {
                     color: Color(0xFFFFFFFF),
                     width: SizeConfig.screenWidth,
                     child: TextFormField(
-                      controller: _mobileController,
-                      keyboardType: TextInputType.number,
-                      //textInputAction: TextInputAction.next,
+                      obscureText: _obscureConfirmTextLogin,
+                      controller: _confirmPasswordController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
                       validator: (value){
-                        if(value.isEmpty){
-                          return 'Enter your Mobile Number';
+                        if (value.isEmpty) {
+                          return 'Confirm your password';
+                        }
+                        if (_confirmPasswordController.text != _newPasswordController.text) {
+                          return 'Password Mismatch';
                         }
                         return null;
                       },
@@ -586,12 +378,28 @@ class _EditProfileState extends State<EditProfile> {
                         color: Color(0xFF042538),
                       ),
                       decoration:kFieldDecoration.copyWith(
-                          hintText: '$_phoneNumber',
-                          hintStyle:TextStyle(
-                            color:Color(0xFF717F88),
-                            fontSize: 14,
-                            fontFamily: 'Gelion',
-                            fontWeight: FontWeight.w400,
+                          suffixIcon: TextButton(
+                            onPressed:_toggleConfirmPassLogin,
+                            child:_obscureTextLogin ?
+                            Text(
+                              "show",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ): Text(
+                              "Hide",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
                           )
                       ),
                     ),
@@ -604,10 +412,24 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   /// A function to toggle if to show the password or not by
-  /// changing [_obscureTextLogin] value
-  void _toggleLogin() {
+  /// changing [_obscurePassTextLogin] value
+  void _toggleOldPassLogin() {
+    setState(() {
+      _obscureOldTextLogin = !_obscureOldTextLogin;
+    });
+  }
+
+  void _togglePassLogin() {
     setState(() {
       _obscureTextLogin = !_obscureTextLogin;
+    });
+  }
+
+  /// A function to toggle if to show the password or not by
+  /// changing [_obscureConfirmPassTextLogin] value
+  void _toggleConfirmPassLogin() {
+    setState(() {
+      _obscureConfirmTextLogin = !_obscureConfirmTextLogin;
     });
   }
 
@@ -794,31 +616,28 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  void _updateUser() async {
-    if(!mounted)return;
-    setState(() {
-      _showSpinner = true;
-    });
-    var api = AuthRestDataSource();
-    await api.updateProfile(_firstController.text,_surnameController.text, _email,_mobileController.text).then((value) async {
-      await futureValue.updateUser();
-      var db = DatabaseHelper();
-      await db.updateUser(value);
-      if (!mounted) return;
-      setState(() { _showSpinner = false; });
-      _firstController.clear();
-      _surnameController.clear();
-      _mobileController.clear();
+  /// Function that changes a user's password by calling
+  /// [changePassword] in the [RestDataSource] class
+  void _changePassword() async{
+    var api =AuthRestDataSource();
+    await api.updatePassword(_oldPasswordController.text, _newPasswordController.text).then((value) {
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+      });
+      _oldPasswordController.clear();
+      _newPasswordController.clear();
       Constants.showSuccess(context, 'Password changed successfully');
       Navigator.pushNamedAndRemoveUntil(context,  HomeScreen.id, (route) => false);
-    }).catchError((e) {
+    }).catchError((e){
+      if(!mounted)return;
+      setState(() {
+        _showSpinner= false;
+      });
+      _oldPasswordController.clear();
+      _newPasswordController.clear();
       print(e);
-      if (!mounted) return;
-      setState(() { _showSpinner = false; });
       Constants.showError(context, e);
-      _firstController.clear();
-      _surnameController.clear();
-      _mobileController.clear();
     });
   }
 

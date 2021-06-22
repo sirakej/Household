@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 class FindACategory extends StatefulWidget {
 
@@ -26,6 +27,14 @@ class _FindACategoryState extends State<FindACategory> {
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
 
+  /// A Map to hold the all the available categories and a boolean value to
+  /// show if selected or not
+  Map<Category, List<Candidate>> _candidates = {};
+
+  /// A Map to hold the all the available categories and a boolean value to
+  /// show if selected or not
+  Map<Category, bool> _categoriesSelection = {};
+
   /// A List to hold the all the available plans
   List<Category> _categories = [];
 
@@ -35,7 +44,6 @@ class _FindACategoryState extends State<FindACategory> {
   /// A List to hold the widgets of all the plans
   List<Widget> _categoriesList = [];
 
-  /// Function to fetch all the available plans from the database to
   /// [allCategories]
   void _allCategories() async {
     Future<List<Category>> names = futureValue.getAllCategoryFromDB();
@@ -45,17 +53,23 @@ class _FindACategoryState extends State<FindACategory> {
         setState(() {
           _categoriesLength = 0;
           _categories = [];
+          _categoriesSelection = {};
+          _candidates = {};
         });
       } else if (value.length > 0){
         if(!mounted)return;
         setState(() {
           _categories.addAll(value.reversed);
           _categoriesLength = value.length;
+          for(int i = 0; i < value.length; i++){
+            _categoriesSelection[value[i]] = false;
+            _candidates[value[i]] = [];
+          }
         });
       }
     }).catchError((error){
       print(error);
-      Constants.showError(context, error.toString());
+      Constants.showError(context, error);
     });
   }
 
@@ -71,9 +85,17 @@ class _FindACategoryState extends State<FindACategory> {
                     CupertinoPageRoute(builder: (_){
                       return SelectedCategory(
                         category: _categories[i],
+                        candidates: _candidates[_categories[i]],
                       );
                     })
-                );
+                ).then((value) {
+                  if(value != null){
+                    if(!mounted)return;
+                    setState(() {
+                      _candidates[_categories[i]].add(value);
+                    });
+                  }
+                });
               },
               child: Container(
                 width: SizeConfig.screenWidth,
@@ -115,7 +137,6 @@ class _FindACategoryState extends State<FindACategory> {
             ),
         );
       }
-
       return Column(
         children: _categoriesList,
       );
@@ -123,50 +144,40 @@ class _FindACategoryState extends State<FindACategory> {
     else if(_categoriesLength == 0){
       return Container();
     }
-    return Shimmer.fromColors(
-      direction: ShimmerDirection.ltr,
-      period: Duration(seconds: 3),
-      baseColor: Colors.grey[300],
-      highlightColor: Colors.grey,
-      child:  Container(
-        margin: EdgeInsets.only(bottom: 6),
-        child: Container(
-          width: SizeConfig.screenWidth,
-          padding: EdgeInsets.only(left:8 ,top:9,bottom: 9 ),
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              border: Border.all(
-                  width: 1,
-                  color: Color(0xFFEBF1F4)
-              )
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                ),
-                child: Image.network("",height: 54,width: 54,fit: BoxFit.contain,),
+    return SkeletonLoader(
+      builder: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Row(
+          children: <Widget>[
+            CircleAvatar(
+              backgroundColor: Colors.white.withOpacity(0.5),
+              radius: 20,
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    height: 10,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    height: 12,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                ],
               ),
-              SizedBox(width:12,),
-              Text(
-                "Hire a ",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  //letterSpacing: 1,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Gelion',
-                  fontSize: 16,
-                  color: Color(0xFF042538),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+      items: 20,
+      period: Duration(seconds: 2),
+      highlightColor: Color(0xFF1F1F1F),
+      direction: SkeletonDirection.btt,
     );
   }
 
