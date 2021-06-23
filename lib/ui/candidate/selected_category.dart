@@ -30,8 +30,11 @@ class SelectedCategory extends StatefulWidget {
 }
 
 class _SelectedCategoryState extends State<SelectedCategory> {
+
   bool selected = false;
+
   bool isShow = false;
+
   /// A string variable holding the selected state value
   String _selectedTribe;
 
@@ -130,9 +133,9 @@ class _SelectedCategoryState extends State<SelectedCategory> {
           _candidatesLength = value.length;
         });
       }
-    }).catchError((error){
-      print(error);
-      Constants.showError(context, error.toString());
+    }).catchError((e){
+      print(e);
+      Constants.showError(context, e);
     });
   }
 
@@ -182,14 +185,15 @@ class _SelectedCategoryState extends State<SelectedCategory> {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(
           children: <Widget>[
-            CircleAvatar(
-              backgroundColor: Colors.white.withOpacity(0.5),
-              radius: 20,
+            Container(
+              width: 50,
+              height: 50,
+              color: Colors.white.withOpacity(0.5),
             ),
             SizedBox(width: 10),
             Expanded(
               child: Column(
-                children: <Widget>[
+                children: [
                   Container(
                     width: double.infinity,
                     height: 10,
@@ -210,7 +214,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
       items: 20,
       period: Duration(seconds: 2),
       highlightColor: Color(0xFF1F1F1F),
-      direction: SkeletonDirection.btt,
+      direction: SkeletonDirection.ltr,
     );
   }
 
@@ -244,7 +248,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                     onPressed:(){Navigator.pop(context);}
                 ),
               ),
-
               Container(
                 padding: EdgeInsets.only(left: 24, top: 24),
                 child: Column(
@@ -323,110 +326,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                   padding: EdgeInsets.only(left: 24),
                   child: SingleChildScrollView(
                     physics: BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-//                        CandidateContainer(
-//                          candidateName: 'Aderonke',
-//                          candidateGender: 'female',
-//                          candidateExperienceYears: '2 Years Experience',
-//                          candidateAvailability: 'Available Weekdays',
-//                          candidateCity: 'Lagos',
-//                          imagePath: 'butler',
-//                          ratings: 3.5,
-//                        ),
-                      _buildList(),
-                      ],
-                    ),
+                    child: _buildList(),
                   ),
                 ),
               )
@@ -434,7 +334,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
           ),
         ),
       ),
-      floatingActionButton: (widget.candidates != null)
+      floatingActionButton: (widget.candidates != null || widget.candidates.isNotEmpty)
           ? FloatingActionButton(
         onPressed: null,
         child: Center(
@@ -1114,22 +1014,30 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            FlatButton(
-                              minWidth: SizeConfig.screenWidth/1.5,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xFF00A69D),
+                                onPrimary: Color(0xFFFFFFFF),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
                               ),
-                              padding: EdgeInsets.only(top:18 ,bottom: 18),
-                              onPressed:(){},
-                              color: Color(0xFF00A69D),
-                              child: Text(
-                                "Show Results",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFFFFFFFF),
+                              onPressed: (){},
+                              child: Container(
+                                padding: EdgeInsets.only(top: 18, bottom: 18),
+                                constraints:  BoxConstraints(
+                                  minWidth: SizeConfig.screenWidth / 1.5
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Show Results",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Gelion',
+                                      fontSize: 16,
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -1176,10 +1084,11 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                 children: [
                   Container(
                     width: SizeConfig.screenWidth,
+                    height: SizeConfig.screenHeight,
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.fromLTRB(24, 0, 24, 38),
+                          padding: EdgeInsets.fromLTRB(24, 24, 24, 38),
                           margin: EdgeInsets.only(top: 34),
                           width: SizeConfig.screenWidth,
                           decoration: BoxDecoration(
@@ -1188,18 +1097,19 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                              Stack(
                                 children: [
-                                  IconButton(
-                                    onPressed:(){
-                                      Navigator.pop(context);
-                                    },
-                                    icon:Icon(
-                                      Icons.chevron_left,
-                                      size: 16,
-                                      color: Color(0xFF000000),
-                                    )
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: IconButton(
+                                        iconSize: 1,
+                                        icon: Icon(
+                                          Icons.arrow_back_ios_sharp,
+                                          size: 19,
+                                          color: Color(0xFF000000),
+                                        ),
+                                        onPressed:(){Navigator.pop(context);}
+                                    ),
                                   ),
                                   Center(
                                     child: Text(
@@ -1213,8 +1123,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                       ),
                                     ),
                                   ),
-                                  Container(),
-                                  Container()
                                 ],
                               ),
                               SizedBox(height:31),
@@ -1226,11 +1134,14 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Image.asset(
-                                    "assets/icons/profile.png",
-                                    width:74,
-                                    height:74,
-                                    fit:BoxFit.cover,
+                                  child: Image.network(
+                                    candidate.profileImage,
+                                    width: 74,
+                                    height: 74,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace){
+                                      return Container();
+                                    },
                                   ),
                                 ),
                               ),
@@ -1276,7 +1187,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                                 ),
                                                 SizedBox(height: 8),
                                                 Text(
-                                                  "HE55778",
+                                                  candidate.id,
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,
@@ -1330,7 +1241,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                                 ),
                                                 SizedBox(height: 8),
                                                 Text(
-                                                  "Live Out",
+                                                  candidate.availability.title,
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,
@@ -1388,7 +1299,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                                 ),
                                                 SizedBox(height:8),
                                                 Text(
-                                                  "Lagos",
+                                                  candidate.origin,
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,
@@ -1417,7 +1328,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      "3.5 ",
+                                                      '${candidate.rating}',
                                                       textAlign: TextAlign.start,
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.w400,
@@ -1484,7 +1395,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                                 ),
                                                 SizedBox(height:8),
                                                 Text(
-                                                  "${candidate.experience} Years +",
+                                                  "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} +",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w400,
@@ -1520,7 +1431,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                             Container(
                                               width: SizeConfig.screenWidth - 120,
                                               child: Text(
-//                                                  "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
+                                                // "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
                                                 "${candidate.skill}",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
@@ -1742,28 +1653,36 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                         ),
                                       ],
                                     ),
-                                    FlatButton(
-                                      minWidth: SizeConfig.screenWidth,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8)
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFF00A69D),
+                                        onPrimary: Color(0xFFFFFFFF),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8)
+                                        ),
                                       ),
-                                      padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
                                       onPressed:(){
                                         setModalState(() {
                                           widget.candidates.add(candidate);
                                         });
-                                        // Navigator.pop(context,candidate);
                                         Navigator.pop(context);
                                         _buildAddCandidateSheet(context);
                                       },
-                                      color: Color(0xFF00A69D),
-                                      child: Text(
-                                        "Add Candidate to List",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFFFFFFFF),
+                                      child: Container(
+                                        padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
+                                        constraints:  BoxConstraints(
+                                            minWidth: SizeConfig.screenWidth
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Add Candidate to List",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 16,
+                                              color: Color(0xFFFFFFFF),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -1813,7 +1732,12 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children:[
                               Center(
-                                child:Image.asset("assets/icons/circle check full.png",height:60.5,width:60.5,fit: BoxFit.contain,),
+                                child:Image.asset(
+                                  "assets/icons/circle check full.png",
+                                  height: 60.5,
+                                  width: 60.5,
+                                  fit: BoxFit.contain
+                                ),
                               ),
                               SizedBox(height:24.75),
                               Center(
@@ -1842,38 +1766,42 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                 ),
                               ),
                               SizedBox(height:30),
-                              FlatButton(
-                                minWidth: SizeConfig.screenWidth,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF00A69D),
+                                  onPrimary: Color(0xFFFFFFFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
                                 ),
-                                padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
                                 onPressed:(){
                                   Navigator.pop(context);
-                                  Navigator.push(context,
-                                      CupertinoPageRoute(builder: (_){
-                                    return ShortListedCandidate(
-                                      category: widget.category,
-                                      candidates: widget.candidates,
-                                    );
-                                  })
-                                  );
+                                  Navigator.pop(context, [true, widget.candidates]);
                                 },
-                                color: Color(0xFF00A69D),
-                                child: Text(
-                                  "Check Out",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFFFFFFFF),
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(0, 19, 0, 18),
+                                  constraints:  BoxConstraints(
+                                      minWidth: SizeConfig.screenWidth
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Check Out",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 16,
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                              SizedBox(height:5),
+                              SizedBox(height: 5),
                               Center(
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  },
                                   child:Text(
                                     "View Other Candidates",
                                     textAlign: TextAlign.center,

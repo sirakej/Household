@@ -37,143 +37,151 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
-      body: SafeArea(
-        child: Container(
-          width: SizeConfig.screenWidth,
-          padding: EdgeInsets.only(left:24, right: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset("assets/icons/register_logo.png",height:48.46,width:30,fit: BoxFit.contain,),
-              SizedBox(height: 22.54,),
-              Text(
-                'Welcome Back!',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Gelion',
-                  fontSize: 19,
-                  color: Color(0xFFF7941D),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Color(0xFFFFFFFF),
+        body: SafeArea(
+          child: Container(
+            width: SizeConfig.screenWidth,
+            padding: EdgeInsets.only(left:24, right: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset("assets/icons/register_logo.png",height:48.46,width:30,fit: BoxFit.contain,),
+                SizedBox(height: 22.54,),
+                Text(
+                  'Welcome Back!',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Gelion',
+                    fontSize: 19,
+                    color: Color(0xFFF7941D),
+                  ),
                 ),
-              ),
-              SizedBox(height: 8,),
-              Text(
-                'Login with your account details to\ncontinue.',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  //letterSpacing: 1,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF57565C),
+                SizedBox(height: 8,),
+                Text(
+                  'Login with your account details to\ncontinue.',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    //letterSpacing: 1,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    fontSize: 14,
+                    color: Color(0xFF57565C),
+                  ),
                 ),
-              ),
-              SizedBox(height: 23,),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSignIn(),
-                      SizedBox(height: 44,),
-                      FlatButton(
-                        minWidth: SizeConfig.screenWidth,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        padding: EdgeInsets.only(top:18 ,bottom: 18),
-                        onPressed:(){
-                          if(_formKey.currentState.validate()){
-                            _loginUser();
-                          }
-                        },
-                        color: Color(0xFF00A69D),
-                        child:  _showSpinner
-                            ? CupertinoActivityIndicator(radius: 13)
-                            :Text(
-                          "Login",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFFFFFFFF),
+                SizedBox(height: 23,),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSignIn(),
+                        SizedBox(height: 44,),
+                        FlatButton(
+                          minWidth: SizeConfig.screenWidth,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)
+                          ),
+                          padding: EdgeInsets.only(top:18 ,bottom: 18),
+                          onPressed:(){
+                            if(_formKey.currentState.validate()){
+                              _loginUser();
+                            }
+                          },
+                          color: Color(0xFF00A69D),
+                          child:  _showSpinner
+                              ? CupertinoActivityIndicator(radius: 13)
+                              :Text(
+                            "Login",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Gelion',
+                              fontSize: 16,
+                              color: Color(0xFFFFFFFF),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 28,),
-                      Center(
-                        child: TextButton(
-                            onPressed:(){
-                              Navigator.push(context,
-                                  CupertinoPageRoute(builder: (_){
-                                    return SignUp();
-                                  })
-                              );
-
-                            },
-                            child:  RichText(
-                              text:TextSpan(
-                                  text: "Not yet a register user?\n",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF042538),
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                        text: "Create An Account",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFF00A69D),
-                                        )
-                                    )
-                                  ]
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        child: Center(
+                        SizedBox(height: 28,),
+                        Center(
                           child: TextButton(
-                              onPressed: (){
-                                Navigator.pushNamed(context, RegisterCandidate.id);
+                              onPressed:(){
+                                Navigator.push(context,
+                                    CupertinoPageRoute(builder: (_){
+                                      return SignUp();
+                                    })
+                                );
+
                               },
-                              child:Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      "Become A Candidate Today\t",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'Gelion',
-                                        fontSize: 14,
-                                        color: Color(0xFF00A69D),
+                              child:  RichText(
+                                text:TextSpan(
+                                    text: "Not yet a register user?\n",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Gelion',
+                                      fontSize: 14,
+                                      color: Color(0xFF042538),
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                          text: "Create An Account",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 16,
+                                            color: Color(0xFF00A69D),
+                                          )
                                       )
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_outlined,
-                                    size: 18,
-                                    color: Color(0xFF00A69D),
-                                  ),
-                                ],
+                                    ]
+                                ),
+                                textAlign: TextAlign.center,
                               )
                           ),
                         ),
-                      )
-                    ],
+                        Container(
+                          alignment: Alignment.center,
+                          child: Center(
+                            child: TextButton(
+                                onPressed: (){
+                                  Navigator.pushNamed(context, RegisterCandidate.id);
+                                },
+                                child:Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        "Become A Candidate Today\t",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        )
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_outlined,
+                                      size: 18,
+                                      color: Color(0xFF00A69D),
+                                    ),
+                                  ],
+                                )
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

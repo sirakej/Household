@@ -46,14 +46,19 @@ class _CandidateContainerState extends State<CandidateContainer> {
             Row(
               children: [
                 Container(
+                  height: 57,
+                  width: 72,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
-                  child: Image.asset(
-                      "assets/icons/butler.png",
-                      height: 57,
-                      width: 72,
-                      fit: BoxFit.contain
+                  child: Image.network(
+                    widget.candidate.profileImage,
+                    height: 57,
+                    width: 72,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace){
+                      return Container();
+                    },
                   ),
                 ),
                 SizedBox(width: 12),
@@ -72,7 +77,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       ),
                     ),
                     Text(
-                      "${widget.candidate.experience} Years Experience",
+                      "${widget.candidate.experience} ${widget.candidate.experience > 1 ? 'Years' : 'Year'} Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,
@@ -82,17 +87,17 @@ class _CandidateContainerState extends State<CandidateContainer> {
                         color: Color(0xFF717F88),
                       ),
                     ),
-//                    Text(
-//                      "${widget.candidate.availablity} . ${widget.candidate.resedential}",
-//                      textAlign: TextAlign.start,
-//                      style: TextStyle(
-//                        //letterSpacing: 1,
-//                        fontWeight: FontWeight.w400,
-//                        fontFamily: 'Gelion',
-//                        fontSize: 12,
-//                        color: Color(0xFF717F88),
-//                      ),
-//                    ),
+                    Text(
+                      "${widget.candidate.availability.title} . ${widget.candidate.origin}",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        //letterSpacing: 1,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 12,
+                        color: Color(0xFF717F88),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -101,9 +106,9 @@ class _CandidateContainerState extends State<CandidateContainer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
+                  padding: const EdgeInsets.only(top: 2.0, right: 4),
                   child: Text(
-                    "3.5",
+                    "${widget.candidate.rating}",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       //letterSpacing: 1,
@@ -145,14 +150,19 @@ class _CandidateContainerState extends State<CandidateContainer> {
             Row(
               children: [
                 Container(
+                  height: 57,
+                  width: 72,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
-                  child: Image.asset(
-                    "assets/icons/butler.png",
+                  child: Image.network(
+                    widget.candidate.profileImage,
                     height: 57,
                     width: 72,
-                    fit: BoxFit.contain
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace){
+                      return Container();
+                    },
                   ),
                 ),
                 SizedBox(width: 12),
@@ -172,7 +182,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       ),
                     ),
                     Text(
-                      "${widget.candidate.experience} Years Experience",
+                      "${widget.candidate.experience} ${widget.candidate.experience > 1 ? 'Years' : 'Year'} Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         //letterSpacing: 1,
@@ -182,17 +192,17 @@ class _CandidateContainerState extends State<CandidateContainer> {
                         color: Color(0xFFF7941D),
                       ),
                     ),
-//                    Text(
-//                      "${widget.candidate.availablity} . ${widget.candidate.resedential}",
-//                      textAlign: TextAlign.start,
-//                      style: TextStyle(
-//                        //letterSpacing: 1,
-//                        fontWeight: FontWeight.w400,
-//                        fontFamily: 'Gelion',
-//                        fontSize: 12,
-//                        color: Color(0xFF717F88),
-//                      ),
-//                    ),
+                    Text(
+                      "${widget.candidate.availability.title} . ${widget.candidate.origin}",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        //letterSpacing: 1,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 12,
+                        color: Color(0xFF717F88),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -201,9 +211,9 @@ class _CandidateContainerState extends State<CandidateContainer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
+                  padding: const EdgeInsets.only(top: 2.0, right: 4),
                   child: Text(
-                    "3.5",
+                    "${widget.candidate.rating}",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       //letterSpacing: 1,

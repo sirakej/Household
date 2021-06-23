@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected_category.dart';
+import 'package:householdexecutives_mobile/ui/candidate/short_listed_candidate.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
@@ -67,9 +69,9 @@ class _FindACategoryState extends State<FindACategory> {
           }
         });
       }
-    }).catchError((error){
-      print(error);
-      Constants.showError(context, error);
+    }).catchError((e){
+      print(e);
+      Constants.showError(context, e);
     });
   }
 
@@ -89,11 +91,24 @@ class _FindACategoryState extends State<FindACategory> {
                       );
                     })
                 ).then((value) {
+                  print(value);
                   if(value != null){
-                    if(!mounted)return;
-                    setState(() {
-                      _candidates[_categories[i]].add(value);
-                    });
+                    if(value.isNotEmpty){
+                      if(!mounted)return;
+                      setState(() {
+                        _candidates[_categories[i]] = value[1];
+                      });
+                      if(value[0] == true){
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (_){
+                              return ShortListedCandidate(
+                                candidates: _candidates,
+                              );
+                            })
+                        );
+                      }
+                    }
+
                   }
                 });
               },
@@ -114,12 +129,22 @@ class _FindACategoryState extends State<FindACategory> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
+                      height: 54,
+                      width: 54,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(6)),
                       ),
-                      child: Image.network("${_categories[i].category.image}",height: 54,width: 54,fit: BoxFit.contain,),
+                      child: Image.network(
+                        _categories[i].category.image,
+                        height: 54,
+                        width: 54,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace){
+                          return Container();
+                        },
+                      ),
                     ),
-                    SizedBox(width:12,),
+                    SizedBox(width: 12),
                     Text(
                       "Hire a ${_categories[i].category.name}",
                       textAlign: TextAlign.start,
@@ -149,26 +174,17 @@ class _FindACategoryState extends State<FindACategory> {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(
           children: <Widget>[
-            CircleAvatar(
-              backgroundColor: Colors.white.withOpacity(0.5),
-              radius: 20,
+            Container(
+              width: 50,
+              height: 50,
+              color: Colors.white.withOpacity(0.5),
             ),
             SizedBox(width: 10),
             Expanded(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: 10,
-                    color: Colors.white.withOpacity(0.5),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    width: double.infinity,
-                    height: 12,
-                    color: Colors.white.withOpacity(0.5),
-                  ),
-                ],
+              child: Container(
+                width: double.infinity,
+                height: 20,
+                color: Colors.white.withOpacity(0.5),
               ),
             ),
           ],
@@ -177,108 +193,7 @@ class _FindACategoryState extends State<FindACategory> {
       items: 20,
       period: Duration(seconds: 2),
       highlightColor: Color(0xFF1F1F1F),
-      direction: SkeletonDirection.btt,
-    );
-  }
-
-  //bool _showSpinner = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _allCategories();
-    print(_allCategories);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(left:24,right:24),
-          width: SizeConfig.screenWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20,),
-              IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    size: 19,
-                    color: Color(0xFF000000),
-                  ),
-                  onPressed:(){Navigator.pop(context);}
-                  ),
-              SizedBox(height: 30,),
-              Text(
-                'Find A Candidate!',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Gelion',
-                  fontSize: 19,
-                  color: Color(0xFFF7941D),
-                ),
-              ),
-              SizedBox(height: 8,),
-              Text(
-                'Experienced, Professional & Vetted',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  //letterSpacing: 1,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF57565C),
-                ),
-              ),
-              SizedBox(height: 32,),
-              _buildSearch(),
-              SizedBox(height: 8,),
-
-              Expanded(
-                child: Container(
-                  child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-                        Container(height: 16,),
-//                        _buildCandidateContainer("Hire a Butler", "assets/icons/butler.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Caregiver", "assets/icons/Caregiver.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Carpenter", "assets/icons/Carpenter.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Chauffeur", "assets/icons/chaffeur.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Chef", "assets/icons/chef.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Doorman", "assets/icons/doorman.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire an Electrician", "assets/icons/electrician.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Gardener", "assets/icons/gardener.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Gatekeeper", "assets/icons/gatekeeper.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Housekeeper", "assets/icons/Housekeeper.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Nanny", "assets/icons/nanny.png"),
-//                        SizedBox(height: 6,),
-//                        _buildCandidateContainer("Hire a Plumber", "assets/icons/plumber.png"),
-//                        SizedBox(height: 6,),
-                      _buildList(),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      direction: SkeletonDirection.ltr,
     );
   }
 
@@ -294,7 +209,6 @@ class _FindACategoryState extends State<FindACategory> {
             child: TextFormField(
               controller: _searchController,
               keyboardType: TextInputType.text,
-              //textInputAction: TextInputAction.next,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -314,6 +228,106 @@ class _FindACategoryState extends State<FindACategory> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _allCategories();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(left:24,right:24),
+          width: SizeConfig.screenWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    size: 19,
+                    color: Color(0xFF000000),
+                  ),
+                  onPressed:(){Navigator.pop(context);}
+                  ),
+              SizedBox(height: 30),
+              Text(
+                'Find A Candidate!',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Gelion',
+                  fontSize: 19,
+                  color: Color(0xFFF7941D),
+                ),
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Experienced, Professional & Vetted',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      //letterSpacing: 1,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Gelion',
+                      fontSize: 14,
+                      color: Color(0xFF57565C),
+                    ),
+                  ),
+                  _candidates.values.any((element) => element.length > 0)
+                      ? TextButton(
+                    onPressed: (){
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_){
+                            return ShortListedCandidate(
+                              candidates: _candidates,
+                            );
+                          })
+                      );
+                    },
+                    child: Text(
+                      "Checkout",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF00A69D),
+                      ),
+                    ),
+                  )
+                      : Container()
+                ],
+              ),
+              SizedBox(height: 32),
+              _buildSearch(),
+              SizedBox(height: 8),
+              Expanded(
+                child: Container(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 16),
+                        _buildList(),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

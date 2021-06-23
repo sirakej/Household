@@ -90,6 +90,7 @@
 //    "_id": id,
 //  };
 //}
+
 class Candidate {
   Candidate({
     this.createdAt,
@@ -215,13 +216,13 @@ class Availability {
   });
 
   String title;
-  bool monday;
-  bool tuesday;
-  bool wednesday;
-  bool thursday;
-  bool friday;
-  bool saturday;
-  bool sunday;
+  Map<String, dynamic> monday;
+  Map<String, dynamic> tuesday;
+  Map<String, dynamic> wednesday;
+  Map<String, dynamic> thursday;
+  Map<String, dynamic> friday;
+  Map<String, dynamic> saturday;
+  Map<String, dynamic> sunday;
 
   factory Availability.fromJson(Map<String, dynamic> json) => Availability(
     title: json["title"],
