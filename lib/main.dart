@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:householdexecutives_mobile/ui/candidate/my_purchases.dart';
 import 'package:householdexecutives_mobile/ui/home/drawer_page/account_tab/edit_profile.dart';
 import 'package:householdexecutives_mobile/ui/home/drawer_page/account_tab/password_and_security.dart';
 import 'package:householdexecutives_mobile/ui/home/saved_candidate.dart';
@@ -38,8 +39,8 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         primaryColor: Color(0xFF1A60CD),
       ),
-     initialRoute: Splash.id,
-     // initialRoute:ShortListedCandidate.id,
+      //initialRoute: Splash.id,
+      initialRoute:RegisterCandidate.id,
       routes: {
         Splash.id: (context) => Splash(),
         OnBoard.id:(context)=>OnBoard(),
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
         EditProfile.id:(context)=>EditProfile(),
         PasswordAndSecurity.id:(context)=>PasswordAndSecurity(),
         SavedCandidate.id:(context)=>SavedCandidate(),
-        ShortListedCandidate.id:(context)=>ShortListedCandidate(),
+      //  ShortListedCandidate.id:(context)=>ShortListedCandidate(),
+        MyPurchases.id:(context)=>MyPurchases()
       },
     );
   }

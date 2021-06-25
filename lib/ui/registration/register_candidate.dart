@@ -14,6 +14,18 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
   /// A string variable holding the selected state value
   String _selectedTribe;
 
+  bool liveIn = false;
+  bool custom = false;
+
+  bool monday = false;
+  bool tuesday = false;
+  bool wednesday = false;
+  bool thursday = false;
+  bool friday = false;
+  bool saturday = false;
+  bool sunday = false;
+
+
   /// A list of string variables holding a list of all countries
   List<String> _tribe =[
     "Annang",
@@ -149,9 +161,644 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildSignUp(),
-                      SizedBox(height: 44,),
+                      SizedBox(height: 24,),
+                      Text(
+                        "Availability",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  liveIn = !liveIn;
+                                    });
+                              },
+                              icon: Icon(
+                                liveIn
+                                    ? Icons.radio_button_on_rounded
+                                    : Icons.radio_button_unchecked,
+                                size: 12.83,
+                                color: liveIn
+                                    ? Color(0xFF00A69D)
+                                    : Color(0xFF000000),
+                              ),
+                            ),
+                            Text(
+                              "Live In",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 55.75,),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  custom = !custom;
+                                    });
+                              },
+                              icon: Icon(
+                                custom
+                                    ? Icons.radio_button_on_rounded
+                                    : Icons.radio_button_unchecked,
+                                size: 12.83,
+                                color: custom
+                                    ? Color(0xFF00A69D)
+                                    : Color(0xFF000000),
+                              ),
+                            ),
+                            Text(
+                              "Custom",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],),
+                      SizedBox(height: 23,),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  sunday = !sunday;
+                                });
+                              },
+                              child: sunday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "sun",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "sun",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  monday = !monday;
+                                });
+                              },
+                              child: monday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "Mon",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "Mon",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  tuesday = !tuesday;
+                                });
+                              },
+                              child: tuesday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "Tue",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "Tue",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  wednesday = !wednesday;
+                                });
+                              },
+                              child: wednesday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "Wed",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "Wed",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  thursday = !thursday;
+                                });
+                              },
+                              child: thursday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "Thu",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "Thu",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  friday = !friday;
+                                });
+                              },
+                              child: friday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "Fri",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "Fri",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  saturday = !saturday;
+                                });
+                              },
+                              child: saturday ? Container(
+                                height:33,
+                                width: 33,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D).withOpacity(0.1),
+                                ),
+                                  child:Center(
+                                    child: Text(
+                                      "Sat",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
+                                      ),
+                                    ),
+                                  )
+                              ) : Text(
+                                "Sat",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height:33),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Unique Skill(s)",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Gelion',
+                              fontSize: 14,
+                              color: Color(0xFF042538),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          Container(
+                            width: SizeConfig.screenWidth,
+                            child: TextFormField(
+                              controller: _firstController,
+                              keyboardType: TextInputType.name,
+                              textInputAction: TextInputAction.next,
+                              validator: (value){
+                                if(value.isEmpty){
+                                  return 'Enter your skills';
+                                }
+                                return null;
+                              },
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                              decoration:kFieldDecoration.copyWith(
+                                  hintText: 'Please Select',
+                                  hintStyle:TextStyle(
+                                    color:Color(0xFF717F88),
+                                    fontSize: 14,
+                                    fontFamily: 'Gelion',
+                                    fontWeight: FontWeight.w400,
+                                  )
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height:20),
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        height: 1,
+                        color: Color(0xFF6F8A9C),
+                      ),
+                      SizedBox(height:20),
+                      Text(
+                        "Upload Documents",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(8))
+                        ),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "IMG123.JPEG",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF717F88),
+                              ),
+                            ),
+
+                            FlatButton(
+                              minWidth: 103,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:12 ,bottom: 12),
+                              onPressed:(){
+                              },
+                              color: Color(0xFF00A69D),
+                              child: Text(
+                                "Upload",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16,),
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(8))
+                        ),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Identity Verification",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF717F88),
+                              ),
+                            ),
+
+                            FlatButton(
+                              minWidth: 103,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:12 ,bottom: 12),
+                              onPressed:(){
+                              },
+                              color: Color(0xFF00A69D),
+                              child: Text(
+                                "Upload",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16,),
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(8))
+                        ),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Residence Verification",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF717F88),
+                              ),
+                            ),
+
+                            FlatButton(
+                              minWidth: 103,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:12 ,bottom: 12),
+                              onPressed:(){
+                              },
+                              color: Color(0xFF00A69D),
+                              child: Text(
+                                "Upload",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16,),
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(8))
+                        ),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Guarantor Verification",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF717F88),
+                              ),
+                            ),
+
+                            FlatButton(
+                              minWidth: 103,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:12 ,bottom: 12),
+                              onPressed:(){
+                              },
+                              color: Color(0xFF00A69D),
+                              child: Text(
+                                "Upload",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16,),
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(8))
+                        ),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Medical Examination",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF717F88),
+                              ),
+                            ),
+
+                            FlatButton(
+                              minWidth: 103,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              padding: EdgeInsets.only(top:12 ,bottom: 12),
+                              onPressed:(){
+                              },
+                              color: Color(0xFF00A69D),
+                              child: Text(
+                                "Upload",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20,),
                       FlatButton(
                         minWidth: SizeConfig.screenWidth,
                         shape: RoundedRectangleBorder(
@@ -174,9 +821,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                           ),
                         ),
                       ),
-
                       SizedBox(height: 28,),
-
                     ],
                   ),
                 ),

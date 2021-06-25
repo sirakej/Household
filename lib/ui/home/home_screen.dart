@@ -4,13 +4,11 @@ import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user_db_helper.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find_a_category.dart';
-import 'package:householdexecutives_mobile/ui/candidate/selected_list.dart';
 import 'package:householdexecutives_mobile/ui/home/drawer_page/schedue_interview.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign_in.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'drawer_page/account.dart';
 import 'drawer_page/hired_candidate.dart';
 import 'drawer_page/transaction_details.dart';
@@ -765,7 +763,8 @@ class _HomeScreenState extends State<HomeScreen> {
         isDismissible: false,
         context: context,
         builder: (BuildContext context){
-          return StatefulBuilder(builder:(BuildContext context, StateSetter setState /*You can rename this!*/){
+          return StatefulBuilder(builder:(BuildContext context, StateSetter setState /*
+          You can rename this!*/){
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

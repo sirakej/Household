@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
+import 'package:householdexecutives_mobile/model/create_candidate.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/savedCandidates.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
@@ -43,6 +45,7 @@ class AuthRestDataSource {
   static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
 
   static final SAVED_CANDIDATE = BASE_URL + 'candidate/saved';
+  static final CREATE_CANDIDTE = BASE_URL + 'candidate';
 
 
   //static final LIST_USER = "";
@@ -85,6 +88,36 @@ class AuthRestDataSource {
       } else {
         res["data"]["user"]["token"] = res["data"]["token"];
         return User.map(res["data"]["user"]);
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
+  Future<dynamic> registerCandidate(CreateCandidate createCandidate) async {
+    Map<String, String> header = {"Content-Type": "application/json"};
+    return _netUtil.post(SIGN_UP_URL, headers: header, body: {
+      "email":CreateCandidate().email,
+      "first_name":CreateCandidate().firstName,
+      "last_name":CreateCandidate().lastName,
+      "age":CreateCandidate().age,
+      "phone_number":CreateCandidate().phoneNumber,
+      "tribe":CreateCandidate().origin,
+      "gender":CreateCandidate().gender,
+      "experience": CreateCandidate().experience,
+      "availability": CreateCandidate().availability,
+     // "category": CreateCandidate().category,
+//      "profile_image":
+//      "medical"
+//      "clinical":
+//      "resedential":
+//      "workhistory":
+//      "guarantors":
+    }).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        return CreateCandidate.fromJson(res['data']);
       }
     }).catchError((e) {
       errorHandler.handleError(e);
