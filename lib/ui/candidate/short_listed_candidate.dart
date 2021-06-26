@@ -250,8 +250,8 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                       print(k.category.name);
                       print(_selectedPlans[k.category.name]);
                       setState(() {
-                        _selectedPlans[k].forEach((key, value) {
-                          if(key.title == _plans[i].title){
+                        _selectedPlans[k.category].forEach((key, value) {
+                          if(key.id == _plans[i].id){
                             _selectedPlans[k][key] = true;
                           }
                           else {
@@ -316,23 +316,37 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                           color: Color(0xFF000000),
                         ),
                       ),
-                      InkWell(
-                        onTap: (){},
-                        child: Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFF00A69D)
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.add,
-                              color: Color(0xFFFFFFFF),
-                              size: 12,
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: (){},
+                            child: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF00A69D)
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Color(0xFFFFFFFF),
+                                  size: 12,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          SizedBox(width: 5,),
+                          Text(
+                            "Add",
+                            style: TextStyle(
+                              color: Color(0xFF00A69D),
+                              fontFamily: 'Rubik',
+                              fontSize: 14,
+                              fontWeight:FontWeight.w400,
+                            ),
+                          )
+                        ],
                       ),
                     ]
                 ),

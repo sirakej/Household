@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size_config.dart';
+import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
+import 'package:householdexecutives_mobile/model/create_candidate.dart';
 
 
 class RegisterCandidate extends StatefulWidget {
@@ -24,6 +26,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
   bool friday = false;
   bool saturday = false;
   bool sunday = false;
+
 
 
   /// A list of string variables holding a list of all countries
@@ -77,6 +80,15 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
     "None"
   ];
 
+  /// A string variable holding the selected state value
+  String _selectedGender;
+
+  /// A list of string variables holding a list of all countries
+  List<String> _gender =[
+    "Male",
+    "Female"
+  ];
+
 
   /// A string variable holding the selected state value
   String _selectedExperience;
@@ -87,14 +99,6 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
     "2 years - 5 years",
     "5 years - 10 years",
     "10 years and above",
-  ];
-
-  /// A string variable holding the selected state value
-  String _selectedGender;
-  /// A list of string variables holding a list of all countries
-  List<String> _gender =[
-    "Male",
-    "Female"
   ];
 
   /// A [GlobalKey] to hold the form state of my form widget for form validation
@@ -118,6 +122,31 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
 
   /// A boolean variable to control showing of the progress indicator
   bool _showSpinner = false;
+
+  void _registerCandidate(CreateCandidate create){
+    if(!mounted)return;
+    setState(() {
+      _showSpinner = true;
+    });
+    var api = AuthRestDataSource();
+    api.registerCandidate(create).then((value)async {
+      
+      if(!mounted)return;
+      setState(() {
+        _showSpinner = false;
+      });
+//      var db=DatabaseHelper();
+//      await db.initDb();
+//      await db.saveUser(user);
+//      _addBoolToSF(true,user);
+    }).catchError((e){
+      print(e);
+      _passwordController.clear();
+      if (!mounted) return;
+      setState(() { _showSpinner = false; });
+      Constants.showError(context, e);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +185,14 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                   color: Color(0xFF57565C),
                 ),
               ),
-              SizedBox(height: 43,),
+              SizedBox(height: 10),
               Expanded(
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 33),
                       _buildSignUp(),
                       SizedBox(height: 24,),
                       Text(
@@ -1023,15 +1053,15 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                                   width: 18,
                                   fit: BoxFit.contain
                               ),
-                              value: _selectedReligion,
+                              value: _selectedGender,
                               onChanged: (String value){
                                 if(!mounted)return;
                                 setState(() {
-                                  _selectedReligion = value;
+                                  _selectedGender = value;
                                 });
                               },
                               validator: (value){
-                                if (_selectedReligion == null || _selectedReligion.isEmpty){
+                                if (_selectedGender == null || _selectedGender.isEmpty){
                                   return 'Pick your option';
                                 }
                                 return null;
@@ -1047,7 +1077,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                                 ),
                               ),
                               selectedItemBuilder: (BuildContext context){
-                                return _religion.map((value){
+                                return _gender.map((value){
                                   return Text(
                                     value,
                                     style: TextStyle(
@@ -1059,7 +1089,7 @@ class _RegisterCandidateState extends State<RegisterCandidate> {
                                   );
                                 }).toList();
                               },
-                              items: _religion.map((String value){
+                              items: _gender.map((String value){
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(

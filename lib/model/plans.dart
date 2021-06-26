@@ -1,4 +1,3 @@
-
 class Plan {
   Plan({
     this.id,
@@ -15,6 +14,7 @@ class Plan {
   String title;
   String price;
   List<String> details;
+
 
   factory Plan.fromJson(Map<String, dynamic> json) => Plan(
     id: json["_id"],
