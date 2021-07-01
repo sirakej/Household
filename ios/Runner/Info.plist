@@ -42,5 +42,27 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Household Executives would like to have access to your Speech recognition</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Household Executives would like to have access to your Motion Usage</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Household Executives would like to have access to your Media Library</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Household Executives would like to have access to your Calendar</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Household Executives would like to access your gallery to upload image</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Household Executives would like to have access to your photo library</string>
+    <key>UIBackgroundModes</key>
+    <array>
+       <string>fetch</string>
+       <string>remote-notification</string>
+    </array>
+    <key>UISupportsDocumentBrowser</key>
+    <true/>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
 </dict>
 </plist>

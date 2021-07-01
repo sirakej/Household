@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
-import 'package:householdexecutives_mobile/model/create_candidate.dart';
+import 'package:householdexecutives_mobile/model/create-candidate.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
-import 'package:householdexecutives_mobile/model/savedCandidates.dart';
+import 'package:householdexecutives_mobile/model/save-candidates.dart';
+import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'error-handler.dart';
-import 'network_util.dart';
+import 'network-util.dart';
 
 /// A [AuthRestDataSource] class to do all the send request to the back end
 /// and handle the result
@@ -30,24 +31,21 @@ class AuthRestDataSource {
   static final RESET_PASSWORD_URL = BASE_URL + "user/resetpassword";
   static final CHANGE_PASSWORD = BASE_URL + "user/resetpassword/change";
 
+  static final GET_USER = BASE_URL + "user";
   static final UPDATE_USER_PROFILE = BASE_URL + "user/profile";
   static final UPDATE_USER_PASSWORD = BASE_URL + "user/profile/password";
 
   static final GET_CATEGORY = BASE_URL + "category";
-  static final GET_CANDIDATE = BASE_URL + "candidate";
   static final GET_SAVED_CANDIDATE = BASE_URL + "user/savedcandidate";
 
-  static final GET_USER = BASE_URL + "user";
-  static final GET_PLANS = BASE_URL + "plan";
-
-  static final INITIALIZE_PAYMENT = BASE_URL + 'plan/payment';
-  static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
-
+  static final GET_CANDIDATE = BASE_URL + "candidate";
   static final SAVED_CANDIDATE = BASE_URL + 'candidate/saved';
   static final CREATE_CANDIDTE = BASE_URL + 'candidate';
+  static final CANDIDTE_REVIEW = BASE_URL + 'candidate/review';
 
-
-  //static final LIST_USER = "";
+  static final GET_PLANS = BASE_URL + "plan";
+  static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
+  static final FETCH_PAYMENT_HISTORY = BASE_URL + 'plan/payment/history';
 
 
   /// A function that creates a new user with [name], [email]
@@ -93,41 +91,11 @@ class AuthRestDataSource {
     });
   }
 
-  Future<dynamic> registerCandidate(CreateCandidate createCandidate) async {
-    Map<String, String> header = {"Content-Type": "application/json"};
-    return _netUtil.post(SIGN_UP_URL, headers: header, body: {
-      "email":CreateCandidate().email,
-      "first_name":CreateCandidate().firstName,
-      "last_name":CreateCandidate().lastName,
-      "age":CreateCandidate().age,
-      "phone_number":CreateCandidate().phoneNumber,
-      "tribe":CreateCandidate().origin,
-      "gender":CreateCandidate().gender,
-      "experience": CreateCandidate().experience,
-      "availability": CreateCandidate().availability,
-     // "category": CreateCandidate().category,
-//      "profile_image":
-//      "medical"
-//      "clinical":
-//      "resedential":
-//      "workhistory":
-//      "guarantors":
-    }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return CreateCandidate.fromJson(res['data']);
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
   /// A function that reset user's password POST with [email]
   Future<dynamic> resetPassword(String email) async {
     Map<String, String> header = {"Content-Type": "application/json"};
     return _netUtil.post(RESET_PASSWORD_URL, headers: header, body: {
-      "email": email
+      "email": email.toLowerCase().trim()
     }).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
@@ -138,143 +106,6 @@ class AuthRestDataSource {
       errorHandler.handleError(e);
     });
   }
-
-//  /// A function that changes user's password with [password] PUT
-//  Future<dynamic> changePassword(String password) async {
-//    String userId;
-//    Map<String, String> header;
-//    Future<User> user = futureValues.getCurrentUser();
-//    await user.then((value) {
-//      if(value.token == null){
-//        throw ("No user logged in");
-//      }
-//      userId = value.id;
-//      header = {
-//        "Authorization": "Bearer ${value.token}",
-//        "Content-Type": "application/json",
-//      };
-//    });
-//    String CHANGE_PASSWORD_URL = CHANGE_PASSWORD + '/$userId';
-//    return _netUtil.put(CHANGE_PASSWORD_URL, headers: header, body: {
-//      "password": password
-//    }).then((dynamic res) {
-//      if (res["error"]) {
-//        throw res["msg"];
-//      } else {
-//        return User.map(res["data"]);
-//      }
-//    }).catchError((e) {
-//      errorHandler.handleError(e);
-//    });
-//  }
-//
-//  /// A function that updates user's profiles with [password] PUT
-//  Future<dynamic> updateProfile(String email, String firstName, String surname, String phone) async {
-//    String userId;
-//    Map<String, String> header;
-//    Future<User> user = futureValues.getCurrentUser();
-//    await user.then((value) {
-//      if(value.token == null){
-//        throw ("No user logged in");
-//      }
-//      userId = value.id;
-//      header = {
-//        "Authorization": "Bearer ${value.token}",
-//        "Content-Type": "application/json",
-//      };
-//    });
-//    String UPDATE_USER_PROFILE_URL = UPDATE_USER_PROFILE + '/$userId';
-//    return _netUtil.put(UPDATE_USER_PROFILE_URL, headers: header, body: {
-//      "email": email,
-//      "first_name": firstName,
-//      "surname": surname,
-//      "phone_number": phone
-//    }).then((dynamic res) {
-//      if (res["error"]) {
-//        throw res["msg"];
-//      } else {
-//        return User.map(res["data"]);
-//      }
-//    }).catchError((e) {
-//      errorHandler.handleError(e);
-//    });
-//  }
-//
-//  /// A function that fetches all the payments plan GET
-//  Future<List<AllPaymentPlan>> getPaymentPlan() async {
-//    Map<String, String> header;
-//    Future<User> user = futureValues.getCurrentUser();
-//    await user.then((value) {
-//      if(value.token == null){
-//        throw ("No user logged in");
-//      }
-//      header = {
-//        "Authorization": "Bearer ${value.token}",
-//        "Content-Type": "application/json",
-//      };
-//    });
-//    List<AllPaymentPlan> plans;
-//    return _netUtil.get(PAYMENT_PLAN, headers: header).then((dynamic res) {
-//      if(res["error"]){
-//        throw res["msg"];
-//      }else{
-//        var rest = res["data"] as List;
-//        plans = rest.map<AllPaymentPlan>((json) => AllPaymentPlan.fromJson(json)).toList();
-//        return plans;
-//      }
-//    }).catchError((e){
-//      errorHandler.handleError(e);
-//    });
-//  }
-//
-//  /// A function to create a free trial for user POST
-//  Future<dynamic> createFreeTrial() async {
-//    String userId;
-//    Future<User> user = futureValues.getCurrentUser();
-//    await user.then((value) {
-//      if(value.token == null){
-//        throw ("No user logged in");
-//      }
-//      userId = value.id;
-//    });
-//    String PAYMENT_PLAN_URL = PAYMENT_PLAN + '/freetrial/$userId';
-//    return _netUtil.post(PAYMENT_PLAN_URL).then((dynamic res) {
-//      if (res["error"]) {
-//        throw res["msg"];
-//      } else {
-//        return res["data"];
-//      }
-//    }).catchError((e) {
-//      errorHandler.handleError(e);
-//    });
-//  }
-//
-//  /// A function to create a plan for a user POST
-//  Future<AllPaymentPlan> createPlan(AllPaymentPlan plan) async {
-//    String userId;
-//    Future<User> user = futureValues.getCurrentUser();
-//    await user.then((value) {
-//      if(value.token == null){
-//        throw ("No user logged in");
-//      }
-//      userId = value.id;
-//    });
-//    String PAYMENT_PLAN_URL = PAYMENT_PLAN + '/$userId';
-//    return _netUtil.post(PAYMENT_PLAN_URL, body: {
-//      "title": plan.title,
-//      "detail": plan.detail,
-//      "price": plan.price,
-//      "duration": plan.duration
-//    }).then((dynamic res) {
-//      if (res["error"]) {
-//        throw res["msg"];
-//      } else {
-//        return res["data"];
-//      }
-//    }).catchError((e) {
-//      errorHandler.handleError(e);
-//    });
-//  }
 
   Future<dynamic> updateProfile(String firstName, String surName, String email,
       String phoneNumber) async {
@@ -297,7 +128,7 @@ class AuthRestDataSource {
     return _netUtil.put(UPDATE_USER_PROFILE_URL, headers: header, body: {
       "first_name": firstName.trim(),
       "surname": surName.trim(),
-      "email": email.trim(),
+      "email": email.toLowerCase().trim(),
       "phone_number": phoneNumber.trim(),
     }).then((dynamic res) {
       if (res["error"]) {
@@ -341,64 +172,6 @@ class AuthRestDataSource {
     });
   }
 
-  /// A function that fetches all categories
-  Future<List<Category>> getCategory() async {
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
-    });
-    List<Category> categories;
-    return _netUtil.get(GET_CATEGORY, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        categories =
-            rest.map<Category>((json) => Category.fromJson(json)).toList();
-        return categories;
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
-
-  Future<List<Candidate>> getCandidate(String id) async {
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
-    });
-
-    List<Candidate> candidates;
-    String GET_CANDIDATE_URL = GET_CANDIDATE + "/$id";
-    return _netUtil.get(GET_CANDIDATE_URL, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        candidates =
-            rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
-        return candidates;
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
   /// A function that fetches the particular current logged in user
   /// into a model of [User] GET.
   Future<dynamic> getCurrentUser() async {
@@ -434,6 +207,153 @@ class AuthRestDataSource {
     });
   }
 
+  /// A function that fetches all categories
+  Future<List<Category>> getCategory() async {
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if (value.token == null) {
+        throw ("No user logged in");
+      }
+      header = {
+        "Authorization": "Bearer ${value.token}",
+        "Content-Type": "application/json",
+      };
+    });
+    List<Category> categories;
+    return _netUtil.get(GET_CATEGORY, headers: header).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        var rest = res["data"] as List;
+        categories =
+            rest.map<Category>((json) => Category.fromJson(json)).toList();
+        return categories;
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
+  Future<List<Candidate>> getCandidate(String id) async {
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if (value.token == null) {
+        throw ("No user logged in");
+      }
+      header = {
+        "Authorization": "Bearer ${value.token}",
+        "Content-Type": "application/json",
+      };
+    });
+
+    List<Candidate> candidates;
+    String GET_CANDIDATE_URL = GET_CANDIDATE + "/$id";
+    return _netUtil.get(GET_CANDIDATE_URL, headers: header).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        var rest = res["data"] as List;
+        candidates =
+            rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
+        return candidates;
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
+  Future<dynamic> registerCandidate(CreateCandidate createCandidate) async {
+    Map<String, String> header = {"Content-Type": "application/json"};
+    return _netUtil.post(SIGN_UP_URL, headers: header, body: {
+      "email":CreateCandidate().email,
+      "first_name":CreateCandidate().firstName,
+      "last_name":CreateCandidate().lastName,
+      "age":CreateCandidate().age,
+      "phone_number":CreateCandidate().phoneNumber,
+      "tribe":CreateCandidate().origin,
+      "gender":CreateCandidate().gender,
+      "experience": CreateCandidate().experience,
+      "availability": CreateCandidate().availability,
+    }).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        return CreateCandidate.fromJson(res['data']);
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
+  Future<dynamic> saveCandidate(List<SaveCandidates> saved) async {
+    String userId;
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if (value != null) {
+        if (value.token == null) {
+          throw ("No user logged in");
+        }
+        userId = value.id;
+        header = {
+          "Authorization": "Bearer ${value.token}",
+          "Content-Type": "application/json",
+        };
+      }
+      else {
+        throw ("No user authenticated");
+      }
+    });
+    String SAVED_CANDIDATE_URL = SAVED_CANDIDATE + '/$userId';
+    return _netUtil.put(SAVED_CANDIDATE_URL, headers: header, body: {
+      "saved": saved
+    }).then((dynamic res) {
+      print(res);
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        return res["data"];
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
+  /// A function that reviews user's candidate POST with [id], [review]
+  Future<dynamic> reviewCandidate(String id, String review, int rating) async {
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if (value != null) {
+        if (value.token == null) {
+          throw ("No user logged in");
+        }
+        header = {
+          "Authorization": "Bearer ${value.token}",
+          "Content-Type": "application/json",
+        };
+      }
+      else {
+        throw ("No user authenticated");
+      }
+    });
+    return _netUtil.post(CANDIDTE_REVIEW, headers: header, body: {
+      "candidate": id,
+      "detail": review,
+      "rating": rating
+    }).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        return 'Successful';
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
+
   Future<List<Plan>> getPlans() async {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
@@ -459,44 +379,6 @@ class AuthRestDataSource {
       }
     }).catchError((e) {
       errorHandler.handleError(e);
-    });
-  }
-
-  /// A function that initializes payment POST.
-  /// with [amount]
-  Future<dynamic> initializePayment(Plan plan) async {
-    String userId;
-    Map<dynamic, dynamic> data = Map();
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      userId = value.id;
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "content-Type": "application/json"
-      };
-    });
-    String INITIALIZE_PAYMENT_URL = INITIALIZE_PAYMENT + '/$userId';
-    return _netUtil.post(INITIALIZE_PAYMENT_URL, headers: header, body: {
-      "plan": plan.toJson()
-    }).then((dynamic res) {
-      if (res["error"]) {
-        throw (res["msg"]);
-      } else {
-        data['access_code'] = res['data']['access_code'];
-        data['checkout'] = res['data']['checkout'];
-        data['reference'] = res['data']['reference'];
-        return data;
-      }
-    }).catchError((e) {
-      print(e);
-      if (e is SocketException) {
-        throw ("Unable to connect to the server, check your internet connection");
-      }
-      throw (e);
     });
   }
 
@@ -534,33 +416,31 @@ class AuthRestDataSource {
     });
   }
 
-  Future<dynamic> saveCandidate(List<Saved> saved) async {
+  /// A function that fetches transaction history
+  Future<List<Transaction>> getTransactionHistory() async {
     String userId;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
+      if (value.token == null) {
+        throw ("No user logged in");
       }
-      else {
-        throw ("No user authenticated");
-      }
+      userId = value.id;
+      header = {
+        "Authorization": "Bearer ${value.token}",
+        "Content-Type": "application/json",
+      };
     });
-    String SAVED_CANDIDATE_URL = SAVED_CANDIDATE + '/$userId';
-    return _netUtil.put(SAVED_CANDIDATE_URL, headers: header, body: {
-      "saved": saved
-    }).then((dynamic res) {
+    List<Transaction> transactions;
+    String FETCH_PAYMENT_HISTORY_URL = FETCH_PAYMENT_HISTORY + '/$userId';
+    return _netUtil.get(FETCH_PAYMENT_HISTORY_URL, headers: header).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
       } else {
-        return res["data"];
+        var rest = res["data"] as List;
+        transactions =
+            rest.map<Transaction>((json) => Transaction.fromJson(json)).toList();
+        return transactions;
       }
     }).catchError((e) {
       errorHandler.handleError(e);

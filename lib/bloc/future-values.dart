@@ -1,8 +1,11 @@
-import 'package:householdexecutives_mobile/database/user_db_helper.dart';
+import 'package:householdexecutives_mobile/database/user-db-helper.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
-import 'package:householdexecutives_mobile/model/mySavedList.dart';
+import 'package:householdexecutives_mobile/model/hired-candidates.dart';
+import 'package:householdexecutives_mobile/model/saved-list.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
+import 'package:householdexecutives_mobile/model/scheduled-candidates.dart';
+import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
@@ -27,7 +30,7 @@ class FutureValues{
       User user = value['user'];
       String token = value['token'];
       var myUpdate = User(
-        user.token,
+        token,
         user.id,
         user.createdAt,
         user.updatedAt,
@@ -74,6 +77,24 @@ class FutureValues{
     var data = RestDataSource();
     Future<List<MySavedList>> savedList = data.getSavedList();
     return savedList;
+  }
+
+  Future<List<HiredCandidates>> getAllHiredCandidatesFromDB() {
+    var data = RestDataSource();
+    Future<List<HiredCandidates>> savedList = data.getHiredCandidates();
+    return savedList;
+  }
+
+  Future<List<ScheduledCandidates>> getAllScheduledCandidatesFromDB() {
+    var data = RestDataSource();
+    Future<List<ScheduledCandidates>> savedList = data.getScheduledCandidates();
+    return savedList;
+  }
+
+  Future<List<Transaction>> getTransactionHistoryFromDB() {
+    var data = AuthRestDataSource();
+    Future<List<Transaction>> transactions = data.getTransactionHistory();
+    return transactions;
   }
 
 }

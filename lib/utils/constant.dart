@@ -1,9 +1,24 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/database/user-db-helper.dart';
+import 'package:householdexecutives_mobile/ui/registration/sign-in.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Constants {
+
+  static void logOut(BuildContext context) async {
+    var db = DatabaseHelper();
+    await db.deleteUsers();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool boolValue = prefs.getBool('loggedIn') ?? true;
+    if(boolValue == true){
+      await prefs.setBool('loggedIn', false);
+      await prefs.setBool('fullRegistration', false);
+      Navigator.of(context).pushNamedAndRemoveUntil(SignIn.id, (Route<dynamic> route) => false);
+    }
+  }
 
   /// Method to capitalize the first letter of each word in [string]
   static String capitalize(String string) {
@@ -115,7 +130,7 @@ class Constants {
         context: context,
         barrierDismissible: false,
         barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        transitionDuration: const Duration(milliseconds: 700),
+        transitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (BuildContext buildContext, Animation animation, Animation secondaryAnimation) {
           if(shouldDismiss){
             Future.delayed(const Duration(seconds: 2), () {
@@ -132,7 +147,7 @@ class Constants {
             child: WillPopScope(
               onWillPop: () async => false,
               child: Padding(
-                padding: const EdgeInsets.only(top: 50, bottom: 10),
+                padding: const EdgeInsets.only(top: 50, bottom: 60),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -187,11 +202,25 @@ const String BASE_URL = "https://householdexecutives.herokuapp.com/v1/";
 const kFieldDecoration = InputDecoration(
   border: OutlineInputBorder(
     borderSide: BorderSide(
-      color: Color(0XFFC4C4C4),
+      color: Color(0xFFC4C4C4),
       width: 1,
     ),
     borderRadius: BorderRadius.all(Radius.circular(8))
-  )
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Color(0xFFC4C4C4),
+      width: 1,
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(8))
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Color(0xFF00A69D),
+      width: 1,
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(8))
+  ),
 );
 
 const kPayCardDecoration = InputDecoration(
