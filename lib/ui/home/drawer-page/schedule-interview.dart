@@ -241,6 +241,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
               color: Color(0xFF3B4A54),
             ),
           ),
+          SizedBox(height: 150),
         ]
       )
     );

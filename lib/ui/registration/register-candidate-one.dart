@@ -30,6 +30,9 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _emailController = TextEditingController();
 
+  /// A [TextEditingController] to control the input text for the user's address
+  TextEditingController _addressController = TextEditingController();
+
   /// A [TextEditingController] to control the input text for the user's phone number
   TextEditingController _phoneNumberController = TextEditingController();
 
@@ -400,6 +403,52 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                "Residence",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: TextFormField(
+                  controller: _addressController,
+                  keyboardType: TextInputType.streetAddress,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter your residence';
+                    }
+                    return null;
+                  },
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  decoration:kFieldDecoration.copyWith(
+                      hintText: 'Ogba, Lagos',
+                      hintStyle:TextStyle(
+                        color:Color(0xFF717F88),
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        fontWeight: FontWeight.normal,
+                      )
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
                 "Phone Number",
                 textAlign: TextAlign.start,
                 style: TextStyle(
@@ -585,10 +634,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                       child: DropdownButtonFormField<String>(
                         isExpanded: true,
                         style: TextStyle(
-                          color: Color(0xFF999999),
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
                         ),
                         icon: Image.asset(
                             'assets/icons/arrow-down.png',
@@ -623,10 +672,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                             return Text(
                               value,
                               style: TextStyle(
-                                color: Color(0xFF1C2D55),
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.normal,
                                 fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
                               ),
                             );
                           }).toList();
@@ -637,10 +686,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                             child: Text(
                               value,
                               style: TextStyle(
-                                color: Color(0xFF666666),
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.normal,
                                 fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
                               ),
                             ),
                           );
@@ -672,10 +721,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         child: DropdownButtonFormField<String>(
                           isExpanded: true,
                           style: TextStyle(
-                            color: Color(0xFF999999),
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.normal,
                             fontFamily: 'Gelion',
+                            color: Color(0xFF042538),
                           ),
                           icon: Image.asset(
                               'assets/icons/arrow-down.png',
@@ -710,10 +759,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                               return Text(
                                 value,
                                 style: TextStyle(
-                                  color: Color(0xFF1C2D55),
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.normal,
                                   fontFamily: 'Gelion',
+                                  color: Color(0xFF042538),
                                 ),
                               );
                             }).toList();
@@ -724,10 +773,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                               child: Text(
                                 value,
                                 style: TextStyle(
-                                  color: Color(0xFF666666),
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.normal,
                                   fontFamily: 'Gelion',
+                                  color: Color(0xFF042538),
                                 ),
                               ),
                             );
@@ -763,10 +812,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                       child: DropdownButtonFormField<String>(
                         isExpanded: true,
                         style: TextStyle(
-                          color: Color(0xFF999999),
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
                         ),
                         icon: Image.asset(
                             'assets/icons/arrow-down.png',
@@ -801,10 +850,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                             return Text(
                               value,
                               style: TextStyle(
-                                color: Color(0xFF1C2D55),
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.normal,
                                 fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
                               ),
                             );
                           }).toList();
@@ -815,10 +864,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                             child: Text(
                               value,
                               style: TextStyle(
-                                color: Color(0xFF666666),
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.normal,
                                 fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
                               ),
                             ),
                           );
@@ -895,6 +944,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
       candidate.firstName = Constants.capitalize(_firstNameController.text.trim());
       candidate.lastName = Constants.capitalize(_lastNameController.text.trim());
       candidate.email = _emailController.text.toLowerCase().trim();
+      candidate.residence = _addressController.text.trim();
       candidate.phoneNumber = _number.phoneNumber.trim();
       candidate.age = int.parse(_ageController.text);
       candidate.origin = _originController.text;

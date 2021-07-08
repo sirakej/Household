@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/model/saved-list.dart';
+import 'package:householdexecutives_mobile/model/saved-candidates.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +20,9 @@ class _SavedPurchasesState extends State<SavedPurchases> {
 
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
+
+  /// GlobalKey of a my RefreshIndicatorState to refresh my list items
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   /// Converting [dateTime] in string format to return a formatted time
   /// of hrs, minutes and am/pm
@@ -52,10 +55,10 @@ class _SavedPurchasesState extends State<SavedPurchases> {
           _purchasesLength = value.length;
         });
       }
-    })/*.catchError((e){
+    }).catchError((e){
       print(e);
       Constants.showError(context, e);
-    })*/;
+    });
   }
 
   /// A function to build the list of all purchases
@@ -100,7 +103,7 @@ class _SavedPurchasesState extends State<SavedPurchases> {
                           );
                         }
                         )
-                    );
+                    ).then((value) => _refresh());
                   },
                   child: Container(
                     width: SizeConfig.screenWidth,
@@ -230,6 +233,32 @@ class _SavedPurchasesState extends State<SavedPurchases> {
     );
   }
 
+  /// Function to refresh details of the list of all the saved purchases user has
+  /// similar to [_allPurchases()]
+  Future<Null> _refresh() {
+    Future<List<MySavedList>> list = futureValue.getAllSavedListFromDB();
+    return list.then((value) {
+      _purchases.clear();
+      if(value.isEmpty || value.length == 0){
+        if(!mounted)return;
+        setState(() {
+          _purchasesLength = 0;
+          _purchases = [];
+        });
+      }
+      else if (value.length > 0){
+        if(!mounted)return;
+        setState(() {
+          _purchases.addAll(value);
+          _purchasesLength = value.length;
+        });
+      }
+    }).catchError((e){
+      print(e);
+      Constants.showError(context, e);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -239,55 +268,59 @@ class _SavedPurchasesState extends State<SavedPurchases> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFFCFDFE),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 20,
-            color: Color(0xFF000000),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          "My Purchases",
-          style: TextStyle(
-            fontWeight: FontWeight.normal,
-            fontFamily: 'Gelion',
-            fontSize: 19,
-            color: Color(0xFF000000),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(24, 14, 24, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'You’re only allowed to select a maximmum of 3\ncandidates per category',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Gelion',
-                fontSize: 12.6829,
-                color: Color(0xFF57565C),
-              ),
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      key: _refreshIndicatorKey,
+      color: Color(0xFF00A69D),
+      child: Scaffold(
+        backgroundColor: Color(0xFFFCFDFE),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_outlined,
+              size: 20,
+              color: Color(0xFF000000),
             ),
-            SizedBox(height: 33.39),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: _buildAllPurchases(),
-              )
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            "My Purchases",
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 19,
+              color: Color(0xFF000000),
             ),
-          ]
+          ),
+        ),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(24, 14, 24, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'You’re only allowed to select a maximmum of 3\ncandidates per category',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    fontSize: 12.6829,
+                    color: Color(0xFF57565C),
+                  ),
+                ),
+                SizedBox(height: 33.39),
+                _buildAllPurchases(),
+                SizedBox(height: SizeConfig.screenHeight - 200),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -42,4 +42,15 @@ class Availability {
     "saturday": saturday,
     "sunday": sunday,
   };
+
+  Map<String, String> toMap() => {
+    "title": title,
+    "monday": monday.toString(),
+    "tuesday": tuesday.toString(),
+    "wednesday": wednesday.toString(),
+    "thursday": thursday.toString(),
+    "friday": friday.toString(),
+    "saturday": saturday.toString(),
+    "sunday": sunday.toString(),
+  };
 }

@@ -1,11 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate.dart';
+import 'package:householdexecutives_mobile/model/popular-category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find-category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 import 'drawer-page/account.dart';
 import 'drawer-page/hired-candidate.dart';
 import 'drawer-page/purchases/saved-purchases.dart';
@@ -51,10 +55,554 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  /// A List to hold the all the popular categories
+  List<PopularCategory> _popularCategories = [];
+
+  /// Variable of List<[Category]> to hold all the filtered popular categories
+  List<PopularCategory> _filteredPopularCategories = [];
+
+  /// An Integer variable to hold the length of [_popularCategories]
+  int _popularCategoriesLength;
+
+  /// [allCategories]
+  void _allPopularCategories({bool refresh}) async {
+    Future<List<PopularCategory>> names = futureValue.getPopularCategoryFromDB();
+    await names.then((value) {
+      if(value.isEmpty || value.length == 0){
+        if(!mounted)return;
+        setState(() {
+          _popularCategoriesLength = 0;
+          _popularCategories = [];
+          _filteredPopularCategories = [];
+        });
+      }
+      else if (value.length > 0){
+        if(!mounted)return;
+        setState(() {
+          _popularCategories.addAll(value);
+          _filteredPopularCategories = _popularCategories;
+          _popularCategoriesLength = value.length;
+        });
+      }
+    }).catchError((e){
+      print(e);
+      if(e == 'No Internet Connection'){
+        _allPopularCategories(refresh: false);
+      }
+      else {
+        Constants.showError(context, e);
+      }
+    });
+  }
+
+  /// A function to build the list of all the popular categories
+  Widget _buildPopularCategories() {
+    List<Widget> categoriesList = [];
+    if(_popularCategories.length > 0 && _popularCategories.isNotEmpty){
+      for (int i = 0; i < _filteredPopularCategories.length; i++){
+        categoriesList.add(
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CachedNetworkImage(
+                  imageUrl: _filteredPopularCategories[i].category.smallerImage,
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.contain,
+                  errorWidget: (context, url, error) => Container(),
+                ),
+                SizedBox(width: 6),
+                Text(
+                  _filteredPopularCategories[i].category.name,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    fontSize: 14,
+                    color: Color(0xFF042538),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
+        child: Row(
+          children: categoriesList,
+        ),
+      );
+    }
+    else if(_popularCategoriesLength == 0){
+      return Container(height: 20);
+    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: BouncingScrollPhysics(),
+      child: Row(
+        children: [
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xFFFFFFFF),
+            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+            margin: EdgeInsets.only(right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle
+                  ),
+                ),
+                SizedBox(width: 6),
+                Container(
+                  height: 20,
+                  width: 50,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// A List to hold the all the recommended candidates
+  List<Candidate> _recommendedCandidates = [];
+
+  /// Variable of List<[Candidate]> to hold all the filtered recommended candidates
+  List<Candidate> _filteredRecommendedCandidates = [];
+
+  /// An Integer variable to hold the length of [_recommendedCandidates]
+  int _recommendedCandidatesLength;
+
+  void _allRecommendedCandidates({bool refresh}) async {
+    Future<List<Candidate>> names = futureValue.getRecommendedCandidates();
+    await names.then((value) {
+      if(value.isEmpty || value.length == 0){
+        if(!mounted)return;
+        setState(() {
+          _recommendedCandidatesLength = 0;
+          _recommendedCandidates = [];
+          _filteredRecommendedCandidates = [];
+        });
+      }
+      else if (value.length > 0){
+        if(!mounted)return;
+        setState(() {
+          _recommendedCandidates.addAll(value);
+          _filteredRecommendedCandidates = _recommendedCandidates;
+          _popularCategoriesLength = value.length;
+        });
+      }
+    }).catchError((e){
+      print(e);
+      if(e == 'No Internet Connection'){
+        _allRecommendedCandidates(refresh: false);
+      }
+      else {
+        Constants.showError(context, e);
+      }
+    });
+  }
+
+  /// A function to build the list of all the recommended candidates
+  Widget _buildRecommendedCandidates() {
+    List<Widget> recommendedCandidatesList = [];
+    if(_recommendedCandidates.length > 0 && _recommendedCandidates.isNotEmpty){
+      recommendedCandidatesList.clear();
+      for (int i = 0; i < _filteredRecommendedCandidates.length; i++){
+        recommendedCandidatesList.add(
+            Container(
+              width: 160,
+              height: 125,
+              margin: EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: Color(0xFFE8E8E8),
+                borderRadius: BorderRadius.all(Radius.circular(8))
+              ),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: CachedNetworkImage(
+                        imageUrl: _filteredRecommendedCandidates[i].recommendedCategory.image,
+                        width: 160,
+                        height: 107,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => Container(),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 160,
+                      height: 52,
+                      padding: EdgeInsets.fromLTRB(10, 6.17, 10, 11),
+                      alignment: Alignment.bottomCenter,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _filteredRecommendedCandidates[i].recommendedCategory.name,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 13,
+                                  color: Color(0xFF042538),
+                                ),
+                              ),
+                              Text(
+                                _filteredRecommendedCandidates[i].firstName,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 12,
+                                  color: Color(0xFF717F88),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                _filteredRecommendedCandidates[i].rating.toString(),
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 12,
+                                  color: Color(0xFF717F88),
+                                ),
+                              ),
+                              Image.asset(
+                                  "assets/icons/star.png",
+                                  width: 10,
+                                  height: 8.81,
+                                  fit: BoxFit.contain
+                              )
+                            ],
+                          ),
+                        ],
+                      ) ,
+                    ),
+                  )
+                ],
+              ),
+            )
+        );
+      }
+      /*List<Widget> _firstRow = [];
+      List<Widget> _secondRow = [];
+      int half = (recommendedCandidatesList.length / 2).round();
+      for(int i = 0; i < half; i++){
+        _firstRow.add(recommendedCandidatesList[i]);
+      }
+      for(int i = half; i < recommendedCandidatesList.length; i++){
+        _secondRow.add(recommendedCandidatesList[i]);
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SingleChildScrollView(child: Row(children: _firstRow)),
+          SizedBox(height: 14.94),
+          SingleChildScrollView(child: Row(children: _secondRow))
+        ],
+      );*/
+      return Wrap(
+        spacing: 12,
+        runSpacing: 18,
+        crossAxisAlignment: WrapCrossAlignment.start,
+        children: recommendedCandidatesList,
+      );
+    }
+    else if(_recommendedCandidatesLength == 0){
+      return Container(height: 160);
+    }
+    return Wrap(
+      spacing: 8,
+      runSpacing: 18,
+      crossAxisAlignment: WrapCrossAlignment.start,
+      children: [
+        Container(
+          width: 160,
+          height: 125,
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(8))
+          ),
+        ),
+        Container(
+          width: 160,
+          height: 125,
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(8))
+          ),
+        ),
+        Container(
+          width: 160,
+          height: 125,
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(8))
+          ),
+        ),
+        Container(
+          width: 160,
+          height: 125,
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(8))
+          ),
+        ),
+        Container(
+          width: 160,
+          height: 125,
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(8))
+          ),
+        ),
+        Container(
+          width: 160,
+          height: 125,
+          decoration: BoxDecoration(
+              color: Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.all(Radius.circular(8))
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   void initState() {
     _getCurrentUser();
     super.initState();
+    _allPopularCategories(refresh: true);
+    _allRecommendedCandidates(refresh: true);
   }
 
   @override
@@ -62,6 +610,44 @@ class _HomeScreenState extends State<HomeScreen> {
     SizeConfig().init(context);
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.menu,
+            size: 20,
+            color: Color(0xFF000000),
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState.openDrawer();
+          },
+        ),
+        centerTitle: false,
+        elevation: 0,
+        title: Text(
+          "Welcome $_firstName",
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Gelion',
+            fontSize: 16,
+            color: Color(0xFF000000),
+          ),
+        ),
+        /*actions: [
+          IconButton(
+            onPressed: (){
+
+            },
+            icon: Image.asset(
+              "assets/icons/notification_baseline.png",
+              height: 24,
+              width: 24,
+              fit: BoxFit.contain
+            )
+          )
+        ],*/
+      ),
       drawer: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(topRight: Radius.circular(30))
@@ -74,66 +660,76 @@ class _HomeScreenState extends State<HomeScreen> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF006838),
-                            Color(0xFF00A69D),
-                          ],
-                          stops: [0.55, 1],
-                        )
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFFFFFFF),
-                            border: Border.all(
-                              color: Color(0xFF5D6970),
-                              width: 1.5
-                            )
-                          ),
-                          child: (_surName != null && _firstName != null)
-                              ? Center(
-                            child: Text(
-                              Constants.profileName('$_surName $_firstName'),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Gelion',
-                                fontSize: 24,
-                                color: Color(0xFF000000),
-                              ),
-                            ),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_){
+                            return Account();
+                          }
                           )
-                              : Container(),
-                        ),
-                        /*Center(
-                          child: Image.asset(
-                            "assets/icons/profile.png",
+                      );
+                    },
+                    child: DrawerHeader(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF006838),
+                              Color(0xFF00A69D),
+                            ],
+                            stops: [0.55, 1],
+                          )
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
                             width: 64,
                             height: 64,
-                            fit: BoxFit.contain
-                          )
-                        ),*/
-                        SizedBox(width: 13),
-                        Text(
-                          "${_firstName ?? ''} ${_surName ?? ''}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFFFFFFFF),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFFFFFFFF),
+                              border: Border.all(
+                                color: Color(0xFF5D6970),
+                                width: 1.5
+                              )
+                            ),
+                            child: (_surName != null && _firstName != null)
+                                ? Center(
+                              child: Text(
+                                Constants.profileName('$_surName $_firstName'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 24,
+                                  color: Color(0xFF000000),
+                                ),
+                              ),
+                            )
+                                : Container(),
                           ),
-                        ),
-                      ],
+                          /*Center(
+                            child: Image.asset(
+                              "assets/icons/profile.png",
+                              width: 64,
+                              height: 64,
+                              fit: BoxFit.contain
+                            )
+                          ),*/
+                          SizedBox(width: 13),
+                          Text(
+                            "${_firstName ?? ''} ${_surName ?? ''}",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Gelion',
+                              fontSize: 16,
+                              color: Color(0xFFFFFFFF),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -147,7 +743,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: "My Account",
                               imageName: "account",
                               onTap: (){
-                                Navigator.pop(context);
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
                                       return Account();
@@ -160,7 +755,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: "Hired Candidates",
                               imageName: "hired_candidates",
                               onTap: (){
-                                Navigator.pop(context);
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
                                       return HireCandidate();
@@ -187,7 +781,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: "Transactions & Payments",
                               imageName: "transactions",
                               onTap: (){
-                                Navigator.pop(context);
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
                                       return TransactionAndPayments();
@@ -200,7 +793,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: "My Purchases",
                               imageName: "my_purchases",
                               onTap: (){
-                                Navigator.pop(context);
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
                                       return SavedPurchases();
@@ -212,7 +804,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: "Scheduled Interview",
                               imageName: "scheduled_interview",
                               onTap: (){
-                                Navigator.pop(context);
                                 Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
                                       return ScheduledInterview();
@@ -259,7 +850,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -312,254 +903,125 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                   )
                 ],
-              ),
-              SizedBox(height: 10),
+              ),*/
+              //SizedBox(height: 10),
               Expanded(
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 22),
-                        _buildSearch(),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Popular Categories",
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //SizedBox(height: 22),
+                     // _buildSearch(),
+                      //SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Popular Categories",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Gelion',
+                              fontSize: 14,
+                              color: Color(0xFF6F8A9C),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: (){
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (_){
+                                    //return SelectedList();
+                                    return FindACategory();
+                                  })
+                              );
+                            },
+                            child: Text(
+                              "see all",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Gelion',
                                 fontSize: 14,
-                                color: Color(0xFF6F8A9C),
+                                color: Color(0xFF00A69D),
                               ),
                             ),
-                            TextButton(
-                              onPressed: (){},
-                              child: Text(
-                                "see all",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 14,
-                                  color: Color(0xFF00A69D),
-                                ),
+                          )
+                        ],
+                      ),
+                      _buildPopularCategories(),
+                      SizedBox(height: 20),
+                      Text(
+                        "Recommended Candidates",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          color: Color(0xFF6F8A9C),
+                        ),
+                      ),
+                      SizedBox(height: 18),
+                      _buildRecommendedCandidates(),
+                      /*Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
+                              SizedBox(width: 50),
+                              _buildRecommendedContainer("assets/icons/home_plumber.png","Plumber", "Michelle", 3.5),
+                            ],
+                          ),
+                          SizedBox(height: 18),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildRecommendedContainer("assets/icons/home_electrician.png","Electrician", "Taiwo", 3.5),
+                              SizedBox(width: 50,),
+                              _buildRecommendedContainer("assets/icons/home_carpenter.png","Carpenter", "Dauda", 3.5),
+                            ],
+                          ),
+                        ],
+                      ),*/
+                      SizedBox(height: 5),
+                      Center(
+                        child: TextButton(
+                            onPressed:(){
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (_){
+                                    //return SelectedList();
+                                    return FindACategory();
+                                  })
+                              );
+                            },
+                            child: Text(
+                              "see all candidates",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF00A69D),
                               ),
                             )
-                          ],
                         ),
-                        SizedBox(
-                          height: 50,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 1,
-                              physics: BouncingScrollPhysics(),
-                              itemBuilder: (_,__)=>  Row(
-                                children: [
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/waiter.png",width: 20,height:20 ,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Butler",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),//butler
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/baby-boy 1.png",width: 24,height: 24,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Caregiver",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),//caregiver
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/hammer 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Carpenter",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),//car
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/taxi-driver 1.png",width: 20,height:20 ,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Chauffeur",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),//chauffeur
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/chef-hat 1.png",width:20 ,height: 20,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "Chef",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),//chef
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    color: Color(0xFFFFFFFF),
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 11,bottom: 11,),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset("assets/icons/broom.png",width: 16,height: 22,fit: BoxFit.contain,),
-                                        SizedBox(width: 6,),
-                                        Text(
-                                          "House Keeper",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF042538),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),//housekeeper
-                                ],
-                              )
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "Recommended Candidates",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 14,
-                            color: Color(0xFF6F8A9C),
-                          ),
-                        ),
-                        SizedBox(height: 18),
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildRecommendedContainer("assets/icons/caterer.png","Chef", "Funke", 3.5),
-                                SizedBox(width: 50,),
-                                _buildRecommendedContainer("assets/icons/home_plumber.png","Plumber", "Michelle", 3.5),
-                              ],
-                            ),
-                            SizedBox(height: 18,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildRecommendedContainer("assets/icons/home_electrician.png","Electrician", "Taiwo", 3.5),
-                                SizedBox(width: 50,),
-                                _buildRecommendedContainer("assets/icons/home_carpenter.png","Carpenter", "Dauda", 3.5),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-                        Center(
-                          child: TextButton(
-                              onPressed:(){
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      //return SelectedList();
-                                      return FindACategory();
-                                    })
-                                );
-                              },
-                              child: Text(
-                                "see all candidates",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 14,
-                                  color: Color(0xFF00A69D),
-                                ),
-                              )
-                          ),
-                        ),
-                        SizedBox(height:7),
-                        Container(
+                      ),
+                      SizedBox(height: 7),
+                      Center(
+                        child: Container(
                           child: Stack(
                             children: [
                               Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(10))
-                                  ),
-                                  child: Image.asset("assets/icons/ads.png",fit:BoxFit.contain,width:327 ,height:96)
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10))
+                                ),
+                                child: Image.asset(
+                                  "assets/icons/ads.png",
+                                  fit: BoxFit.contain,
+                                  width: 327,
+                                  height: 96
+                                )
                               ),
                               Container(
                                 padding: EdgeInsets.fromLTRB(27, 5, 0, 14),
@@ -576,7 +1038,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Color(0xFFFFFFFF),
                                       ),
                                     ),
-                                    SizedBox(height: 6,),
+                                    SizedBox(height: 6),
                                     Text(
                                       "Every service required for the proper\nmaintenance and upkeep of your\nhome is covered.",
                                       textAlign: TextAlign.start,
@@ -592,9 +1054,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                             ],
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               )
@@ -640,264 +1102,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  Widget _buildRecommendedContainer(String imagePath,String category,String candidateName, double ratings ){
-    return FittedBox(
-      child: Container(
-       width: SizeConfig.screenWidth/2.8,
-        height: 159,
-        decoration: BoxDecoration(
-          //color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.all(Radius.circular(8))
-        ),
-        child: Stack(
-          children: [
-            Image.asset(imagePath , fit:BoxFit.contain,width:SizeConfig.screenWidth,height: 160,),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                width: SizeConfig.screenWidth/2.8,
-                padding: EdgeInsets.only(left: 10,right: 10,top: 6,bottom: 11),
-                alignment: Alignment.bottomCenter,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          category,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 13,
-                            color: Color(0xFF042538),
-                          ),
-                        ),
-                        Text(
-                          candidateName,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 12,
-                            color: Color(0xFF717F88),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "$ratings",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 12,
-                            color: Color(0xFF717F88),
-                          ),
-                        ),
-                        Image.asset("assets/icons/star.png",width:10 ,height:8.81,fit:BoxFit.contain ,)
-                      ],
-                    ),
-                  ],
-                ) ,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  /*_buildModalSheet(BuildContext context){
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        elevation: 100,
-        isScrollControlled: true,
-        barrierColor: Color(0xFF07072B).withOpacity(0.81),
-        isDismissible: false,
-        context: context,
-        builder: (BuildContext context){
-          return StatefulBuilder(builder:(BuildContext context, StateSetter setState *//*
-          You can rename this!*//*){
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: SizeConfig.screenWidth,
-                  child: Stack(
-                    children: [
-                      Container(
-                        //height: SizeConfig.screenHeight,
-                        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-                        margin: EdgeInsets.only(top: 34),
-                        width: SizeConfig.screenWidth,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-                        ),
-                        child: Column(
-                          mainAxisSize:  MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 64),
-                            Center(
-                              child: Text(
-                                "Akande Seun",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFF042538),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 5,),
-                            Center(
-                              child: TextButton(
-                                onPressed:(){
-                                  },
-                                child: Text(
-                                  "Update profile information",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF00A69D),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 8,),
-                            FlatButton(
-                              minWidth: SizeConfig.screenWidth,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 2,
-                                      color: Color(0xFF00A69D)
-                                  ),
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              padding: EdgeInsets.only(top:18 ,bottom: 18),
-                              onPressed:(){},
-                              color: Color(0xFF00A69D).withOpacity(0.4),
-                              child: Text(
-                                "Hire from a different category",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFF00A69D),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 16,),
-                            FlatButton(
-                              minWidth: SizeConfig.screenWidth,
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 1,
-                                      color: Color(0xFFC4C4C4).withOpacity(0.48),
-                                  ),
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              padding: EdgeInsets.only(top:18 ,bottom: 18),
-                              onPressed:(){},
-                              child: Text(
-                                "View List",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFF00A69D),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height:15,),
-                            Center(
-                              child: TextButton(
-                                onPressed:(){
-                                  _logout();
-                                },
-                                child: Text(
-                                  "Sign Out",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFFE36D45),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 20,),
-                          ],
-                        ),
-                      ),
-                      Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Container(
-                              width: 90,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: Image.asset(
-                                "assets/icons/profile.png",
-                                // width: 90,
-                                // height: 90,
-                                fit:BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                                padding: EdgeInsets.only(right: 24),
-                                child: Container(
-                                  width: 26,
-                                  height: 26,
-                                  child: FloatingActionButton(
-                                      elevation: 30,
-                                      backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
-                                      shape: CircleBorder(),
-                                      onPressed: (){
-                                        Navigator.pop(context);
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Color(0xFFFFFFFF),
-                                        size:13,
-                                      )
-                                  ),
-                                )
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          });
-        }
-    );
-  }*/
 
 }

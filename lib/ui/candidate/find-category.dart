@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +11,7 @@ import 'package:householdexecutives_mobile/ui/candidate/selected-category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/short-listed-candidate.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
 class FindACategory extends StatefulWidget {
@@ -63,6 +67,7 @@ class _FindACategoryState extends State<FindACategory> {
   void _allCategories() async {
     Future<List<Category>> names = futureValue.getAllCategoryFromDB();
     await names.then((value) {
+      //_getList();
       if(value.isEmpty || value.length == 0){
         if(!mounted)return;
         setState(() {
@@ -90,7 +95,7 @@ class _FindACategoryState extends State<FindACategory> {
     });
   }
 
-  /// A function to build the list of all the available payments plans
+  /// A function to build the list of all the categories
   Widget _buildList() {
     if(_categories.length > 0 && _categories.isNotEmpty){
       _categoriesList.clear();
@@ -154,14 +159,12 @@ class _FindACategoryState extends State<FindACategory> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(6)),
                       ),
-                      child: Image.network(
-                        _filteredCategories[i].category.image,
+                      child: CachedNetworkImage(
+                        imageUrl: _filteredCategories[i].category.image,
                         height: 54,
                         width: 54,
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace){
-                          return Container();
-                        },
+                        errorWidget: (context, url, error) => Container(),
                       ),
                     ),
                     SizedBox(width: 12),
@@ -169,8 +172,7 @@ class _FindACategoryState extends State<FindACategory> {
                       "Hire a ${_filteredCategories[i].category.name}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        //letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
                         fontSize: 16,
                         color: Color(0xFF042538),
@@ -226,7 +228,7 @@ class _FindACategoryState extends State<FindACategory> {
         keyboardType: TextInputType.text,
         style: TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.normal,
           fontFamily: 'Gelion',
           color: Color(0xFF042538),
         ),
@@ -252,11 +254,22 @@ class _FindACategoryState extends State<FindACategory> {
               color:Color(0xFF6F8A9C),
               fontSize: 14,
               fontFamily: 'Gelion',
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             )
         ),
       ),
     );
+  }
+
+  void _getList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data = prefs.getString('checkout');
+    if(data != null){
+      _candidates = jsonDecode(data);
+    }
+    print(data);
+    //print(jsonDecode(data));
+    print('fetched');
   }
 
   @override
@@ -317,7 +330,7 @@ class _FindACategoryState extends State<FindACategory> {
                       'Experienced, Professional & Vetted',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
                         fontSize: 14,
                         color: Color(0xFF57565C),
@@ -344,7 +357,7 @@ class _FindACategoryState extends State<FindACategory> {
                       child: Text(
                         "Checkout",
                         style: TextStyle(
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
                           fontSize: 16,
                           color: Color(0xFF00A69D),
@@ -359,13 +372,21 @@ class _FindACategoryState extends State<FindACategory> {
                 SizedBox(height: 8),
                 Expanded(
                   child: Container(
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 16),
-                          _buildList(),
-                        ],
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (scrollNotification) {
+                        if (scrollNotification is ScrollUpdateNotification) {
+                          HapticFeedback.selectionClick();
+                        }
+                        return;
+                      },
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 16),
+                            _buildList(),
+                          ],
+                        ),
                       ),
                     ),
                   ),

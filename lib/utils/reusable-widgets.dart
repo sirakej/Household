@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
@@ -57,14 +58,12 @@ class _CandidateContainerState extends State<CandidateContainer> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
-                  child: Image.network(
-                    widget.candidate.profileImage,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.candidate.profileImage,
                     height: 57,
                     width: 72,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace){
-                      return Container();
-                    },
+                    errorWidget: (context, url, error) => Container(),
                   ),
                 ),
                 SizedBox(width: 12),
@@ -172,14 +171,12 @@ class _CandidateContainerState extends State<CandidateContainer> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
-                  child: Image.network(
-                    widget.candidate.profileImage,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.candidate.profileImage,
                     height: 57,
                     width: 72,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace){
-                      return Container();
-                    },
+                    errorWidget: (context, url, error) => Container(),
                   ),
                 ),
                 SizedBox(width: 12),

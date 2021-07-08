@@ -37,33 +37,39 @@ class SavedCategory {
     this.getCategory,
     this.package,
     this.roles,
+    this.hires,
     this.interview,
+    this.interviewDate,
     this.purchase,
   });
 
   String id;
   DateTime createdAt;
   DateTime updatedAt;
-  List<CandidatePlan> candidatePlan;
+  List<SavedCandidatePlan> candidatePlan;
   String user;
   String category;
   CategoryClass getCategory;
   Plan package;
   int roles;
+  int hires;
   bool interview;
+  DateTime interviewDate;
   String purchase;
 
   factory SavedCategory.fromJson(Map<String, dynamic> json) => SavedCategory(
     id: json["_id"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
-    candidatePlan: List<CandidatePlan>.from(json["candidate_plan"].map((x) => CandidatePlan.fromJson(x))),
+    candidatePlan: List<SavedCandidatePlan>.from(json["candidate_plan"].map((x) => SavedCandidatePlan.fromJson(x))),
     user: json["user"],
     category: json["category"],
     getCategory: CategoryClass.fromJson(json["get_category"]),
     package: Plan.fromJson(json["package"]),
     roles: json["roles"],
+    hires: json["hires"] ?? 0,
     interview: json["interview"],
+    interviewDate: json["interview_date"] == null ? null : DateTime.parse(json["interview_date"]),
     purchase: json["purchase"],
   );
 
@@ -77,34 +83,40 @@ class SavedCategory {
     "get_category": getCategory.toJson(),
     "package": package.toJson(),
     "roles": roles,
+    "hires": hires ?? null,
     "interview": interview,
+    "interview_date": interviewDate == null ? null : interviewDate.toIso8601String(),
     "purchase": purchase,
   };
 
 }
 
-class CandidatePlan {
+class SavedCandidatePlan {
 
-  CandidatePlan({
+  SavedCandidatePlan({
     this.candidate,
     this.getCandidate,
     this.hirePlan,
+    this.hired,
   });
 
   String candidate;
   Candidate getCandidate;
   Availability hirePlan;
+  bool hired;
 
-  factory CandidatePlan.fromJson(Map<String, dynamic> json) => CandidatePlan(
+  factory SavedCandidatePlan.fromJson(Map<String, dynamic> json) => SavedCandidatePlan(
     candidate: json["candidate"],
     getCandidate: Candidate.fromJson(json["get_candidate"]),
     hirePlan: Availability.fromJson(json["hire_plan"]),
+    hired: json["hired"] ?? null,
   );
 
   Map<String, dynamic> toJson() => {
     "candidate": candidate,
     "get_candidate": getCandidate.toJson(),
     "hire_plan": hirePlan.toJson(),
+    "hired": hired,
   };
 
 }

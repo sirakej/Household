@@ -2,13 +2,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/model/candidate-availability.dart';
+import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
-import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/model/create-candidate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 class RegisterCandidateTwo extends StatefulWidget {
 
@@ -35,6 +38,9 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
 
   /// A [TextEditingController] to control the input text for the languages
   TextEditingController _languagesController = TextEditingController();
+
+  /// A [TextEditingController] to control the input text for the history
+  TextEditingController _historyController = TextEditingController();
 
   bool _liveIn = false;
   bool _custom = true;
@@ -63,34 +69,38 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     'Medical Examination',
   ];
 
+  List<String> _uploadName = [
+    'profile_image',
+    'identity',
+    'resedential',
+    'guarantors',
+    'medical',
+  ];
+
   String _profileImage = 'Profile Image'; // IMG123.JPEG
   String _identityVerification = 'Identity Verification';
   String _residenceVerification = 'Residence Verification';
   String _guarantorVerification = 'Guarantor Verification';
   String _medicalExamination = 'Medical Examination';
 
-  List<http.MultipartFile> _uploads = [];
+  Map<int, http.MultipartFile> _uploads = {
+    1: null, 2: null, 3: null, 4: null, 5: null
+  };
 
   final _picker = ImagePicker();
 
   void _getImage(int id) async {
-    File image;
-    // _uploads.clear();
     try{
+      File image;
       final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-      if(!mounted)return;
-      setState(() {
-        image = File(pickedFile.path);
-        print(image.path);
-        _verifications[id] = "${_verifications[id]}.${image.path.split('.').last}";
-      });
-      _uploads.add(
-        await http.MultipartFile.fromPath("formFile", image.path, filename: _verificationName[id - 1]),
-      );
+      _uploads[id] = null;
+      _verifications[id] = _verificationName[id-1];
+      image = File(pickedFile.path);
+      _verifications[id] = "${_verifications[id]}.${image.path.split('.').last}";
+      _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id-1], image.path, filename: _verificationName[id-1]);
+      setState(() { });
     } catch (err){
-      // if(!mounted)return;
-      // setState(() { _verifications[id] = _verificationName[id - 1]; });
-      // Constants.showErrorFlushBarMessage('You haven\'t selected an image', context);
+      print(err);
     }
   }
 
@@ -98,22 +108,128 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     FilePickerResult result = await FilePicker.platform.pickFiles();
     if(result != null) {
       PlatformFile file = result.files.first;
-
       if(!mounted)return;
       setState(() {
         _verifications[id] = "${_verifications[id]}.${file.extension}";
       });
-      _uploads.add(
-        await http.MultipartFile.fromPath("formFile", file.path, filename: _verificationName[id - 1]),
-      );
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
+      _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id - 1], file.path, filename: _verificationName[id - 1]);
     } else {
-      // User canceled the picker
+      print("User canceled the picker");
     }
+  }
+
+  Future<void> _loadAssets(int id) async {
+    List<Asset> resultList = [];
+    String error;
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 1,
+        materialOptions: MaterialOptions(
+          statusBarColor: '#00A69D',
+          actionBarColor: '#00A69D',
+          selectCircleStrokeColor: '#00A69D',
+          allViewTitle: "All Photos",
+        ),
+      );
+    } on Exception catch (e) {
+      print(e.toString());
+      if(e.toString() == "The user has denied the gallery access."){
+        _buildImageRequest();
+      }
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if(resultList != null){
+      if(resultList.length > 0){
+        _uploads[id] = null;
+        _verifications[id] = _verificationName[id-1];
+        Asset asset = resultList[0];
+        var path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
+        _verifications[id] = "${_verifications[id]}.${path.split('.').last}";
+        _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id-1], path, filename: _verificationName[id-1]);
+      }
+    }
+
+    if (!mounted) return;
+    setState(() {
+      //if (error == null) _error = 'No Error Detected';
+      //print(_error);
+    });
+
+  }
+
+  /// This function builds and return a dialog to the user telling them to enable
+  /// permission in settings
+  Future<void> _buildImageRequest(){
+    return showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        elevation: 0.0,
+        child: Container(
+          width: 300,
+          height: 165,
+          decoration: BoxDecoration(
+            color: Color(0xFFFFFFFF).withOpacity(0.91),
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+          ),
+          child:  Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: Text(
+                    'Note',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Raleway',
+                        color: Color(0xFF1D1D1D)
+                    ),
+                  )
+              ),
+              Container(
+                width: 260,
+                padding: EdgeInsets.only(top: 12, bottom: 11),
+                child: Text(
+                  "You disabled permission to access your storage. Please enable access to your storage in settings to upload images",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Raleway',
+                  ),
+                ),
+              ),
+              Container(
+                width: 252,
+                height: 1,
+                color: Color(0xFF9C9C9C).withOpacity(0.44),
+              ),
+              TextButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(top: 12.0, bottom: 11),
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Raleway',
+                        color: Color(0xFF00A69D)
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// A boolean variable to control showing of the progress indicator
@@ -122,6 +238,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    //setState(() { _showSpinner = false; });
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -671,7 +788,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                   ),
                                   Button(
                                     onTap: (){
-                                      _getImage(1);
+                                      _loadAssets(1);
                                     },
                                     buttonColor: Color(0xFF00A69D),
                                     width: 103,
@@ -720,7 +837,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                   ),
                                   Button(
                                     onTap: (){
-                                      _getFile(2);
+                                      _loadAssets(2);
                                     },
                                     buttonColor: Color(0xFF00A69D),
                                     width: 103,
@@ -769,7 +886,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                   ),
                                   Button(
                                     onTap: (){
-                                      _getFile(3);
+                                      _loadAssets(3);
                                     },
                                     buttonColor: Color(0xFF00A69D),
                                     width: 103,
@@ -818,7 +935,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                   ),
                                   Button(
                                     onTap: (){
-                                      _getFile(4);
+                                      _loadAssets(4);
                                     },
                                     buttonColor: Color(0xFF00A69D),
                                     width: 103,
@@ -867,7 +984,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                   ),
                                   Button(
                                     onTap: (){
-                                      _getFile(5);
+                                      _loadAssets(5);
                                     },
                                     buttonColor: Color(0xFF00A69D),
                                     width: 103,
@@ -895,7 +1012,12 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                         Button(
                           onTap: (){
                             if(_formKey.currentState.validate() && !_showSpinner){
-                              _registerCandidate();
+                              if(_uploads.containsValue(null)){
+                                Constants.showInfo(context, 'Please upload all Documents');
+                              }
+                              else {
+                                _registerCandidate();
+                              }
                             }
                           },
                           buttonColor: Color(0xFF00A69D),
@@ -1007,7 +1129,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                 child: TextFormField(
                   controller: _languagesController,
                   keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.next,
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter the languages you speak';
@@ -1040,28 +1162,125 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
               ),
             ],
           ),
+          SizedBox(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "History",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: TextFormField(
+                  controller: _historyController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 5,
+                  validator: (value){
+                    if(value.isEmpty){
+                      return 'A brief history about yourself';
+                    }
+                    return null;
+                  },
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  decoration:kFieldDecoration.copyWith(
+                    hintText: '8 months at Radisson BLU,',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF717F88),
+                      fontSize: 14,
+                      fontFamily: 'Gelion',
+                      fontWeight: FontWeight.normal,
+                    ),
+                    helperText: "Separate with \",\" if you have more than 1",
+                    helperStyle: TextStyle(
+                      color: Color(0xFF717F88),
+                      fontSize: 14,
+                      fontFamily: 'Gelion',
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 30),
         ],
       )
     );
   }
 
+  void _setAvailability(){
+    var availability = Availability();
+    availability.title = _liveIn ? 'Live In' : 'Custom';
+    availability.sunday = { "availability": _liveIn ? true : _sunday, "booked": false };
+    availability.monday = { "availability": _liveIn ? true : _monday, "booked": false };
+    availability.tuesday = { "availability": _liveIn ? true : _tuesday, "booked": false };
+    availability.wednesday = { "availability": _liveIn ? true : _wednesday, "booked": false };
+    availability.thursday = { "availability": _liveIn ? true : _thursday, "booked": false };
+    availability.friday = { "availability": _liveIn ? true : _friday, "booked": false };
+    availability.saturday = { "availability": _liveIn ? true : _saturday, "booked": false };
+    widget.candidate.availability = availability;
+  }
+
   /// Function to save the user's details in [CreateCandidate] model then move
   /// to the next phase of registration [RegisterCandidateTwo]
   void _registerCandidate(){
+    _setAvailability();
+    print(widget.candidate.availability);
     widget.candidate.skill = _skillsController.text;
+    widget.candidate.languages = _languagesController.text;
+    List<String> history = _historyController.text.split(',');
+    List<String> trimmedHistory = [];
+    history.forEach((i) {
+      if(i.trim().isNotEmpty){
+        trimmedHistory.add(i.trim());
+      }
+    });
+    widget.candidate.history = trimmedHistory.toString();
+    List<http.MultipartFile> uploads = [];
+    _uploads.forEach((key, value) {
+      uploads.add(value);
+    });
+    widget.candidate.image = uploads;
     if(!mounted)return;
     setState(() { _showSpinner = true; });
-    var api = AuthRestDataSource();
+    var api = RestDataSource();
+    print(widget.candidate);
     api.registerCandidate(widget.candidate).then((value)async {
       if(!mounted)return;
       setState(() { _showSpinner = false; });
     }).catchError((e){
       print(e);
       if (!mounted) return;
-      setState(() { _showSpinner = false; });
+      setState(() {
+        _showSpinner = false;
+        _resetUploads();
+      });
       Constants.showError(context, e);
     });
+  }
+
+  _resetUploads(){
+    _uploads = { 1: null, 2: null, 3: null, 4: null, 5: null };
+    _verifications = {
+      1: 'Profile Image',
+      2: 'Identity Verification',
+      3: 'Residence Verification',
+      4: 'Guarantor Verification',
+      5: 'Medical Examination',
+    };
   }
 
 }

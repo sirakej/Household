@@ -15,6 +15,7 @@ class HiredCandidates {
     this.endDate,
     this.status,
     this.savedCategory,
+    this.category,
   });
 
   String id;
@@ -28,6 +29,7 @@ class HiredCandidates {
   DateTime endDate;
   String status;
   String savedCategory;
+  String category;
 
   factory HiredCandidates.fromJson(Map<String, dynamic> json) => HiredCandidates(
     id: json["_id"],
@@ -41,6 +43,7 @@ class HiredCandidates {
     endDate: DateTime.parse(json["end_date"]),
     status: json["status"],
     savedCategory: json["saved_category"],
+    category: json["category"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -55,5 +58,6 @@ class HiredCandidates {
     "end_date": endDate.toIso8601String(),
     "status": status,
     "saved_category": savedCategory,
+    "category": category,
   };
 }

@@ -190,40 +190,41 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
 
   Widget _buildEmpty(String description){
     return Center(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children : [
-              Image.asset(
-                  'assets/icons/empty.png',
-                  width: 143,
-                  height: 108,
-                  fit: BoxFit.contain
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+          children : [
+            Image.asset(
+                'assets/icons/empty.png',
+                width: 143,
+                height: 108,
+                fit: BoxFit.contain
+            ),
+            SizedBox(height: 24),
+            Text(
+              "Empty List",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 19,
+                color: Color(0xFF000000),
               ),
-              SizedBox(height: 24),
-              Text(
-                "Empty List",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 19,
-                  color: Color(0xFF000000),
-                ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 14,
+                color: Color(0xFF3B4A54),
               ),
-              SizedBox(height: 12),
-              Text(
-                description,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF3B4A54),
-                ),
-              ),
-            ]
-        )
+            ),
+            SizedBox(height: 150),
+        ]
+      )
     );
   }
 

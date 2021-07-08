@@ -8,6 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Constants {
 
+  static String formatISOTime(DateTime date) {
+    var duration = date.timeZoneOffset;
+    print(duration.isNegative);
+    if (duration.isNegative)
+      return (date.toIso8601String() + "-${duration.inHours.toString().padLeft(2, '0')}:${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
+    else
+      return (date.toIso8601String() + "+${duration.inHours.toString().padLeft(2, '0')}:${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
+  }
+
   static void logOut(BuildContext context) async {
     var db = DatabaseHelper();
     await db.deleteUsers();

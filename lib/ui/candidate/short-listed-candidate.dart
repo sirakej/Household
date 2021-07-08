@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/save-candidates.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/networking/paystack-webview.dart';
+import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/ui/packages.dart';
 import 'package:householdexecutives_mobile/ui/successful-pay.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
@@ -36,7 +36,6 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
   var futureValue = FutureValues();
 
   String _buttonText = "Proceed To Payment";
-  // String _buttonText = "Pay";
 
   /// A List to hold the all the available plans
   List<Plan> _plans = [];
@@ -508,9 +507,10 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
   }
 
   void _saveList() async {
-    String data = jsonEncode(widget.candidates);
+    String data = json.encode(widget.candidates);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('checkout', data);
+    print('saved');
   }
 
   /// Function to calculate the total price when user select a package into
@@ -539,8 +539,9 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
 
   @override
   void initState() {
-    _allPlans();
+    //_saveList();
     super.initState();
+    _allPlans();
     _getCounts();
   }
 
@@ -892,7 +893,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
         saved.add(val);
       }
     });
-    var api = AuthRestDataSource();
+    var api = RestDataSource();
     await api.saveCandidate(saved).then((value) {
       print(value);
       if(!mounted)return;

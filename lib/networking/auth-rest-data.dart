@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/model/candidate.dart';
-import 'package:householdexecutives_mobile/model/category.dart';
-import 'package:householdexecutives_mobile/model/create-candidate.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
-import 'package:householdexecutives_mobile/model/save-candidates.dart';
 import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
@@ -27,21 +23,11 @@ class AuthRestDataSource {
 
   static final SIGN_UP_URL = BASE_URL + "user/register";
   static final LOGIN_URL = BASE_URL + "user/login";
-
   static final RESET_PASSWORD_URL = BASE_URL + "user/resetpassword";
   static final CHANGE_PASSWORD = BASE_URL + "user/resetpassword/change";
-
   static final GET_USER = BASE_URL + "user";
   static final UPDATE_USER_PROFILE = BASE_URL + "user/profile";
   static final UPDATE_USER_PASSWORD = BASE_URL + "user/profile/password";
-
-  static final GET_CATEGORY = BASE_URL + "category";
-  static final GET_SAVED_CANDIDATE = BASE_URL + "user/savedcandidate";
-
-  static final GET_CANDIDATE = BASE_URL + "candidate";
-  static final SAVED_CANDIDATE = BASE_URL + 'candidate/saved';
-  static final CREATE_CANDIDTE = BASE_URL + 'candidate';
-  static final CANDIDTE_REVIEW = BASE_URL + 'candidate/review';
 
   static final GET_PLANS = BASE_URL + "plan";
   static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
@@ -203,153 +189,6 @@ class AuthRestDataSource {
       }
     }).catchError((e) {
       print(e);
-      errorHandler.handleError(e);
-    });
-  }
-
-  /// A function that fetches all categories
-  Future<List<Category>> getCategory() async {
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
-    });
-    List<Category> categories;
-    return _netUtil.get(GET_CATEGORY, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        categories =
-            rest.map<Category>((json) => Category.fromJson(json)).toList();
-        return categories;
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
-  Future<List<Candidate>> getCandidate(String id) async {
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
-    });
-
-    List<Candidate> candidates;
-    String GET_CANDIDATE_URL = GET_CANDIDATE + "/$id";
-    return _netUtil.get(GET_CANDIDATE_URL, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        candidates =
-            rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
-        return candidates;
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
-  Future<dynamic> registerCandidate(CreateCandidate createCandidate) async {
-    Map<String, String> header = {"Content-Type": "application/json"};
-    return _netUtil.post(SIGN_UP_URL, headers: header, body: {
-      "email":CreateCandidate().email,
-      "first_name":CreateCandidate().firstName,
-      "last_name":CreateCandidate().lastName,
-      "age":CreateCandidate().age,
-      "phone_number":CreateCandidate().phoneNumber,
-      "tribe":CreateCandidate().origin,
-      "gender":CreateCandidate().gender,
-      "experience": CreateCandidate().experience,
-      "availability": CreateCandidate().availability,
-    }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return CreateCandidate.fromJson(res['data']);
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
-  Future<dynamic> saveCandidate(List<SaveCandidates> saved) async {
-    String userId;
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
-    });
-    String SAVED_CANDIDATE_URL = SAVED_CANDIDATE + '/$userId';
-    return _netUtil.put(SAVED_CANDIDATE_URL, headers: header, body: {
-      "saved": saved
-    }).then((dynamic res) {
-      print(res);
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return res["data"];
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
-  }
-
-  /// A function that reviews user's candidate POST with [id], [review]
-  Future<dynamic> reviewCandidate(String id, String review, int rating) async {
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
-    });
-    return _netUtil.post(CANDIDTE_REVIEW, headers: header, body: {
-      "candidate": id,
-      "detail": review,
-      "rating": rating
-    }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return 'Successful';
-      }
-    }).catchError((e) {
       errorHandler.handleError(e);
     });
   }

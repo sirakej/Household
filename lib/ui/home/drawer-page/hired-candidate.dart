@@ -3,17 +3,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/hired-candidates.dart';
-import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
-import 'package:householdexecutives_mobile/ui/home/drawer-page/schedule-interview.dart';
-import 'package:householdexecutives_mobile/ui/home/drawer-page/transaction-details.dart';
+import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'account.dart';
-import 'purchases/saved-purchases.dart';
 
 class HireCandidate extends StatefulWidget {
 
@@ -31,24 +27,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
 
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
-
-  /// String variable to hold the current name of the user
-  String _firstName;
-
-  String _surName;
-
-  /// Setting the current user logged in to [_firstName]
-  void _getCurrentUser() async {
-    await futureValue.getCurrentUser().then((user) {
-      if(!mounted)return;
-      setState(() {
-        _firstName = user.firstName;
-        _surName = user.surName;
-      });
-    }).catchError((e) {
-      print(e);
-    });
-  }
 
   /// A List to hold the all the hired candidates
   List<HiredCandidates> _candidates = [];
@@ -93,7 +71,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
               child: CandidateContainer(
                 candidate: _candidates[i].getCandidate,
                 onPressed: (){
-                  _buildProfileModalSheet(context, _candidates[i].getCandidate, 'Send Review');
+                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, 'Send Review');
                 },
                 selected: false,
                 showStars: false,
@@ -153,7 +131,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
               child: CandidateContainer(
                 candidate: _candidates[i].getCandidate,
                 onPressed: (){
-                  _buildProfileModalSheet(context, _candidates[i].getCandidate, null);
+                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, null);
                 },
                 selected: false,
                 showStars: false,
@@ -213,7 +191,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
               child: CandidateContainer(
                 candidate: _candidates[i].getCandidate,
                 onPressed: (){
-                  _buildProfileModalSheet(context, _candidates[i].getCandidate, 'Rehire');
+                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, 'Rehire');
                 },
                 selected: false,
                 showStars: false,
@@ -295,6 +273,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
               color: Color(0xFF3B4A54),
             ),
           ),
+          SizedBox(height: 150),
         ]
       )
     );
@@ -302,7 +281,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
 
   @override
   void initState(){
-    _getCurrentUser();
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _allHiredCandidates();
@@ -518,7 +496,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     );
   }
 
-  _buildProfileModalSheet(BuildContext context, Candidate candidate, String text){
+  _buildProfileModalSheet(BuildContext context, Candidate candidate, String categoryId, String text){
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
       history.add(
@@ -1091,7 +1069,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                           onTap: (){
                             Navigator.pop(context);
                             if(text == 'Send Review'){
-                              _buildReviewSheet(context, candidate);
+                              _buildReviewSheet(context, candidate, categoryId);
                             }
                             else if(text == 'Rehire') {
 
@@ -1136,7 +1114,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
 
   bool _showSpinner = false;
 
-  _buildReviewSheet(BuildContext context, Candidate candidate){
+  _buildReviewSheet(BuildContext context, Candidate candidate, String categoryId){
     final formKey = GlobalKey<FormState>();
     int rating = 0;
     showModalBottomSheet<void>(
@@ -1148,167 +1126,162 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
         builder: (BuildContext context){
           return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
             return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      FocusScopeNode currentFocus = FocusScope.of(context);
-                      if (!currentFocus.hasPrimaryFocus) {
-                        currentFocus.unfocus();
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(24, 56, 24, 38),
-                      margin: EdgeInsets.only(top: 34),
-                      width: SizeConfig.screenWidth,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft:Radius.circular(30),
-                            topRight:Radius.circular(30)
+              child: GestureDetector(
+                onTap: () {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(24, 42, 24, 38),
+                  margin: EdgeInsets.only(top: 34),
+                  width: SizeConfig.screenWidth,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft:Radius.circular(30),
+                        topRight:Radius.circular(30)
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children:[
+                      Text(
+                        "Review Candidate",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFF042538),
                         ),
-                        color: Colors.white,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children:[
-                          SizedBox(height: 42),
-                          Text(
-                            "Review Candidate",
-                            textAlign: TextAlign.center,
+                      SizedBox(height: 32),
+                      Container(
+                        width: 74,
+                        height: 74,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Color(0xFF717F88), width: 0.5)
+                        ),
+                        child: Image.network(
+                          candidate.profileImage,
+                          width: 74,
+                          height: 74,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace){
+                            return Container();
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "${candidate.firstName}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      RatingBar.builder(
+                        initialRating: 0,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: false,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.all(0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Color(0xFFF7941D),
+                          size: 8,
+                        ),
+                        onRatingUpdate: (rating) {
+                          setModalState(() {
+                            rating = rating;
+                          });
+                        },
+                      ),
+                      //StarDisplay(value: candidate.rating ?? 0),
+                      SizedBox(height: 23),
+                      Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Review of Candidate',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                fontSize: 16,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              width: SizeConfig.screenWidth,
+                              child: TextFormField(
+                                controller: reviewController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 5,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Give us a review';
+                                  }
+                                  return null;
+                                },
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Gelion',
+                                  color: Color(0xFF042538),
+                                ),
+                                decoration:kFieldDecoration.copyWith(
+                                    hintText: 'Your message here...',
+                                    hintStyle:TextStyle(
+                                      color:Color(0xFF717F88),
+                                      fontSize: 14,
+                                      fontFamily: 'Gelion',
+                                      fontWeight: FontWeight.w400,
+                                    )
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                      ),
+                      SizedBox(height: 32),
+                      Button(
+                        onTap: (){
+                          if(formKey.currentState.validate() && !_showSpinner){
+                            _reviewCandidate(candidate.id, categoryId, rating, setModalState);
+                          }
+                        },
+                        buttonColor: Color(0xFF00A69D),
+                        child: Center(
+                          child: _showSpinner
+                              ? CupertinoActivityIndicator(radius: 13)
+                              : Text(
+                            "Send",
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Gelion',
                               fontSize: 16,
-                              color: Color(0xFF042538),
+                              color: Color(0xFFFFFFFF),
                             ),
                           ),
-                          SizedBox(height: 32),
-                          Container(
-                            width: 74,
-                            height: 74,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Color(0xFF717F88), width: 0.5)
-                            ),
-                            child: Image.network(
-                              candidate.profileImage,
-                              width: 74,
-                              height: 74,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace){
-                                return Container();
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            "${candidate.firstName}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFF042538),
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          RatingBar.builder(
-                            initialRating: 0,
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemCount: 5,
-                            itemPadding: EdgeInsets.all(0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Color(0xFFF7941D),
-                              size: 8,
-                            ),
-                            onRatingUpdate: (rating) {
-                              setModalState(() {
-                                rating = rating;
-                              });
-                            },
-                          ),
-                          //StarDisplay(value: candidate.rating ?? 0),
-                          SizedBox(height: 23),
-                          Form(
-                            key: formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Review of Candidate',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF042538),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Container(
-                                  width: SizeConfig.screenWidth,
-                                  child: TextFormField(
-                                    controller: reviewController,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 5,
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Give us a review';
-                                      }
-                                      return null;
-                                    },
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Gelion',
-                                      color: Color(0xFF042538),
-                                    ),
-                                    decoration:kFieldDecoration.copyWith(
-                                        hintText: 'Your message here...',
-                                        hintStyle:TextStyle(
-                                          color:Color(0xFF717F88),
-                                          fontSize: 14,
-                                          fontFamily: 'Gelion',
-                                          fontWeight: FontWeight.w400,
-                                        )
-                                    ),
-                                  ),
-                                ),
-                              ]
-                            ),
-                          ),
-                          SizedBox(height: 32),
-                          Button(
-                            onTap: (){
-                              if(formKey.currentState.validate() && !_showSpinner){
-                                _reviewCandidate(candidate.id, rating, setModalState);
-                              }
-                            },
-                            buttonColor: Color(0xFF00A69D),
-                            child: Center(
-                              child: _showSpinner
-                                  ? CupertinoActivityIndicator(radius: 13)
-                                  : Text(
-                                "Send",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 16,
-                                  color: Color(0xFFFFFFFF),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 15),
-                          SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 15),
+                      SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           });
@@ -1326,102 +1299,83 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
         builder: (BuildContext context){
           return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
             return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(24, 30, 24, 38),
-                          margin: EdgeInsets.only(top: 34),
-                          width: SizeConfig.screenWidth,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight:Radius.circular(30)),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              Center(
-                                child:Image.asset(
-                                    "assets/icons/circle check full.png",
-                                    height: 60.5,
-                                    width: 60.5,
-                                    fit: BoxFit.contain
-                                ),
-                              ),
-                              SizedBox(height: 24.75),
-                              Center(
-                                child: Text(
-                                  "Review Sent",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF042538),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 13),
-                              Center(
-                                child: Text(
-                                  "You have completed your hire!",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF57565C),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 30),
-                              Button(
-                                onTap: (){
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                buttonColor: Color(0xFF00A69D),
-                                child: Center(
-                                  child: Text(
-                                    "Home",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Gelion',
-                                      fontSize: 16,
-                                      color: Color(0xFFFFFFFF),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Center(
-                                child: TextButton(
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                  child:Text(
-                                    "Review other candidates",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Gelion',
-                                      fontSize: 16,
-                                      color: Color(0xFF00A69D),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
+              child: Container(
+                padding: EdgeInsets.fromLTRB(24, 30, 24, 38),
+                margin: EdgeInsets.only(top: 34),
+                width: SizeConfig.screenWidth,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight:Radius.circular(30)),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children:[
+                    Image.asset(
+                        "assets/icons/circle check full.png",
+                        height: 60.5,
+                        width: 60.5,
+                        fit: BoxFit.contain
+                    ),
+                    SizedBox(height: 24.75),
+                    Text(
+                      "Review Sent",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                    SizedBox(height: 13),
+                    Text(
+                      "You have completed your hire!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF57565C),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Button(
+                      onTap: (){
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      buttonColor: Color(0xFF00A69D),
+                      child: Center(
+                        child: Text(
+                          "Home",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFFFFFFFF),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 5),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      child:Text(
+                        "Review other candidates",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFF00A69D),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           });
@@ -1429,11 +1383,13 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     );
   }
 
-  void _reviewCandidate(String id, int rating, StateSetter setModalState){
+  void _reviewCandidate(String candidateId, String categoryId, int rating,
+      StateSetter setModalState){
     if(!mounted) return;
     setModalState(() { _showSpinner = true; });
-    var api = AuthRestDataSource();
-    api.reviewCandidate(id, reviewController.text.trim(), rating).then((dynamic) async{
+    var api = RestDataSource();
+    api.reviewCandidate(candidateId, categoryId, reviewController.text.trim(),
+        rating).then((dynamic) async{
       reviewController.clear();
       if(!mounted) return;
       setModalState(() { _showSpinner = false; });

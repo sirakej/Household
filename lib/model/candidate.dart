@@ -1,4 +1,5 @@
 import 'candidate-availability.dart';
+import 'category-class.dart';
 
 class Candidate {
 
@@ -15,6 +16,7 @@ class Candidate {
     this.origin,
     this.tribe,
     this.gender,
+    this.religion,
     this.experience,
     this.residence,
     this.skill,
@@ -30,6 +32,7 @@ class Candidate {
     this.rating,
     this.officialHeReport,
     this.id,
+    this.recommendedCategory,
   });
 
   DateTime createdAt;
@@ -44,6 +47,7 @@ class Candidate {
   String origin;
   String tribe;
   String gender;
+  String religion;
   int experience;
   String residence;
   String skill;
@@ -59,6 +63,7 @@ class Candidate {
   int rating;
   String officialHeReport;
   String id;
+  CategoryClass recommendedCategory;
 
   factory Candidate.fromJson(Map<String, dynamic> json) => Candidate(
     createdAt: DateTime.parse(json["created_at"]),
@@ -73,6 +78,7 @@ class Candidate {
     origin: json["origin"],
     tribe: json["tribe"],
     gender: json["gender"],
+    religion: json["religion"] ?? '',
     experience: json["experience"],
     residence: json["residence"],
     skill: json["skill"],
@@ -88,6 +94,9 @@ class Candidate {
     rating: json["rating"],
     officialHeReport: json["official_he_report"],
     id: json["_id"],
+    recommendedCategory: json["recommended_category"] == null
+        ? null
+        : CategoryClass.fromJson(json["recommended_category"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -103,6 +112,7 @@ class Candidate {
     "origin": origin,
     "tribe": tribe,
     "gender": gender,
+    "religion": religion,
     "experience": experience,
     "residence": residence,
     "skill": skill,

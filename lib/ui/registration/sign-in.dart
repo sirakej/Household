@@ -128,7 +128,7 @@ class _SignInState extends State<SignIn> {
                               },
                               child:  RichText(
                                 text:TextSpan(
-                                    text: "Not yet a register user?\n",
+                                    text: "Not yet a registered user?\n",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontFamily: 'Gelion',

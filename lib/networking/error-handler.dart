@@ -6,7 +6,7 @@ class ErrorHandler {
   void handleError(dynamic e) {
     print(e);
     if (e is SocketException) {
-      throw ("No internet connection");
+      throw ("No Internet Connection");
     }
     if (e is TimeoutException) {
       throw ("Request timeout, try again");

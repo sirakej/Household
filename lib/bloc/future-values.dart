@@ -2,14 +2,14 @@ import 'package:householdexecutives_mobile/database/user-db-helper.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/hired-candidates.dart';
-import 'package:householdexecutives_mobile/model/saved-list.dart';
+import 'package:householdexecutives_mobile/model/popular-category.dart';
+import 'package:householdexecutives_mobile/model/saved-candidates.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/scheduled-candidates.dart';
 import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
-
 
 class FutureValues{
 
@@ -59,16 +59,35 @@ class FutureValues{
   }
 
   Future<List<Category>> getAllCategoryFromDB() {
-    var data = AuthRestDataSource();
+    var data = RestDataSource();
     Future<List<Category>> categories = data.getCategory();
     return categories;
+  }
+
+  Future<List<PopularCategory>> getPopularCategoryFromDB({bool refresh}) async {
+    List<PopularCategory> sortedCategories = [];
+    var data = RestDataSource();
+    Future<List<PopularCategory>> categories = data.getPopularCategory(refresh: refresh);
+    await categories.then((value){
+      sortedCategories.addAll(value);
+      sortedCategories.sort((a, b) => (b.count).compareTo(a.count));
+    }).catchError((e){
+      throw e;
+    });
+    return sortedCategories;
+  }
+
+  Future<List<Candidate>> getRecommendedCandidates({bool refresh}) {
+    var data = RestDataSource();
+    Future<List<Candidate>> candidates = data.getRecommendedCandidate(refresh: refresh);
+    return candidates;
   }
 
   /// Function to get all available plans in the database with
   /// the help of [AuthRestDataSource]
   /// It returns a list of [Candidate]
   Future<List<Candidate>> getAllCandidateFromDB(String id) {
-    var data = AuthRestDataSource();
+    var data = RestDataSource();
     Future<List<Candidate>> candidates = data.getCandidate(id);
     return candidates;
   }
