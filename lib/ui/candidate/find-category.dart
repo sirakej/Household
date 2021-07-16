@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +12,18 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class FindACategory extends StatefulWidget {
 
   static const String id = 'find_a_category';
+
+  final bool hasList;
+
+  const FindACategory({
+    Key key,
+    this.hasList
+  }) : super(key: key);
 
   @override
   _FindACategoryState createState() => _FindACategoryState();
@@ -60,14 +67,14 @@ class _FindACategoryState extends State<FindACategory> {
   /// An Integer variable to hold the length of [_categories]
   int _categoriesLength;
 
-  /// A List to hold the widgets of all the plans
+  /// A List to hold the widgets of all the category widgets
   List<Widget> _categoriesList = [];
 
   /// [allCategories]
   void _allCategories() async {
     Future<List<Category>> names = futureValue.getAllCategoryFromDB();
     await names.then((value) {
-      //_getList();
+      _getList();
       if(value.isEmpty || value.length == 0){
         if(!mounted)return;
         setState(() {
@@ -77,7 +84,8 @@ class _FindACategoryState extends State<FindACategory> {
           _categoriesSelection = {};
           _candidates = {};
         });
-      } else if (value.length > 0){
+      }
+      else if (value.length > 0){
         if(!mounted)return;
         setState(() {
           _categories.addAll(value.reversed);
@@ -89,9 +97,24 @@ class _FindACategoryState extends State<FindACategory> {
           }
         });
       }
+      if(widget.hasList == true){
+        if(!mounted)return;
+        Navigator.push(context,
+            CupertinoPageRoute(builder: (_){
+              return ShortListedCandidate(
+                candidates: _candidates,
+              );
+            })
+        ).then((val) {
+          if(val != null){
+            if(!mounted)return;
+            setState(() { _candidates = val; });
+          }
+        });
+      }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -163,7 +186,7 @@ class _FindACategoryState extends State<FindACategory> {
                         imageUrl: _filteredCategories[i].category.image,
                         height: 54,
                         width: 54,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                         errorWidget: (context, url, error) => Container(),
                       ),
                     ),
@@ -261,15 +284,30 @@ class _FindACategoryState extends State<FindACategory> {
     );
   }
 
+  /// This function saves user's shortlisted candidates temporarily from shared
+  /// preference then stores it back to [_candidates]
+  /// 'checkoutCategory' key for key in [_candidates] and
+  /// 'checkoutCandidates' key for value in [_candidates]
   void _getList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String data = prefs.getString('checkout');
-    if(data != null){
-      _candidates = jsonDecode(data);
+    String checkoutCategory = prefs.getString('checkoutCategory');
+    String checkoutCandidates = prefs.getString('checkoutCandidates');
+
+    if(checkoutCategory != null && checkoutCandidates != null){
+      var tempCategory = jsonDecode(checkoutCategory) as List;
+      var rest = jsonDecode(checkoutCandidates) as List;
+
+      if(!mounted)return;
+      setState(() {
+        _candidates.forEach((key, value) {
+          for(int i = 0; i < tempCategory.length; i++){
+            if(tempCategory[i] == key.category.id){
+              _candidates[key] = rest[i].map<Candidate>((json) => Candidate.fromJson(json)).toList();
+            }
+          }
+        });
+      });
     }
-    print(data);
-    //print(jsonDecode(data));
-    print('fetched');
   }
 
   @override
@@ -348,9 +386,7 @@ class _FindACategoryState extends State<FindACategory> {
                         ).then((val) {
                           if(val != null){
                             if(!mounted)return;
-                            setState(() {
-                              _candidates = val;
-                            });
+                            setState(() { _candidates = val; });
                           }
                         });
                       },

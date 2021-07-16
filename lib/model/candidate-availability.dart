@@ -9,7 +9,7 @@ class Availability {
     this.thursday,
     this.friday,
     this.saturday,
-    this.sunday,
+    this.sunday
   });
 
   String title;
@@ -29,7 +29,7 @@ class Availability {
     thursday: json["thursday"],
     friday: json["friday"],
     saturday: json["saturday"],
-    sunday: json["sunday"],
+    sunday: json["sunday"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -40,7 +40,7 @@ class Availability {
     "thursday": thursday,
     "friday": friday,
     "saturday": saturday,
-    "sunday": sunday,
+    "sunday": sunday
   };
 
   Map<String, String> toMap() => {
@@ -51,6 +51,6 @@ class Availability {
     "thursday": thursday.toString(),
     "friday": friday.toString(),
     "saturday": saturday.toString(),
-    "sunday": sunday.toString(),
+    "sunday": sunday.toString()
   };
 }

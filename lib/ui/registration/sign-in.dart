@@ -11,6 +11,7 @@ import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'forgot-password/reset-password.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -354,7 +355,7 @@ class _SignInState extends State<SignIn> {
       _passwordController.clear();
       if(!mounted)return;
       setState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
-
-import 'constant.dart';
+import 'static-functions.dart';
 
 class CandidateContainer extends StatefulWidget {
 
@@ -62,7 +61,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                     imageUrl: widget.candidate.profileImage,
                     height: 57,
                     width: 72,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Container(),
                   ),
                 ),
@@ -175,7 +174,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                     imageUrl: widget.candidate.profileImage,
                     height: 57,
                     width: 72,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Container(),
                   ),
                 ),
@@ -344,7 +343,7 @@ class DrawerHeaderName extends StatelessWidget {
           child: (surName != null && firstName != null)
               ? Center(
             child: Text(
-              Constants.profileName('$surName $firstName'),
+              Functions.profileName('$surName $firstName'),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Gelion',
@@ -388,11 +387,14 @@ class DrawerContainer extends StatelessWidget {
 
   final String imageName;
 
+  final int number;
+
   const DrawerContainer({
     Key key,
     @required this.onTap,
     @required this.title,
     @required this.imageName,
+    this.number,
   }) : super(key: key);
 
   @override
@@ -405,24 +407,50 @@ class DrawerContainer extends StatelessWidget {
             border: Border(bottom: BorderSide(color: Color(0xFFEBF1F4), width: 1))
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-                "assets/icons/$imageName.png",
-                width: 16,
-                height: 16,
-                fit: BoxFit.contain
+            Row(
+              children: [
+                Image.asset(
+                    "assets/icons/$imageName.png",
+                    width: 16,
+                    height: 16,
+                    fit: BoxFit.contain
+                ),
+                SizedBox(width: 10),
+                Text(
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    fontSize: 14,
+                    color: Color(0xFF3B4A54),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: 10),
-            Text(
-              title,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Gelion',
-                fontSize: 14,
-                color: Color(0xFF3B4A54),
+            number != null
+                ? Container(
+              width: 18,
+              height: 18,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFF00889D)
               ),
-            ),
+              child: Center(
+                child: Text(
+                  '$number',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    fontSize: 12,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+            )
+                : Container(),
           ],
         ),
       ),

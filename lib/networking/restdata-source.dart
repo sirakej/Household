@@ -11,6 +11,7 @@ import 'package:householdexecutives_mobile/model/saved-candidates.dart';
 import 'package:householdexecutives_mobile/model/scheduled-candidates.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'error-handler.dart';
 import 'network-util.dart';
@@ -31,6 +32,7 @@ class RestDataSource {
   static final GET_HIRED_CANDIDATES = BASE_URL + "user/hire";
   static final GET_SCHEDULED_CANDIDATES = BASE_URL + "user/schedule";
 
+  static final GET_CATEGORY_URL = BASE_URL + "getcategory";
   static final CATEGORY_URL = BASE_URL + "category";
   static final POPULAR_CATEGORY = BASE_URL + "category/popular";
   static final CANDIDATE_URL = BASE_URL + "candidate";
@@ -39,6 +41,23 @@ class RestDataSource {
   static final SCHEDULED_CANDIDATE = BASE_URL + "candidate/schedule";
   static final HIRE_CANDIDATE = BASE_URL + "candidate/hire";
   static final CANDIDTE_REVIEW = BASE_URL + 'candidate/review';
+
+  /// A function that fetches all categories without sending token in header
+  Future<List<Category>> getAllCategory() async {
+    List<Category> categories;
+    return _netUtil.get(GET_CATEGORY_URL).then((dynamic res) {
+      if (res["error"]) {
+        throw res["msg"];
+      } else {
+        var rest = res["data"] as List;
+        categories =
+            rest.map<Category>((json) => Category.fromJson(json)).toList();
+        return categories;
+      }
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
+  }
 
   /// A function that fetches all categories
   Future<List<Category>> getCategory() async {
@@ -196,13 +215,15 @@ class RestDataSource {
       "religion": createCandidate.religion,
       "skill": createCandidate.skill,
       "history": createCandidate.history,
-      "availability": jsonEncode(createCandidate.availability.toJson()),
+      "category": createCandidate.category,
+      "availability": jsonEncode(createCandidate.availability.toJson())
     };
     return _netUtil.postForm(CANDIDATE_URL, createCandidate.image, body: body)
         .then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
-      } else {
+      }
+      else {
         return res['data'];
       }
     }).catchError((e) {
@@ -420,7 +441,7 @@ class RestDataSource {
     });
     String SCHEDULED_CANDIDATE_URL = SCHEDULED_CANDIDATE + '/$userId/$id';
     return _netUtil.put(SCHEDULED_CANDIDATE_URL, headers: header, body: {
-      "interview_date": Constants.formatISOTime(date)
+      "interview_date": Functions.formatISOTime(date)
     }).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
@@ -432,9 +453,10 @@ class RestDataSource {
     });
   }
 
-  /// A function that hires a candidate POST with [categoryId], [candidateId],
-  /// [hire] and [date]
-  Future<dynamic> hireCandidate(String categoryId, Candidate candidate, DateTime date) async {
+  /// A function that hires a candidate POST with [savedCategoryId],
+  /// [categoryId], [candidateId], [hire] and [date]
+  Future<dynamic> hireCandidate(String savedCategoryId, String categoryId,
+      Candidate candidate, DateTime date) async {
     String userId;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
@@ -455,9 +477,10 @@ class RestDataSource {
     });
     String HIRE_CANDIDATE_URL = HIRE_CANDIDATE + '/$userId/${candidate.id}';
     return _netUtil.post(HIRE_CANDIDATE_URL, headers: header, body: {
-      "saved_category": categoryId,
+      "category": categoryId,
+      "saved_category": savedCategoryId,
       "hire_plan": candidate.availability.toJson(),
-      "start_date": Constants.formatISOTime(date)
+      "resumption": Functions.formatISOTime(date)
     }).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];

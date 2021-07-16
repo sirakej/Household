@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:flutter/cupertino.dart';
@@ -172,7 +172,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     alignment: Alignment.bottomLeft,
                     child: TextButton(
                       onPressed:(){
-                        Constants.logOut(context);
+                        Functions.logOut(context);
                       },
                       child: Text(
                         "Log Out",

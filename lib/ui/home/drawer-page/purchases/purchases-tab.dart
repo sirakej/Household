@@ -9,6 +9,7 @@ import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../home-screen.dart';
@@ -64,7 +65,8 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                       widget.categories[i].candidatePlan[j].getCandidate,
                       widget.categories[i].candidatePlan[j].hired
                           ? false
-                          : (widget.categories[i].hires != widget.categories[i].roles)
+                          : (widget.categories[i].hires != widget.categories[i].roles),
+                    category: widget.categories[i].category,
                   );
                 },
                 selected: false,
@@ -276,7 +278,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
     );
   }
 
-  _buildProfileModalSheet(BuildContext context, String categoryId, Candidate candidate, bool hire){
+  _buildProfileModalSheet(BuildContext context, String categoryId, Candidate candidate, bool hire, {String category}){
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
       history.add(
@@ -359,12 +361,15 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                                 shape: BoxShape.circle,
                                 border: Border.all(color: Color(0xFF717F88), width: 0.5)
                             ),
-                            child: CachedNetworkImage(
-                              imageUrl: candidate.profileImage,
-                              width: 74,
-                              height: 74,
-                              fit: BoxFit.cover,
-                              errorWidget: (context, url, error) => Container(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(34),
+                              child: CachedNetworkImage(
+                                imageUrl: candidate.profileImage,
+                                width: 74,
+                                height: 74,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) => Container(),
+                              ),
                             ),
                           ),
                         ),
@@ -848,7 +853,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                               children: [
                                 Button(
                           onTap: (){
-                            _buildHireStartSheet(context, candidate, categoryId);
+                            _buildHireStartSheet(context, candidate, categoryId, category);
                           },
                           buttonColor: Color(0xFF00A69D),
                           child: Center(
@@ -951,7 +956,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
         _showScheduleSpinner = false;
         _scheduleAt = null;
       });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -1158,7 +1163,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
 
   DateTime _resumeAt;
 
-  _buildHireStartSheet(BuildContext context, Candidate candidate, String categoryId){
+  _buildHireStartSheet(BuildContext context, Candidate candidate, String categoryId, String category){
     _scheduleController.clear();
     final formKey = GlobalKey<FormState>();
     showModalBottomSheet<void>(
@@ -1618,7 +1623,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                     Button(
                       onTap: (){
                         if(formKey.currentState.validate()){
-                          _hireCandidate(categoryId, candidate, setModalState);
+                          _hireCandidate(categoryId, category, candidate, setModalState);
                         }
                       },
                       buttonColor: Color(0xFF00A69D),
@@ -1674,11 +1679,13 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
     );
   }
 
-  void _hireCandidate(String categoryId, Candidate candidate, StateSetter setModalState){
+  void _hireCandidate(String savedCategoryId, String categoryId,
+      Candidate candidate, StateSetter setModalState){
     if(!mounted) return;
     setModalState(() { _showSpinner = true; });
     var api = RestDataSource();
-    api.hireCandidate(categoryId, candidate, _resumeAt).then((dynamic) async{
+    api.hireCandidate(savedCategoryId, categoryId, candidate,
+        _resumeAt).then((dynamic) async{
       if(!mounted) return;
       setModalState(() {
         _resumeAt = null;
@@ -1693,14 +1700,14 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
         _showSpinner = false;
         _scheduleAt = null;
       });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
   _buildCompletedHireSheet(BuildContext context){
     showModalBottomSheet<void>(
         backgroundColor: Colors.transparent,
-        isScrollControlled: true,
+        isScrollControlled: false,
         barrierColor: Color(0xFF07072B).withOpacity(0.81),
         isDismissible: false,
         context: context,
@@ -1886,7 +1893,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
       print(e);
       if(!mounted)return;
       setModalState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

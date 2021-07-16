@@ -6,14 +6,19 @@ import 'package:householdexecutives_mobile/ui/registration/sign-in.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 
 class OnBoard extends StatefulWidget {
+
   static const String id = 'onboard';
+
   @override
   _OnBoardState createState() => _OnBoardState();
 }
 
 class _OnBoardState extends State<OnBoard> {
+
   final int _numPages = 3;
+
   final PageController _pageController = PageController(initialPage: 0);
+
   int currentPage = 0;
 
   String mainText = '';
@@ -23,6 +28,7 @@ class _OnBoardState extends State<OnBoard> {
   int index = 0;
 
   Timer timer;
+
   @override
   void initState() {
     super.initState();
@@ -66,7 +72,6 @@ class _OnBoardState extends State<OnBoard> {
       );
     }
   }
-
 
   Widget _indicator = AnimatedContainer(
     duration: Duration(milliseconds: 500),
@@ -224,10 +229,10 @@ class _OnBoardState extends State<OnBoard> {
     );
   }
 
-
   @override
   void dispose() {
     super.dispose();
     timer.cancel();
   }
-  }
+
+}

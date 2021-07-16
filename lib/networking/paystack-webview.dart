@@ -46,7 +46,7 @@ class _PayStackViewState extends State<PayStackView> {
         javascriptMode: JavascriptMode.unrestricted,
         navigationDelegate: (navigation){
           //Listen for callback URL
-          if(navigation.url.contains("https://householdexecutives.herokuapp.com")){
+          if(navigation.url.contains("https://backend.householdexecutivesltd.com")){
             Navigator.pop(context, 'success'); //close webview
           }
           if(navigation.url.contains('https://standard.paystack.co/close')){

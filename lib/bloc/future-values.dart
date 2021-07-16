@@ -48,6 +48,14 @@ class FutureValues{
     });
   }
 
+  /// This function gets all categories in the db without passing user token
+  /// It returns a list of [Category]
+  Future<List<Category>> getAllCategories() {
+    var data = RestDataSource();
+    Future<List<Category>> categories = data.getAllCategory();
+    return categories;
+  }
+
 
   /// Function to get all available plans in the database with
   /// the help of [AuthRestDataSource]

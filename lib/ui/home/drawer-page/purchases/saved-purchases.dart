@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/saved-candidates.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:intl/intl.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
@@ -57,7 +57,7 @@ class _SavedPurchasesState extends State<SavedPurchases> {
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -168,6 +168,10 @@ class _SavedPurchasesState extends State<SavedPurchases> {
     else if(_purchasesLength == 0){
       return _buildEmpty('You have not made any Purchases\nat the moment');
     }
+    return Container(
+        padding: EdgeInsets.only(top: 100),
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SkeletonLoader(
       builder: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -255,7 +259,7 @@ class _SavedPurchasesState extends State<SavedPurchases> {
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

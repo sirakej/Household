@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
-import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 
 class Packages extends StatefulWidget {
 
@@ -112,7 +111,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
                     ),
                     SizedBox(width: 9),
                     Text(
-                      "${Constants.money(double.parse(widget.plans[i].price), '')}",
+                      "${Functions.money(double.parse(widget.plans[i].price), '')}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -257,7 +256,7 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
         }
       });
     }).catchError((error) {
-      Constants.showError(context, error);
+      Functions.showError(context, error);
     });
   }*/
 

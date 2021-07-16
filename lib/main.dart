@@ -5,11 +5,13 @@ import 'package:householdexecutives_mobile/ui/home/drawer-page/account-tab/secur
 import 'package:householdexecutives_mobile/ui/home/drawer-page/purchases/saved-purchases.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find-category.dart';
 import 'package:householdexecutives_mobile/ui/onboarding-screen.dart';
+import 'package:householdexecutives_mobile/ui/registration/candidate-created-successfully.dart';
 import 'package:householdexecutives_mobile/ui/registration/forgot-password/create-new-password.dart';
 import 'package:householdexecutives_mobile/ui/registration/forgot-password/reset-password.dart';
 import 'package:householdexecutives_mobile/ui/registration/register-candidate-one.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign-in.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign-up.dart';
+import 'package:householdexecutives_mobile/ui/registration/terms.dart';
 import 'package:householdexecutives_mobile/ui/registration/user-created-successfully.dart';
 import 'package:householdexecutives_mobile/ui/splash-screen.dart';
 import 'package:householdexecutives_mobile/ui/successful-pay.dart';
@@ -42,10 +44,12 @@ class MyApp extends StatelessWidget {
         OnBoard.id:(context) => OnBoard(),
         SignIn.id:(context) => SignIn(),
         SignUp.id:(context) => SignUp(),
+        Terms.id:(context) => Terms(),
         RegisterCandidateOne.id:(context) => RegisterCandidateOne(),
         Reset.id:(context) => Reset(),
         CreateNewPassword.id:(context) => CreateNewPassword(),
         UserCreatedSuccessfully.id:(context) => UserCreatedSuccessfully(),
+        CandidateCreatedSuccessfully.id:(context) => CandidateCreatedSuccessfully(),
         FindACategory.id:(context) => FindACategory(),
         SuccessfulPay.id:(context) => SuccessfulPay(),
         HomeScreen.id:(context) => HomeScreen(),

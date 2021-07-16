@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user-db-helper.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 
 class EditProfile extends StatefulWidget {
@@ -111,7 +113,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
           child: Center(
             child: Text(
-              Constants.profileName('${_firstController.text} ${_surnameController.text}'),
+              Functions.profileName('${_firstController.text} ${_surnameController.text}'),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Gelion',
@@ -193,6 +195,9 @@ class _EditProfileState extends State<EditProfile> {
                   controller: _firstController,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your First Name';
@@ -240,6 +245,9 @@ class _EditProfileState extends State<EditProfile> {
                   controller: _surnameController,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your Surname';
@@ -287,6 +295,9 @@ class _EditProfileState extends State<EditProfile> {
                   controller: _mobileController,
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[0-9 -+]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your Mobile Number';
@@ -375,12 +386,12 @@ class _EditProfileState extends State<EditProfile> {
       await db.updateUser(value);
       if (!mounted) return;
       setState(() { _showSpinner = false; });
-      Constants.showSuccess(context, 'Account updated successfully');
+      Functions.showSuccess(context, 'Account updated successfully');
     }).catchError((e) {
       print(e);
       if (!mounted) return;
       setState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

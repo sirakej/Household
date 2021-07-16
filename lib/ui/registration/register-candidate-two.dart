@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate-availability.dart';
+import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
@@ -12,6 +15,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
+
+import 'candidate-created-successfully.dart';
 
 class RegisterCandidateTwo extends StatefulWidget {
 
@@ -32,6 +38,12 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
 
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
+
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
+  /// A [TextEditingController] to control the input text for the categories
+  TextEditingController _categoryController = TextEditingController();
 
   /// A [TextEditingController] to control the input text for the unique skills
   TextEditingController _skillsController = TextEditingController();
@@ -235,10 +247,53 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
   /// A boolean variable to control showing of the progress indicator
   bool _showSpinner = false;
 
+  /// A List to hold the all the categories
+  List<Category> _categories = [];
+
+  /// A List to hold the all the selected categories
+  List<Category> _allSelectedCategories = [];
+
+  Category _selectedCategory;
+
+  /// An Integer variable to hold the length of [_categories]
+  int _categoriesLength;
+
+  /// A List to hold the widgets of all the category widgets
+  List<Widget> _categoriesList = [];
+
+  /// [This function gets all the categorioes in the db to put in [_categories]
+  void _allCategories() async {
+    Future<List<Category>> names = futureValue.getAllCategories();
+    await names.then((value) {
+      if(value.isEmpty || value.length == 0){
+        if(!mounted)return;
+        setState(() {
+          _categoriesLength = 0;
+          _categories = [];
+        });
+      }
+      else if (value.length > 0){
+        if(!mounted)return;
+        setState(() {
+          _categories.addAll(value.reversed);
+          _categoriesLength = value.length;
+        });
+      }
+    }).catchError((e){
+      print(e);
+      Functions.showError(context, e);
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _allCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    //setState(() { _showSpinner = false; });
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -1011,13 +1066,19 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                         SizedBox(height: 80),
                         Button(
                           onTap: (){
-                            if(_formKey.currentState.validate() && !_showSpinner){
-                              if(_uploads.containsValue(null)){
-                                Constants.showInfo(context, 'Please upload all Documents');
+                            if(_allSelectedCategories.length > 0){
+                              if(_formKey.currentState.validate() && !_showSpinner){
+                                if(_uploads.containsValue(null)){
+                                  Functions.showInfo(context, 'Please upload all Documents');
+                                }
+                                else {
+                                  _setAvailability();
+                                  _registerCandidate();
+                                }
                               }
-                              else {
-                                _registerCandidate();
-                              }
+                            }
+                            else {
+                              Functions.showInfo(context, 'Select at least one category of what you do');
                             }
                           },
                           buttonColor: Color(0xFF00A69D),
@@ -1057,6 +1118,90 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Categories",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: DropdownButtonFormField<Category>(
+                  isExpanded: true,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  icon: Image.asset(
+                      'assets/icons/arrow-down.png',
+                      height: 18,
+                      width: 18,
+                      fit: BoxFit.contain
+                  ),
+                  value: _selectedCategory,
+                  onChanged: (Category value){
+                    if(!mounted)return;
+                    setState(() {
+                      if(!_allSelectedCategories.contains(value)){
+                        _allSelectedCategories.add(value);
+                      }
+                      _selectedCategory = null;
+                    });
+                  },
+                  decoration: kFieldDecoration.copyWith(
+                    hintText: 'Please Select',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF717F88),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                    ),
+                  ),
+                  selectedItemBuilder: (BuildContext context){
+                    return _categories.map((value){
+                      return Text(
+                        value.category.name,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                      );
+                    }).toList();
+                  },
+                  items: _categories.map((Category value){
+                    return DropdownMenuItem<Category>(
+                      value: value,
+                      child: Text(
+                        value.category.name,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildCategoryList(),
+            ],
+          ),
+          SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1221,6 +1366,64 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     );
   }
 
+  Widget _buildCategoryList(){
+    List<Widget> categoryContainer = [];
+    if(_allSelectedCategories.length <= 0){
+      categoryContainer.add(Container());
+    }
+    else {
+      for(int i = 0; i < _allSelectedCategories.length; i++){
+        if(_allSelectedCategories[i] != null){
+          categoryContainer.add(
+            InkWell(
+              onTap: (){
+                if(!mounted)return;
+                setState(() {
+                  _allSelectedCategories.removeAt(i);
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 9.73, right: 3.89242),
+                margin: EdgeInsets.only(right: 7.78484, bottom: 8),
+                decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    border: Border.all(color: Color(0xFF757575), width: 0.486553, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.all(Radius.circular(7.78484))
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _allSelectedCategories[i].category.name,
+                      style: TextStyle(
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                          color: Color(0xFF0C0C0C)
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.close_sharp,
+                      size: 12,
+                      color: Color(0xFF000000),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      }
+    }
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      direction: Axis.horizontal,
+      children: categoryContainer,
+    );
+  }
+
   void _setAvailability(){
     var availability = Availability();
     availability.title = _liveIn ? 'Live In' : 'Custom';
@@ -1237,8 +1440,6 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
   /// Function to save the user's details in [CreateCandidate] model then move
   /// to the next phase of registration [RegisterCandidateTwo]
   void _registerCandidate(){
-    _setAvailability();
-    print(widget.candidate.availability);
     widget.candidate.skill = _skillsController.text;
     widget.candidate.languages = _languagesController.text;
     List<String> history = _historyController.text.split(',');
@@ -1248,7 +1449,12 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
         trimmedHistory.add(i.trim());
       }
     });
-    widget.candidate.history = trimmedHistory.toString();
+    widget.candidate.history = jsonEncode(trimmedHistory);
+    List<String> category = [];
+    _allSelectedCategories.forEach((value) {
+      category.add(value.category.id);
+    });
+    widget.candidate.category = jsonEncode(category);
     List<http.MultipartFile> uploads = [];
     _uploads.forEach((key, value) {
       uploads.add(value);
@@ -1257,10 +1463,10 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     if(!mounted)return;
     setState(() { _showSpinner = true; });
     var api = RestDataSource();
-    print(widget.candidate);
     api.registerCandidate(widget.candidate).then((value)async {
       if(!mounted)return;
       setState(() { _showSpinner = false; });
+      Navigator.pushReplacementNamed(context, CandidateCreatedSuccessfully.id);
     }).catchError((e){
       print(e);
       if (!mounted) return;
@@ -1268,7 +1474,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
         _showSpinner = false;
         _resetUploads();
       });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

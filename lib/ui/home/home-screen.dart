@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,13 @@ import 'package:householdexecutives_mobile/ui/candidate/find-category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
-import 'package:skeleton_loader/skeleton_loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'drawer-page/account.dart';
 import 'drawer-page/hired-candidate.dart';
 import 'drawer-page/purchases/saved-purchases.dart';
 import 'drawer-page/transaction-details.dart';
 import 'drawer-page/schedule-interview.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -90,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _allPopularCategories(refresh: false);
       }
       else {
-        Constants.showError(context, e);
+        Functions.showError(context, e);
       }
     });
   }
@@ -101,32 +103,44 @@ class _HomeScreenState extends State<HomeScreen> {
     if(_popularCategories.length > 0 && _popularCategories.isNotEmpty){
       for (int i = 0; i < _filteredPopularCategories.length; i++){
         categoriesList.add(
-          Container(
-            color: Color(0xFFFFFFFF),
-            padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
-            margin: EdgeInsets.only(right: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: _filteredPopularCategories[i].category.smallerImage,
-                  width: 20,
-                  height: 20,
-                  fit: BoxFit.contain,
-                  errorWidget: (context, url, error) => Container(),
-                ),
-                SizedBox(width: 6),
-                Text(
-                  _filteredPopularCategories[i].category.name,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Gelion',
-                    fontSize: 14,
-                    color: Color(0xFF042538),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context,
+                  CupertinoPageRoute(builder: (_){
+                    //return SelectedList();
+                    return FindACategory();
+                  })
+              ).then((value) {
+                _getList();
+              });
+            },
+            child: Container(
+              color: Color(0xFFFFFFFF),
+              padding: EdgeInsets.symmetric(vertical: 11, horizontal: 10),
+              margin: EdgeInsets.only(right: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: _filteredPopularCategories[i].category.smallerImage,
+                    width: 20,
+                    height: 20,
+                    fit: BoxFit.contain,
+                    errorWidget: (context, url, error) => Container(),
                   ),
-                )
-              ],
+                  SizedBox(width: 6),
+                  Text(
+                    _filteredPopularCategories[i].category.name,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Gelion',
+                      fontSize: 14,
+                      color: Color(0xFF042538),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -406,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _allRecommendedCandidates(refresh: false);
       }
       else {
-        Constants.showError(context, e);
+        Functions.showError(context, e);
       }
     });
   }
@@ -414,101 +428,116 @@ class _HomeScreenState extends State<HomeScreen> {
   /// A function to build the list of all the recommended candidates
   Widget _buildRecommendedCandidates() {
     List<Widget> recommendedCandidatesList = [];
+    double width = 160;
+    if(SizeConfig.screenWidth >= 392) width = 160;
+    else width = (SizeConfig.screenWidth / 2) - 48;
     if(_recommendedCandidates.length > 0 && _recommendedCandidates.isNotEmpty){
       recommendedCandidatesList.clear();
       for (int i = 0; i < _filteredRecommendedCandidates.length; i++){
         recommendedCandidatesList.add(
-            Container(
-              width: 160,
-              height: 125,
-              margin: EdgeInsets.only(right: 12),
-              decoration: BoxDecoration(
-                color: Color(0xFFE8E8E8),
-                borderRadius: BorderRadius.all(Radius.circular(8))
-              ),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      child: CachedNetworkImage(
-                        imageUrl: _filteredRecommendedCandidates[i].recommendedCategory.image,
-                        width: 160,
-                        height: 107,
-                        fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => Container(),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: 160,
-                      height: 52,
-                      padding: EdgeInsets.fromLTRB(10, 6.17, 10, 11),
-                      alignment: Alignment.bottomCenter,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFFFFF),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (_){
+                      //return SelectedList();
+                      return FindACategory();
+                    })
+                ).then((value) {
+                  _getList();
+                });
+              },
+              child: Container(
+                width: width,
+                height: 125,
+                margin: EdgeInsets.only(right: 12),
+                decoration: BoxDecoration(
+                  color: Color(0xFFE8E8E8),
+                  borderRadius: BorderRadius.all(Radius.circular(8))
+                ),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
+                        child: CachedNetworkImage(
+                          imageUrl: _filteredRecommendedCandidates[i].recommendedCategory.image,
+                          width: width,
+                          height: 107,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Container(),
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _filteredRecommendedCandidates[i].recommendedCategory.name,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 13,
-                                  color: Color(0xFF042538),
-                                ),
-                              ),
-                              Text(
-                                _filteredRecommendedCandidates[i].firstName,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 12,
-                                  color: Color(0xFF717F88),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                _filteredRecommendedCandidates[i].rating.toString(),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 12,
-                                  color: Color(0xFF717F88),
-                                ),
-                              ),
-                              Image.asset(
-                                  "assets/icons/star.png",
-                                  width: 10,
-                                  height: 8.81,
-                                  fit: BoxFit.contain
-                              )
-                            ],
-                          ),
-                        ],
-                      ) ,
                     ),
-                  )
-                ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: width,
+                        height: 52,
+                        padding: EdgeInsets.fromLTRB(10, 6.17, 10, 11),
+                        alignment: Alignment.bottomCenter,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFFFFF),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _filteredRecommendedCandidates[i].recommendedCategory.name,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 13,
+                                    color: Color(0xFF042538),
+                                  ),
+                                ),
+                                Text(
+                                  _filteredRecommendedCandidates[i].firstName,
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 12,
+                                    color: Color(0xFF717F88),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _filteredRecommendedCandidates[i].rating.toString(),
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 12,
+                                    color: Color(0xFF717F88),
+                                  ),
+                                ),
+                                Image.asset(
+                                    "assets/icons/star.png",
+                                    width: 10,
+                                    height: 8.81,
+                                    fit: BoxFit.contain
+                                )
+                              ],
+                            ),
+                          ],
+                        ) ,
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
         );
@@ -538,68 +567,54 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     else if(_recommendedCandidatesLength == 0){
-      return Container(height: 160);
+      return Container(height: width);
     }
-    return Wrap(
-      spacing: 8,
-      runSpacing: 18,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      children: [
-        Container(
-          width: 160,
-          height: 125,
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(8))
-          ),
-        ),
-        Container(
-          width: 160,
-          height: 125,
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(8))
-          ),
-        ),
-        Container(
-          width: 160,
-          height: 125,
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(8))
-          ),
-        ),
-        Container(
-          width: 160,
-          height: 125,
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(8))
-          ),
-        ),
-        Container(
-          width: 160,
-          height: 125,
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(8))
-          ),
-        ),
-        Container(
-          width: 160,
-          height: 125,
-          decoration: BoxDecoration(
-              color: Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.all(Radius.circular(8))
-          ),
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.only(top: 100, bottom: 100),
+      child: Center(child: CupertinoActivityIndicator(radius: 15))
     );
+  }
+
+  int _shortlistedCandidates = 0;
+
+  /// This function fetches user's shortlisted candidates from shared
+  /// preference then stores the number of candidates to [_shortlistedCandidates]
+  void _getList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String checkoutCategory = prefs.getString('checkoutCategory');
+    String checkoutCandidates = prefs.getString('checkoutCandidates');
+    if(checkoutCategory != null && checkoutCandidates != null){
+      var rest = jsonDecode(checkoutCandidates) as List;
+      if(!mounted)return;
+      setState(() {
+        _shortlistedCandidates = 0;
+        for(int i = 0; i < rest.length; i++){
+          if(rest[i].length != 0){
+            _shortlistedCandidates += rest[i].length;
+          }
+        }
+      });
+    }
+    else {
+      if(!mounted)return;
+      setState(() {
+        _shortlistedCandidates = 0;
+      });
+    }
+  }
+
+  /// This function removes the saved shortlisted candidates stored in shared
+  /// preference
+  void _removeList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('checkoutCategory');
+    await prefs.remove('checkoutCandidates');
   }
 
   @override
   void initState() {
     _getCurrentUser();
+    _getList();
     super.initState();
     _allPopularCategories(refresh: true);
     _allRecommendedCandidates(refresh: true);
@@ -698,7 +713,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: (_surName != null && _firstName != null)
                                 ? Center(
                               child: Text(
-                                Constants.profileName('$_surName $_firstName'),
+                                Functions.profileName('$_surName $_firstName'),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Gelion',
@@ -766,15 +781,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             DrawerContainer(
                               title: "My List",
                               imageName: "my_list",
+                              number: _shortlistedCandidates,
                               onTap: (){
-                                Navigator.pop(context);
-
-                                /*Navigator.push(context,
+                                Navigator.push(context,
                                     CupertinoPageRoute(builder: (_){
-                                      return null;
-                                    }
-                                    )
-                                );*/
+                                      return FindACategory(
+                                          hasList: _shortlistedCandidates > 0
+                                              ? true : false
+                                      );
+                                    })
+                                ).then((value) {
+                                  _getList();
+                                });
                               },
                             ),
                             DrawerContainer(
@@ -824,7 +842,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.bottomLeft,
                   child: TextButton(
                     onPressed:(){
-                      Constants.logOut(context);
+                      _removeList();
+                      Functions.logOut(context);
                     },
                     child: Text(
                       "Log Out",
@@ -934,7 +953,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     //return SelectedList();
                                     return FindACategory();
                                   })
-                              );
+                              ).then((value) {
+                                _getList();
+                              });
                             },
                             child: Text(
                               "see all",
@@ -990,10 +1011,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed:(){
                               Navigator.push(context,
                                   CupertinoPageRoute(builder: (_){
-                                    //return SelectedList();
                                     return FindACategory();
                                   })
-                              );
+                              ).then((value) {
+                                _getList();
+                              });
                             },
                             child: Text(
                               "see all candidates",

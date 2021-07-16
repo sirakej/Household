@@ -13,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShortListedCandidate extends StatefulWidget {
@@ -75,7 +75,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -261,7 +261,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            key.price != null ? Constants.money(double.parse(key.price), 'N') : '',
+                            key.price != null ? Functions.money(double.parse(key.price), 'N') : '',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
@@ -506,11 +506,29 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
     return Column(children: categoriesList);
   }
 
-  void _saveList() async {
-    String data = json.encode(widget.candidates);
+  /// This function removes the saved shortlisted candidates stored in shared
+  /// preference
+  void _removeList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('checkout', data);
-    print('saved');
+    await prefs.remove('checkoutCategory');
+    await prefs.remove('checkoutCandidates');
+  }
+
+  /// This function saves user's shortlisted candidates temporarily to shared
+  /// preference
+  /// 'checkoutCategory' key for key in [widget.candidates] and
+  /// 'checkoutCandidates' key for value in [widget.candidates]
+  void _saveList() async {
+    _removeList();
+    List<String> tempCategory = [];
+    List<dynamic> tempCandidates = [];
+    widget.candidates.forEach((key, value) {
+      tempCategory.add(key.category.id);
+      tempCandidates.add(List<dynamic>.from(value.map((x) => x.toJson())));
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('checkoutCategory', jsonEncode(tempCategory));
+    await prefs.setString('checkoutCandidates', jsonEncode(tempCandidates));
   }
 
   /// Function to calculate the total price when user select a package into
@@ -539,7 +557,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
 
   @override
   void initState() {
-    //_saveList();
+    _saveList();
     super.initState();
     _allPlans();
     _getCounts();
@@ -616,7 +634,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                           ),
                         ),
                         Text(
-                          Constants.money(_totalPrice, 'N'),
+                          Functions.money(_totalPrice, 'N'),
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontFamily: 'Gelion',
@@ -647,7 +665,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                             }
                           }
                           else {
-                            Constants.showInfo(context, "Go back and select your candidates");
+                            Functions.showInfo(context, "Go back and select your candidates");
                           }
                         }
                       },
@@ -889,13 +907,11 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
           candidates.add(cand);
         }
         val.candidatePlan = candidates;
-        print(val.toJson());
         saved.add(val);
       }
     });
     var api = RestDataSource();
     await api.saveCandidate(saved).then((value) {
-      print(value);
       if(!mounted)return;
       setState(() {
         _showSpinner = false;
@@ -906,7 +922,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
     }).catchError((error) {
       if(!mounted)return;
       setState(() { _showSpinner = false; });
-      Constants.showError(context, error);
+      Functions.showError(context, error);
     });
   }
 
@@ -942,11 +958,12 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
         _buttonText = 'Proceed To Payment';
         _paymentDetails = null;
       });
+      _removeList();
       Navigator.pushReplacementNamed(context, SuccessfulPay.id);
     }).catchError((error) {
       if(!mounted)return;
       setState(() { _showSpinner = false; });
-      Constants.showError(context, error);
+      Functions.showError(context, error);
     });
   }
 

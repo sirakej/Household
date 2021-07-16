@@ -4,7 +4,7 @@ import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected-category.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
@@ -64,7 +64,7 @@ class _SelectedListState extends State<SelectedList> {
       }
     }).catchError((error){
       print(error);
-      Constants.showError(context, error);
+      Functions.showError(context, error);
     });
   }
 

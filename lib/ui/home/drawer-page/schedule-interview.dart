@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/scheduled-candidates.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,7 +81,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -118,6 +118,9 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
     else if(_candidatesLength == 0){
       return _buildEmpty('You have no Scheduled candidate\nat the moment');
     }
+    return Container(
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SingleChildScrollView(
       child: SkeletonLoader(
         builder: Container(
@@ -179,6 +182,9 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
     else if(_candidatesLength == 0){
       return _buildEmpty('You have no Finished candidate\nat the moment');
     }
+    return Container(
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SingleChildScrollView(
       child: SkeletonLoader(
         builder: Container(
@@ -366,7 +372,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                   alignment: Alignment.bottomLeft,
                   child: TextButton(
                     onPressed:(){
-                      Constants.logOut(context);
+                      Functions.logOut(context);
                     },
                     child: Text(
                       "Log Out",

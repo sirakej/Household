@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:householdexecutives_mobile/database/user-db-helper.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/ui/registration/register-candidate-one.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign-in.dart';
+import 'package:householdexecutives_mobile/ui/registration/terms.dart';
 import 'package:householdexecutives_mobile/ui/registration/user-created-successfully.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class SignUp extends StatefulWidget {
 
@@ -135,7 +139,7 @@ class _SignUpState extends State<SignUp> {
                               }
                             }
                             else {
-                              Constants.showError(context, 'Agree to our terms and conditions');
+                              Functions.showError(context, 'Agree to our terms and conditions');
                             }
                           },
                           buttonColor: Color(0xFF00A69D),
@@ -259,6 +263,9 @@ class _SignUpState extends State<SignUp> {
                   controller: _firstController,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your First Name';
@@ -287,7 +294,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -308,6 +315,9 @@ class _SignUpState extends State<SignUp> {
                   controller: _surnameController,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your Surname';
@@ -336,7 +346,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -350,7 +360,7 @@ class _SignUpState extends State<SignUp> {
                   color: Color(0xFF042538),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Container(
                 width: SizeConfig.screenWidth,
                 child: TextFormField(
@@ -385,7 +395,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -438,13 +448,13 @@ class _SignUpState extends State<SignUp> {
                   initialValue: _number,
                   textFieldController: _phoneNumberController,
                   formatInput: true,
-                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true,),
                   inputBorder: OutlineInputBorder(),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -458,7 +468,7 @@ class _SignUpState extends State<SignUp> {
                   color: Color(0xFF042538),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Container(
                 width: SizeConfig.screenWidth,
                 child: TextFormField(
@@ -466,6 +476,9 @@ class _SignUpState extends State<SignUp> {
                   controller: _passwordController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                  ],
                   onChanged: (value){
                     setState(() {
                       _password = _passwordController.text;
@@ -476,11 +489,11 @@ class _SignUpState extends State<SignUp> {
                       return 'Enter your password';
                     }
                     if(_condition1 == false){
-                      Constants.showError(context, "password must be at least 8 characters long");
+                      Functions.showError(context, "password must be at least 8 characters long");
                     }if(_condition2 == false){
-                      Constants.showError(context, "password needs to include upper case character");
+                      Functions.showError(context, "password needs to include upper case character");
                     }if(_condition3 == false){
-                      Constants.showError(context, "password needs to include a number or unique character");
+                      Functions.showError(context, "password needs to include a number or unique character");
                     }
                     return null;
                   },
@@ -601,7 +614,7 @@ class _SignUpState extends State<SignUp> {
                 ),
               ]
           ),
-          SizedBox(height: 28,),
+          SizedBox(height: 28),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -634,13 +647,16 @@ class _SignUpState extends State<SignUp> {
                     ),
                     children: [
                       TextSpan(
-                          text: "Terms & Privacy Policy ",
-                          style: TextStyle(
+                        text: "Terms & Privacy Policy ",
+                        style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Gelion',
                             fontSize: 14,
                             color: Color(0xFF00A69D),
-                          )
+                          ),
+                        recognizer: TapGestureRecognizer()..onTap = (){
+                          Navigator.pushNamed(context, Terms.id);
+                        },
                       ),
                       TextSpan(text:" of\nHousehold Executives")
                     ]
@@ -759,8 +775,8 @@ class _SignUpState extends State<SignUp> {
     if(!mounted)return;
     setState(() { _showSpinner = true; });
     var api = AuthRestDataSource();
-    api.signUp(Constants.capitalize(_firstController.text),
-        Constants.capitalize(_surnameController.text), _emailController.text,
+    api.signUp(Functions.capitalize(_firstController.text),
+        Functions.capitalize(_surnameController.text), _emailController.text,
         _number.phoneNumber.trim(), _passwordController.text).then((User user) async {
       _firstController.clear();
       _surnameController.clear();
@@ -778,7 +794,7 @@ class _SignUpState extends State<SignUp> {
       _passwordController.clear();
       if (!mounted) return;
       setState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

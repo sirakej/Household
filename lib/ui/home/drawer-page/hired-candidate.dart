@@ -10,6 +10,7 @@ import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class HireCandidate extends StatefulWidget {
 
@@ -55,7 +56,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -91,6 +92,9 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     else if(_candidatesLength == 0){
       return _buildEmpty('You have no Pending candidate\nat the moment');
     }
+    return Container(
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SingleChildScrollView(
       child: SkeletonLoader(
         builder: Container(
@@ -151,6 +155,9 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     else if(_candidatesLength == 0){
       return _buildEmpty('You have no Ongoing candidate\nat the moment');
     }
+    return Container(
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SingleChildScrollView(
       child: SkeletonLoader(
         builder: Container(
@@ -211,6 +218,9 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     else if(_candidatesLength == 0){
       return _buildEmpty('You have no Previous candidate\nat the moment');
     }
+    return Container(
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SingleChildScrollView(
       child: SkeletonLoader(
         builder: Container(
@@ -397,7 +407,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                   alignment: Alignment.bottomLeft,
                   child: TextButton(
                     onPressed:(){
-                      Constants.logOut(context);
+                      Functions.logOut(context);
                     },
                     child: Text(
                       "Log Out",
@@ -579,14 +589,17 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                 shape: BoxShape.circle,
                                 border: Border.all(color: Color(0xFF717F88), width: 0.5)
                             ),
-                            child: Image.network(
-                              candidate.profileImage,
-                              width: 74,
-                              height: 74,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace){
-                                return Container();
-                              },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(34),
+                              child: Image.network(
+                                candidate.profileImage,
+                                width: 74,
+                                height: 74,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace){
+                                  return Container();
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -1399,7 +1412,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
       print(e);
       if(!mounted)return;
       setModalState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

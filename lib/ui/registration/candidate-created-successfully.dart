@@ -1,18 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/ui/candidate/find-category.dart';
-import 'package:householdexecutives_mobile/ui/home/home-screen.dart';
+import 'package:householdexecutives_mobile/ui/onboarding-screen.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 
-class UserCreatedSuccessfully extends StatefulWidget {
+class CandidateCreatedSuccessfully extends StatefulWidget {
 
-  static const String id = 'user_created_successfully';
+  static const String id = 'candidate_created_successfully';
 
   @override
-  _UserCreatedSuccessfullyState createState() => _UserCreatedSuccessfullyState();
+  _CandidateCreatedSuccessfullyState createState() => _CandidateCreatedSuccessfullyState();
 }
 
-class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
+class _CandidateCreatedSuccessfullyState extends State<CandidateCreatedSuccessfully> {
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +34,10 @@ class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
               ),
               SizedBox(height: 75),
               Image.asset(
-                "assets/icons/circle check full.png",
-                height: 70,
-                width: 70,
-                fit: BoxFit.contain
+                  "assets/icons/circle check full.png",
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.contain
               ),
               SizedBox(height: 16),
               Text(
@@ -53,7 +52,7 @@ class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
               ),
               SizedBox(height: 12),
               Text(
-                'Congratulations! You have been successfully\nregistered as a client',
+                'Congratulations! You have been successfully registered as a candidate. Kindly check your mail for notifications on your application update.\n\nThank You',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
@@ -68,29 +67,20 @@ class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
                   primary: Color(0xFF00A69D).withOpacity(0.2), // background
                   onPrimary: Color(0xFF00A69D), // foreground
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 2, color: Color(0xFF00A69D)),
-                    borderRadius: BorderRadius.circular(8)
+                      side: BorderSide(width: 2, color: Color(0xFF00A69D)),
+                      borderRadius: BorderRadius.circular(8)
                   ),
                   shadowColor: Colors.transparent,
                 ),
                 onPressed:(){
-                  Navigator.pushReplacement(context,
-                      CupertinoPageRoute(builder: (_){
-                        return HomeScreen();
-                      })
-                  );
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (_){
-                        return FindACategory();
-                      })
-                  );
+                  Navigator.of(context).pushNamedAndRemoveUntil(OnBoard.id, (Route<dynamic> route) => false);
                 },
                 child: Container(
                   width: SizeConfig.screenWidth,
                   padding: EdgeInsets.only(top: 18, bottom: 18),
                   child: Center(
                     child: Text(
-                      "Find Candidates",
+                      "Home",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -102,26 +92,6 @@ class _UserCreatedSuccessfullyState extends State<UserCreatedSuccessfully> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
-              TextButton(
-                onPressed: (){
-                  Navigator.pushReplacement(context,
-                      CupertinoPageRoute(builder: (_){
-                        return HomeScreen();
-                      })
-                  );
-                },
-                child: Text(
-                  "Go Home",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Gelion',
-                    fontSize: 16,
-                    color: Color(0xFF00A69D),
-                  ),
-                ),
-              )
             ],
           ),
         ),

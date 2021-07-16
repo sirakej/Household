@@ -17,6 +17,7 @@ class CreateCandidate {
   String skill;
   String languages;
   String history;
+  String category;
   Availability availability;
   List<http.MultipartFile> image;
 

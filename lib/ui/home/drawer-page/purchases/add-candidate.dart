@@ -6,7 +6,7 @@ import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category-class.dart';
 import 'package:householdexecutives_mobile/model/saved-candidates.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
@@ -68,7 +68,7 @@ class _AddCandidateState extends State<AddCandidate> {
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -1517,7 +1517,7 @@ class _AddCandidateState extends State<AddCandidate> {
       print(e);
       if(!mounted)return;
       setModalState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 

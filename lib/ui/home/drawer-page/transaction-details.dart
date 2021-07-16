@@ -11,6 +11,7 @@ import 'hired-candidate.dart';
 import 'account.dart';
 import 'purchases/saved-purchases.dart';
 import 'schedule-interview.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class TransactionAndPayments extends StatefulWidget{
 
@@ -77,7 +78,7 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -128,7 +129,7 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        Constants.money(_transactions[i].totalAmount, 'N'),
+                        Functions.money(_transactions[i].totalAmount, 'N'),
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
@@ -162,6 +163,9 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
     else if(_transactionsLength == 0){
       return _buildEmpty('You have not made any Transactions\nat the moment');
     }
+    return Container(
+        child: Center(child: CupertinoActivityIndicator(radius: 15))
+    );
     return SkeletonLoader(
       builder: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -346,7 +350,7 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
                   alignment: Alignment.bottomLeft,
                   child: TextButton(
                     onPressed:(){
-                      Constants.logOut(context);
+                      Functions.logOut(context);
                     },
                     child: Text(
                       "Log Out",

@@ -7,6 +7,7 @@ import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:householdexecutives_mobile/model/create-candidate.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class RegisterCandidateOne extends StatefulWidget {
 
@@ -272,6 +273,9 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   controller: _firstNameController,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your First Name';
@@ -321,6 +325,9 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   controller: _lastNameController,
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
                   validator: (value){
                     if(value.isEmpty){
                       return 'Enter your Last Name';
@@ -582,6 +589,9 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         controller: _originController,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                        ],
                         validator: (value){
                           if(value.isEmpty){
                             return 'Enter state of origin';
@@ -941,13 +951,13 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
   void _registerCandidate(){
     try {
       var candidate = CreateCandidate();
-      candidate.firstName = Constants.capitalize(_firstNameController.text.trim());
-      candidate.lastName = Constants.capitalize(_lastNameController.text.trim());
+      candidate.firstName = Functions.capitalize(_firstNameController.text.trim());
+      candidate.lastName = Functions.capitalize(_lastNameController.text.trim());
       candidate.email = _emailController.text.toLowerCase().trim();
       candidate.residence = _addressController.text.trim();
       candidate.phoneNumber = _number.phoneNumber.trim();
       candidate.age = int.parse(_ageController.text);
-      candidate.origin = _originController.text;
+      candidate.origin = Functions.capitalize(_originController.text.trim());
       candidate.tribe = _selectedTribe;
       candidate.gender = _selectedGender;
       candidate.religion = _selectedReligion;

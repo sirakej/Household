@@ -10,6 +10,7 @@ import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class SelectedCategory extends StatefulWidget {
 
@@ -136,7 +137,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
       }
     }).catchError((e){
       print(e);
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
@@ -1118,14 +1119,15 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                               shape: BoxShape.circle,
                               border: Border.all(color: Color(0xFF717F88), width: 0.5)
                             ),
-                            child: Image.network(
-                              candidate.profileImage,
-                              width: 74,
-                              height: 74,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace){
-                                return Container();
-                              },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(34),
+                              child: CachedNetworkImage(
+                                imageUrl: candidate.profileImage,
+                                width: 74,
+                                height: 74,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) => Container(),
+                              ),
                             ),
                           ),
                         ),

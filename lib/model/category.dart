@@ -25,8 +25,8 @@ class Category {
 
   Map<String, dynamic> toJson() => {
     "_id": id,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt == null ? null : createdAt.toIso8601String(),
+    "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
     "category": category.toJson(),
     "no_of_candidate": noOfCandidate,
   };

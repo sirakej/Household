@@ -5,6 +5,7 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
+import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class Reset extends StatefulWidget {
 
@@ -193,7 +194,7 @@ class _ResetState extends State<Reset> {
     setState(() { _showSpinner = true; });
     var api = AuthRestDataSource();
     api.resetPassword(_emailController.text).then((dynamic) async{
-      _emailController.clear();
+      //_emailController.clear();
       if(!mounted) return;
       setState(() { _showSpinner = false; });
       Navigator.push(context,
@@ -207,7 +208,7 @@ class _ResetState extends State<Reset> {
       print(e);
       if(!mounted)return;
       setState(() { _showSpinner = false; });
-      Constants.showError(context, e);
+      Functions.showError(context, e);
     });
   }
 
