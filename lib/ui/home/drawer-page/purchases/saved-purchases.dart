@@ -51,7 +51,7 @@ class _SavedPurchasesState extends State<SavedPurchases> {
       else if (value.length > 0){
         if(!mounted)return;
         setState(() {
-          _purchases.addAll(value);
+          _purchases.addAll(value.reversed);
           _purchasesLength = value.length;
         });
       }

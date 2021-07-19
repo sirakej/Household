@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/model/plans.dart';
 import 'package:householdexecutives_mobile/model/save-candidates.dart';
@@ -117,14 +118,12 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
                         ),
-                        child: Image.network(
-                          v[i].profileImage,
+                        child: CachedNetworkImage(
+                          imageUrl: v[i].profileImage,
                           height: 57,
                           width: 72,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace){
-                            return Container();
-                          },
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Container(),
                         ),
                       ),
                       SizedBox(width: 17),

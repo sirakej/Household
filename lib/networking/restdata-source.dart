@@ -456,7 +456,7 @@ class RestDataSource {
   /// A function that hires a candidate POST with [savedCategoryId],
   /// [categoryId], [candidateId], [hire] and [date]
   Future<dynamic> hireCandidate(String savedCategoryId, String categoryId,
-      Candidate candidate, DateTime date) async {
+      Candidate candidate, DateTime date, dynamic hirePlan) async {
     String userId;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
@@ -479,7 +479,7 @@ class RestDataSource {
     return _netUtil.post(HIRE_CANDIDATE_URL, headers: header, body: {
       "category": categoryId,
       "saved_category": savedCategoryId,
-      "hire_plan": candidate.availability.toJson(),
+      "hire_plan": hirePlan.toJson(),
       "resumption": Functions.formatISOTime(date)
     }).then((dynamic res) {
       if (res["error"]) {

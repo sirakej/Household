@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../home-screen.dart';
 import 'add-candidate.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class PurchasesTab extends StatefulWidget {
 
@@ -67,6 +68,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                           ? false
                           : (widget.categories[i].hires != widget.categories[i].roles),
                     category: widget.categories[i].category,
+                    hirePlan: widget.categories[i].candidatePlan[j].hirePlan
                   );
                 },
                 selected: false,
@@ -85,9 +87,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                 },
                 buttonColor: Color(0xFF00A69D),
                 child: Center(
-                  child: _showScheduleSpinner
-                      ? CupertinoActivityIndicator(radius: 13)
-                      : Text(
+                  child: Text(
                     "Schedule",
                     textAlign: TextAlign.start,
                     style: TextStyle(
@@ -193,92 +193,98 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFFCFDFE),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 20,
-            color: Color(0xFF000000),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          _header[_tabController.index],
-          style: TextStyle(
-            fontWeight: FontWeight.normal,
-            fontFamily: 'Gelion',
-            fontSize: 19,
-            color: Color(0xFF000000),
-          ),
-        ),
+    return ModalProgressHUD(
+      inAsyncCall: _showScheduleSpinner,
+      progressIndicator: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00A69D)),
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(24, 14, 24, 0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Text(
-                  'You’re only allowed to select a maximum of 3\ncandidates per category',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    fontSize: 12.6829,
-                    color: Color(0xFF57565C),
-                  ),
-                ),
-              ),
-              SizedBox(height: 43.39),
-              TabBar(
-                  physics: BouncingScrollPhysics(),
-                  controller: _tabController,
-                  indicatorColor: Color(0xFF00A69D),
-                  isScrollable: false,
-                  labelColor: Color(0xFF00A69D),
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    fontSize: 14,
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    fontSize: 14,
-                  ),
-                  unselectedLabelColor: Color(0xFF3B4A54),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorWeight: 3,
-                  tabs: _categoryTabLabel
-              ),
-              Container(
-                width: SizeConfig.screenWidth,
-                height: 1,
-                color: Color(0xFFC5C9CC),
-              ),
-              SizedBox(height: 27),
-              Expanded(
-                child: TabBarView(
-                  physics: BouncingScrollPhysics(),
-                  controller: _tabController,
-                  children: _categoryTabs,
-                ),
-              ),
-              SizedBox(height: 60),
-            ]
+      child: Scaffold(
+        backgroundColor: Color(0xFFFCFDFE),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_outlined,
+              size: 20,
+              color: Color(0xFF000000),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            _header[_tabController.index],
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 19,
+              color: Color(0xFF000000),
+            ),
+          ),
         ),
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(24, 14, 24, 0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    'You’re only allowed to select a maximum of 3\ncandidates per category',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                      fontSize: 12.6829,
+                      color: Color(0xFF57565C),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 43.39),
+                TabBar(
+                    physics: BouncingScrollPhysics(),
+                    controller: _tabController,
+                    indicatorColor: Color(0xFF00A69D),
+                    isScrollable: false,
+                    labelColor: Color(0xFF00A69D),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                      fontSize: 14,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                      fontSize: 14,
+                    ),
+                    unselectedLabelColor: Color(0xFF3B4A54),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorWeight: 3,
+                    tabs: _categoryTabLabel
+                ),
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: 1,
+                  color: Color(0xFFC5C9CC),
+                ),
+                SizedBox(height: 27),
+                Expanded(
+                  child: TabBarView(
+                    physics: BouncingScrollPhysics(),
+                    controller: _tabController,
+                    children: _categoryTabs,
+                  ),
+                ),
+                SizedBox(height: 60),
+              ]
+          ),
+        )
       ),
     );
   }
 
-  _buildProfileModalSheet(BuildContext context, String categoryId, Candidate candidate, bool hire, {String category}){
+  _buildProfileModalSheet(BuildContext context, String categoryId, Candidate candidate, bool hire, {String category, dynamic hirePlan}){
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
       history.add(
@@ -853,7 +859,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                               children: [
                                 Button(
                           onTap: (){
-                            _buildHireStartSheet(context, candidate, categoryId, category);
+                            _buildHireStartSheet(context, candidate, categoryId, category, hirePlan);
                           },
                           buttonColor: Color(0xFF00A69D),
                           child: Center(
@@ -1163,7 +1169,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
 
   DateTime _resumeAt;
 
-  _buildHireStartSheet(BuildContext context, Candidate candidate, String categoryId, String category){
+  _buildHireStartSheet(BuildContext context, Candidate candidate, String categoryId, String category, dynamic hirePlan){
     _scheduleController.clear();
     final formKey = GlobalKey<FormState>();
     showModalBottomSheet<void>(
@@ -1623,7 +1629,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                     Button(
                       onTap: (){
                         if(formKey.currentState.validate()){
-                          _hireCandidate(categoryId, category, candidate, setModalState);
+                          _hireCandidate(categoryId, category, candidate, hirePlan, setModalState);
                         }
                       },
                       buttonColor: Color(0xFF00A69D),
@@ -1680,12 +1686,12 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
   }
 
   void _hireCandidate(String savedCategoryId, String categoryId,
-      Candidate candidate, StateSetter setModalState){
+      Candidate candidate, dynamic hirePlan, StateSetter setModalState){
     if(!mounted) return;
     setModalState(() { _showSpinner = true; });
     var api = RestDataSource();
     api.hireCandidate(savedCategoryId, categoryId, candidate,
-        _resumeAt).then((dynamic) async{
+        _resumeAt, hirePlan).then((dynamic) async{
       if(!mounted) return;
       setModalState(() {
         _resumeAt = null;

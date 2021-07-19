@@ -408,21 +408,13 @@ class _FindACategoryState extends State<FindACategory> {
                 SizedBox(height: 8),
                 Expanded(
                   child: Container(
-                    child: NotificationListener<ScrollNotification>(
-                      onNotification: (scrollNotification) {
-                        if (scrollNotification is ScrollUpdateNotification) {
-                          HapticFeedback.selectionClick();
-                        }
-                        return;
-                      },
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 16),
-                            _buildList(),
-                          ],
-                        ),
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 16),
+                          _buildList(),
+                        ],
                       ),
                     ),
                   ),
