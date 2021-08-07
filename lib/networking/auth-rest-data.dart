@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/model/plans.dart';
+import 'package:householdexecutives_mobile/model/plan.dart';
 import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
@@ -275,10 +275,11 @@ class AuthRestDataSource {
     return _netUtil.get(FETCH_PAYMENT_HISTORY_URL, headers: header).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        transactions =
-            rest.map<Transaction>((json) => Transaction.fromJson(json)).toList();
+      }
+      else {
+        var rest = [];
+        if(res["data"] != null) rest = res["data"] as List;
+        transactions = rest.map<Transaction>((json) => Transaction.fromJson(json)).toList();
         return transactions;
       }
     }).catchError((e) {

@@ -1,10 +1,11 @@
 import 'package:householdexecutives_mobile/database/user-db-helper.dart';
+import 'package:householdexecutives_mobile/model/ad-banner.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/hired-candidates.dart';
 import 'package:householdexecutives_mobile/model/popular-category.dart';
-import 'package:householdexecutives_mobile/model/saved-candidates.dart';
-import 'package:householdexecutives_mobile/model/plans.dart';
+import 'package:householdexecutives_mobile/model/purchases.dart';
+import 'package:householdexecutives_mobile/model/plan.dart';
 import 'package:householdexecutives_mobile/model/scheduled-candidates.dart';
 import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
@@ -48,6 +49,15 @@ class FutureValues{
     });
   }
 
+  /// Function to get the ad banner in the database with the help
+  /// of [RestDataSource]
+  /// It returns a model of [AdBanner]
+  Future<AdBanner> getAdBanner() {
+    var data = RestDataSource();
+    Future<AdBanner> banner = data.getAdBanner();
+    return banner;
+  }
+
   /// This function gets all categories in the db without passing user token
   /// It returns a list of [Category]
   Future<List<Category>> getAllCategories() {
@@ -66,10 +76,17 @@ class FutureValues{
     return plans;
   }
 
-  Future<List<Category>> getAllCategoryFromDB() {
+  Future<List<Category>> getAllCategoryFromDB({bool refresh}) async {
+    List<Category> sortedCategories = [];
     var data = RestDataSource();
-    Future<List<Category>> categories = data.getCategory();
-    return categories;
+    Future<List<Category>> categories = data.getCategory(refresh: refresh);
+    await categories.then((value){
+      sortedCategories.addAll(value);
+      sortedCategories.sort((a, b) => (a.category.singularName).compareTo(b.category.singularName));
+    }).catchError((e){
+      throw e;
+    });
+    return sortedCategories;
   }
 
   Future<List<PopularCategory>> getPopularCategoryFromDB({bool refresh}) async {
@@ -100,10 +117,10 @@ class FutureValues{
     return candidates;
   }
 
-  Future<List<MySavedList>> getAllSavedListFromDB() {
+  Future<List<Purchases>> getAllPendingPurchases() {
     var data = RestDataSource();
-    Future<List<MySavedList>> savedList = data.getSavedList();
-    return savedList;
+    Future<List<Purchases>> purchases = data.getPendingPurchases();
+    return purchases;
   }
 
   Future<List<HiredCandidates>> getAllHiredCandidatesFromDB() {

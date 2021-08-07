@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/model/plans.dart';
+import 'package:householdexecutives_mobile/model/plan.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 
@@ -75,56 +75,61 @@ class _PackagesState extends State<Packages> with SingleTickerProviderStateMixin
           );
         }
         _plansList.add(
-          Container(
-            margin: EdgeInsets.only(bottom: 20),
-            padding: EdgeInsets.only(left: 22, top: 16, bottom: 34),
-            width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: _randomColors[i].withOpacity(0.06),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                    width: 1,
-                    color: _randomColors[i],
-                )
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${widget.plans[i].title}",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Gelion',
-                    fontSize: 14,
-                    color: Color(0xFF99B9CF),
+          GestureDetector(
+            onTap: (){
+              Navigator.pop(context, widget.plans[i]);
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 20),
+              padding: EdgeInsets.only(left: 22, top: 16, bottom: 34),
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: _randomColors[i].withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                      width: 1,
+                      color: _randomColors[i],
+                  )
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${widget.plans[i].title}",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Gelion',
+                      fontSize: 14,
+                      color: Color(0xFF99B9CF),
+                    ),
                   ),
-                ),
-                SizedBox(height: 6),
-                Row(
-                  children: [
-                    Image.asset(
-                        "assets/icons/currency_icon.png",
-                        width: 17,
-                        height: 17,
-                        fit: BoxFit.contain
-                    ),
-                    SizedBox(width: 9),
-                    Text(
-                      "${Functions.money(double.parse(widget.plans[i].price), '')}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Gelion',
-                        fontSize: 24,
-                        color: Color(0xFFF7941D),
+                  SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Image.asset(
+                          "assets/icons/currency_icon.png",
+                          width: 17,
+                          height: 17,
+                          fit: BoxFit.contain
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 17),
-                Column(children: details)
-              ],
+                      SizedBox(width: 9),
+                      Text(
+                        "${Functions.money(double.parse(widget.plans[i].price), '')}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Gelion',
+                          fontSize: 24,
+                          color: Color(0xFFF7941D),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 17),
+                  Column(children: details)
+                ],
+              ),
             ),
           ),
         );

@@ -98,7 +98,7 @@ class _SelectedListState extends State<SelectedList> {
                           Row(
                             children: [
                               Text(
-                                "Hire a ${_categories[i].category.name}  ",
+                                "Hire a ${_categories[i].category.singularName}  ",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w400,

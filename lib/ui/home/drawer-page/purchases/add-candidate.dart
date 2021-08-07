@@ -192,7 +192,7 @@ class _AddCandidateState extends State<AddCandidate> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.category.name}',
+                        '${widget.category.singularName}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -299,29 +299,18 @@ class _AddCandidateState extends State<AddCandidate> {
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
       history.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check,
-              size:12,
+        Container(
+          width: SizeConfig.screenWidth - 120,
+          child: Text(
+            '• ${candidate.history[i].toString()}',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 14,
               color: Color(0xFF717F88),
             ),
-            SizedBox(width:8),
-            Container(
-              width: SizeConfig.screenWidth - 120,
-              child: Text(
-                candidate.history[i].toString(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF717F88),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       );
     }
@@ -442,7 +431,7 @@ class _AddCandidateState extends State<AddCandidate> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Origin",
+                                      "Service Area",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -610,7 +599,7 @@ class _AddCandidateState extends State<AddCandidate> {
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      candidate.gender ?? '',
+                                      Functions.capitalize(candidate.gender) ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -637,7 +626,7 @@ class _AddCandidateState extends State<AddCandidate> {
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} +",
+                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/ad-banner.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/create-candidate.dart';
 import 'package:householdexecutives_mobile/model/hired-candidates.dart';
 import 'package:householdexecutives_mobile/model/popular-category.dart';
+import 'package:householdexecutives_mobile/model/purchases.dart';
 import 'package:householdexecutives_mobile/model/save-candidates.dart';
 import 'package:householdexecutives_mobile/model/saved-candidates.dart';
 import 'package:householdexecutives_mobile/model/scheduled-candidates.dart';
@@ -27,6 +29,7 @@ class RestDataSource {
   /// Instantiating a class of the [NetworkHelper]
   NetworkHelper _netUtil = NetworkHelper();
 
+  static final GET_AD_BANNER = BASE_URL + "banner";
   static final GET_SAVED_LIST = BASE_URL + "user/savedcandidate";
   static final UPDATE_CANDIDATE = BASE_URL + "user/purchase/savedcategory";
   static final GET_HIRED_CANDIDATES = BASE_URL + "user/hire";
@@ -38,9 +41,43 @@ class RestDataSource {
   static final CANDIDATE_URL = BASE_URL + "candidate";
   static final RECOMMENDED_CANDIDATE = BASE_URL + "candidate/recommended";
   static final SAVED_CANDIDATE = BASE_URL + 'candidate/saved';
-  static final SCHEDULED_CANDIDATE = BASE_URL + "candidate/schedule";
+  static final SCHEDULE_INTERVIEW = BASE_URL + "candidate/schedule";
   static final HIRE_CANDIDATE = BASE_URL + "candidate/hire";
   static final CANDIDTE_REVIEW = BASE_URL + 'candidate/review';
+
+  Future<AdBanner> getAdBanner({bool refresh}) async {
+    String fileName = 'ad-banner.json';
+    var dir = await getTemporaryDirectory();
+    File file = File(dir.path + "/" + fileName);
+    if(refresh == false && file.existsSync()){
+      final data = file.readAsStringSync();
+      return AdBanner.fromJson(jsonDecode(jsonDecode(data)["data"]));
+    }
+    else {
+      Map<String, String> header;
+      Future<User> user = futureValues.getCurrentUser();
+      await user.then((value) {
+        if (value.token == null) {
+          throw ("No user logged in");
+        }
+        header = {
+          "Authorization": "Bearer ${value.token}",
+          "Content-Type": "application/json",
+        };
+      });
+      return _netUtil.get(GET_AD_BANNER, headers: header).then((dynamic res) {
+        if(res["error"]){
+          throw (res["msg"]);
+        }
+        else{
+          file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
+          return AdBanner.fromJson(res["data"]);
+        }
+      }).catchError((e){
+        errorHandler.handleError(e);
+      });
+    }
+  }
 
   /// A function that fetches all categories without sending token in header
   Future<List<Category>> getAllCategory() async {
@@ -60,31 +97,44 @@ class RestDataSource {
   }
 
   /// A function that fetches all categories
-  Future<List<Category>> getCategory() async {
-    Map<String, String> header;
-    Future<User> user = futureValues.getCurrentUser();
-    await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
-    });
+  Future<List<Category>> getCategory({bool refresh}) async {
     List<Category> categories;
-    return _netUtil.get(CATEGORY_URL, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        categories =
-            rest.map<Category>((json) => Category.fromJson(json)).toList();
-        return categories;
-      }
-    }).catchError((e) {
-      errorHandler.handleError(e);
-    });
+    String fileName = 'all-categories.json';
+    var dir = await getTemporaryDirectory();
+    File file = File(dir.path + "/" + fileName);
+    if(refresh == false && file.existsSync()){
+      final data = file.readAsStringSync();
+      final res = jsonDecode(data);
+      var rest = res["data"] as List;
+      categories =
+          rest.map<Category>((json) => Category.fromJson(json)).toList();
+      return categories;
+    }
+    else {
+      Map<String, String> header;
+      Future<User> user = futureValues.getCurrentUser();
+      await user.then((value) {
+        if (value.token == null) {
+          throw ("No user logged in");
+        }
+        header = {
+          "Authorization": "Bearer ${value.token}",
+          "Content-Type": "application/json",
+        };
+      });
+      return _netUtil.get(CATEGORY_URL, headers: header).then((dynamic res) {
+        if (res["error"]) {
+          throw res["msg"];
+        } else {
+          file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
+          var rest = res["data"] as List;
+          categories = rest.map<Category>((json) => Category.fromJson(json)).toList();
+          return categories;
+        }
+      }).catchError((e) {
+        errorHandler.handleError(e);
+      });
+    }
   }
 
   /// A function that fetches popular categories
@@ -298,7 +348,7 @@ class RestDataSource {
     });
   }
 
-  Future<dynamic> deleteCandidate(String categoryId, String candidateId) async {
+  Future<dynamic> deleteCandidate(String savedCategoryId, String candidateId) async {
     String userId;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
@@ -317,7 +367,7 @@ class RestDataSource {
         throw ("No user authenticated");
       }
     });
-    String DELETE_CANDIDATE_URL = UPDATE_CANDIDATE + '/$userId/$categoryId/$candidateId';
+    String DELETE_CANDIDATE_URL = UPDATE_CANDIDATE + '/$userId/$savedCategoryId/$candidateId';
     return _netUtil.delete(DELETE_CANDIDATE_URL, headers: header).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];
@@ -329,7 +379,8 @@ class RestDataSource {
     });
   }
 
-  Future<List<MySavedList>> getSavedList() async {
+  Future<List<Purchases>> getPendingPurchases() async {
+    List<Purchases> purchases = [];
     String userId;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
@@ -343,16 +394,18 @@ class RestDataSource {
         "Content-Type": "application/json",
       };
     });
-    List<MySavedList> savedList = [];
     String GET_SAVED_LIST_URL = GET_SAVED_LIST + "/$userId";
     return _netUtil.get(GET_SAVED_LIST_URL , headers: header).then((dynamic res) {
-      if (res["error"]) {
+      if(res["error"]) {
         throw res["msg"];
       }
       else {
-        var rest = res["data"] as List;
-        savedList = rest.map<MySavedList>((json) => MySavedList.fromJson(json)).toList();
-        return savedList;
+        purchases = [];
+        if(res["data"] != null){
+          var rest = res["data"] as List;
+          purchases = rest.map<Purchases>((json) => Purchases.fromJson(json)).toList();
+        }
+        return purchases;
       }
     }).catchError((e) {
       errorHandler.handleError(e);
@@ -439,8 +492,8 @@ class RestDataSource {
         throw ("No user authenticated");
       }
     });
-    String SCHEDULED_CANDIDATE_URL = SCHEDULED_CANDIDATE + '/$userId/$id';
-    return _netUtil.put(SCHEDULED_CANDIDATE_URL, headers: header, body: {
+    String SCHEDULE_INTERVIEW_URL = SCHEDULE_INTERVIEW + '/$userId/$id';
+    return _netUtil.put(SCHEDULE_INTERVIEW_URL, headers: header, body: {
       "interview_date": Functions.formatISOTime(date)
     }).then((dynamic res) {
       if (res["error"]) {
@@ -494,8 +547,9 @@ class RestDataSource {
 
   /// A function that reviews user's candidate POST with [candidateId],
   /// [categoryId], [review] and [rating]
-  Future<dynamic> reviewCandidate(String candidateId, String categoryId,
+  Future<dynamic> reviewCandidate(String candidateId, String categoryId, String hireId,
       String review, int rating) async {
+    String userId;
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
@@ -503,6 +557,7 @@ class RestDataSource {
         if (value.token == null) {
           throw ("No user logged in");
         }
+        userId = value.id;
         header = {
           "Authorization": "Bearer ${value.token}",
           "Content-Type": "application/json",
@@ -513,10 +568,12 @@ class RestDataSource {
       }
     });
     return _netUtil.post(CANDIDTE_REVIEW, headers: header, body: {
+      "user": userId,
       "candidate": candidateId,
       "detail": review,
       "rating": rating,
-      "category": categoryId
+      "category": categoryId,
+      "hirecandidate": hireId
     }).then((dynamic res) {
       if (res["error"]) {
         throw res["msg"];

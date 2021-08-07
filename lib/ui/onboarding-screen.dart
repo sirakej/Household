@@ -168,8 +168,7 @@ class _OnBoardState extends State<OnBoard> {
                           _indicator
                         ],
                       ),
-
-                      SizedBox(height: 34,),
+                      SizedBox(height: 34),
                       FlatButton(
                         minWidth: SizeConfig.screenWidth,
                         shape: RoundedRectangleBorder(

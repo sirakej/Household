@@ -282,7 +282,7 @@ class _SignUpState extends State<SignUp> {
                     color: Color(0xFF042538),
                   ),
                   decoration:kFieldDecoration.copyWith(
-                      hintText: 'Precious',
+                      hintText: 'First Name',
                       hintStyle:TextStyle(
                         color:Color(0xFF717F88),
                         fontSize: 14,
@@ -488,11 +488,13 @@ class _SignUpState extends State<SignUp> {
                     if (value.isEmpty) {
                       return 'Enter your password';
                     }
-                    if(_condition1 == false){
+                    if(!_condition1){
                       Functions.showError(context, "password must be at least 8 characters long");
-                    }if(_condition2 == false){
+                    }
+                    else if(!_condition2){
                       Functions.showError(context, "password needs to include upper case character");
-                    }if(_condition3 == false){
+                    }
+                    else if(!_condition3){
                       Functions.showError(context, "password needs to include a number or unique character");
                     }
                     return null;

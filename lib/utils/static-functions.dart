@@ -34,7 +34,7 @@ class Functions{
     String result = '';
 
     if (string == null) {
-      throw ArgumentError("string: $string");
+      return '';
     }
 
     if (string.isEmpty) {

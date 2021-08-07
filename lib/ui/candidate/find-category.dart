@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate-availability.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected-category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/short-listed-candidate.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
@@ -50,6 +52,9 @@ class _FindACategoryState extends State<FindACategory> {
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
 
+  /// This variable holds the list of all vowels
+  List<String> _vowels = ['a', 'e', 'i', 'o', 'u'];
+
   /// A Map to hold the all the available categories and a boolean value to
   /// show if selected or not
   Map<Category, List<Candidate>> _candidates = {};
@@ -70,7 +75,6 @@ class _FindACategoryState extends State<FindACategory> {
   /// A List to hold the widgets of all the category widgets
   List<Widget> _categoriesList = [];
 
-  /// [allCategories]
   void _allCategories() async {
     Future<List<Category>> names = futureValue.getAllCategoryFromDB();
     await names.then((value) {
@@ -88,7 +92,7 @@ class _FindACategoryState extends State<FindACategory> {
       else if (value.length > 0){
         if(!mounted)return;
         setState(() {
-          _categories.addAll(value.reversed);
+          _categories.addAll(value);
           _filteredCategories = _categories;
           _categoriesLength = value.length;
           for(int i = 0; i < value.length; i++){
@@ -118,6 +122,16 @@ class _FindACategoryState extends State<FindACategory> {
     });
   }
 
+  /// This function checks whether the string value starts with a vowel then
+  /// returns 'an' if not, it returns 'a'
+  String _checkVowel(String name){
+    if(_vowels.contains(name.split('').first.toLowerCase())){
+      return 'an';
+    } else {
+      return 'a';
+    }
+  }
+
   /// A function to build the list of all the categories
   Widget _buildList() {
     if(_categories.length > 0 && _categories.isNotEmpty){
@@ -126,39 +140,7 @@ class _FindACategoryState extends State<FindACategory> {
         _categoriesList.add(
             InkWell(
               onTap: (){
-                Navigator.push(context,
-                    CupertinoPageRoute(builder: (_){
-                      return SelectedCategory(
-                        category: _filteredCategories[i],
-                        candidates: _candidates[_filteredCategories[i]],
-                      );
-                    })
-                ).then((value) {
-                  if(value != null){
-                    if(value.isNotEmpty){
-                      if(!mounted)return;
-                      setState(() {
-                        _candidates[_filteredCategories[i]] = value[1];
-                      });
-                      if(value[0] == true){
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (_){
-                              return ShortListedCandidate(
-                                candidates: _candidates,
-                              );
-                            })
-                        ).then((val) {
-                          if(val != null){
-                            if(!mounted)return;
-                            setState(() {
-                              _candidates = val;
-                            });
-                          }
-                        });
-                      }
-                    }
-                  }
-                });
+                _buildCandidatePreferenceSheet(context, _filteredCategories[i]);
               },
               child: Container(
                 width: SizeConfig.screenWidth,
@@ -192,7 +174,7 @@ class _FindACategoryState extends State<FindACategory> {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      "Hire a ${_filteredCategories[i].category.name}",
+                      "Hire ${_checkVowel(_filteredCategories[i].category.singularName)} ${_filteredCategories[i].category.singularName}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -259,7 +241,7 @@ class _FindACategoryState extends State<FindACategory> {
           if(_filter.text != '' || _filter.text.isNotEmpty){
             List<Category> tempList = [];
             for (int i = 0; i < _filteredCategories.length; i++) {
-              if (_filteredCategories[i].category.name.toLowerCase()
+              if (_filteredCategories[i].category.singularName.toLowerCase()
                   .contains(_filter.text.toLowerCase())) {
                 tempList.add(_filteredCategories[i]);
               }
@@ -396,6 +378,7 @@ class _FindACategoryState extends State<FindACategory> {
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
                           fontSize: 16,
+                          decoration: TextDecoration.underline,
                           color: Color(0xFF00A69D),
                         ),
                       ),
@@ -425,6 +408,595 @@ class _FindACategoryState extends State<FindACategory> {
         ),
       ),
     );
+  }
+
+  /// This function builds a modal sheet to select candidate preference either
+  /// full time or custom
+  _buildCandidatePreferenceSheet(BuildContext context, Category category){
+
+    bool liveIn = false;
+    bool custom = true;
+
+    bool monday = false;
+    bool tuesday = false;
+    bool wednesday = false;
+    bool thursday = false;
+    bool friday = false;
+    bool saturday = false;
+    bool sunday = false;
+
+    showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: false,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder:(context, StateSetter setModalState){
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      padding: EdgeInsets.only(right: 24),
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: 26,
+                        height: 26,
+                        child: FloatingActionButton(
+                            elevation: 30,
+                            backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
+                            shape:CircleBorder(),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: Color(0xFFFFFFFF),
+                              size:13,
+                            )
+                        ),
+                      )
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(24, 40, 24, 48),
+                    margin: EdgeInsets.only(top: 34),
+                    width: SizeConfig.screenWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight:Radius.circular(30)
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children:[
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFF7941D)
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              "assets/icons/info.png",
+                              height: 24,
+                              width: 24,
+                              fit: BoxFit.contain
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 18),
+                        Text(
+                          "Please Select Hire Availability",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Gelion',
+                            fontSize: 18,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Container(
+                          width: SizeConfig.screenWidth - 150,
+                          child: Text(
+                            "These are your preferred candidates. Please schedule Set/Note Interview Dates",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Gelion',
+                              fontSize: 12.6829,
+                              color: Color(0xFF57565C),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 64),
+                        Container(
+                          width: SizeConfig.screenWidth,
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  setModalState(() {
+                                    liveIn = true;
+                                    custom = false;
+                                  });
+                                },
+                                child: Container(
+                                  width: (SizeConfig.screenWidth / 2) - 24,
+                                  padding: EdgeInsets.only(bottom: 14.5),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: liveIn
+                                            ? BorderSide(color: Color(0xFF00A69D), width: 3)
+                                            : BorderSide.none
+                                    )
+                                  ),
+                                  child: Text(
+                                    'Full Time',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Gelion',
+                                      fontSize: 14,
+                                      color: liveIn
+                                          ? Color(0xFF00A69D)
+                                          : Color(0xFF717F88),
+                                    )
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: (){
+                                  setModalState(() {
+                                    liveIn = false;
+                                    custom = true;
+                                  });
+                                },
+                                child: Container(
+                                  width: (SizeConfig.screenWidth / 2) - 24,
+                                  padding: EdgeInsets.only(bottom: 14.5),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: custom
+                                              ? BorderSide(color: Color(0xFF00A69D), width: 3)
+                                              : BorderSide.none
+                                      )
+                                  ),
+                                  child: Text(
+                                      'Part Time',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: custom
+                                            ? Color(0xFF00A69D)
+                                            : Color(0xFF717F88),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ]
+                          ),
+                        ),
+                        Container(
+                          width: SizeConfig.screenWidth,
+                          height: 1,
+                          color: Color(0xFFC5C9CC)
+                        ),
+                        SizedBox(height: 34),
+                        AnimatedCrossFade(
+                          crossFadeState: custom
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                          duration: const Duration(milliseconds: 500),
+                          firstChild: Container(),
+                          secondChild: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Select Day(s)",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 14,
+                                  color: Color(0xFF042538),
+                                ),
+                              ),
+                              SizedBox(height: 7),
+                              Container(
+                                padding: EdgeInsets.only(bottom: 33),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            sunday = !sunday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: sunday
+                                            ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Sun",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        )
+                                            : Text(
+                                          "Sun",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            monday = !monday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: monday
+                                            ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Mon",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        )
+                                            : Text(
+                                          "Mon",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            tuesday = !tuesday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: tuesday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Tue",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Tue",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            wednesday = !wednesday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: wednesday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Wed",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Wed",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            thursday = !thursday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: thursday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Thu",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Thu",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            friday = !friday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: friday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Fri",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Fri",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setModalState(() {
+                                            saturday = !saturday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: saturday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Sat",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Sat",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Button(
+                          onTap: (){
+
+                            var availability = Availability();
+                            availability.title = liveIn ? 'Live In' : 'Custom';
+                            availability.sunday = { "availability": liveIn ? true : sunday, "booked": false };
+                            availability.monday = { "availability": liveIn ? true : monday, "booked": false };
+                            availability.tuesday = { "availability": liveIn ? true : tuesday, "booked": false };
+                            availability.wednesday = { "availability": liveIn ? true : wednesday, "booked": false };
+                            availability.thursday = { "availability": liveIn ? true : thursday, "booked": false };
+                            availability.friday = { "availability": liveIn ? true : friday, "booked": false };
+                            availability.saturday = { "availability": liveIn ? true : saturday, "booked": false };
+
+                            Navigator.pop(context);
+                            Navigator.push(context,
+                                CupertinoPageRoute(builder: (_){
+                                  return SelectedCategory(
+                                    availability: availability,
+                                    category: category,
+                                    candidates: _candidates[category],
+                                  );
+                                })
+                            ).then((value) {
+                              _afterNav(value, category);
+                            });
+                          },
+                          buttonColor: Color(0xFF00A69D),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Continue",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontFamily: 'Gelion',
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                              Icon(
+                                  Icons.arrow_forward,
+                                  size: 18,
+                                  color: Color(0xFFFFFFFF)
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        }
+    );
+  }
+
+  void _afterNav(dynamic value, Category category){
+    if(value != null){
+      if(value.isNotEmpty){
+        if(!mounted)return;
+        setState(() {
+          _candidates[category] = value[1];
+        });
+        if(value[0] == true){
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (_){
+                return ShortListedCandidate(
+                  candidates: _candidates,
+                );
+              })
+          ).then((val) {
+            if(val != null){
+              if(!mounted)return;
+              setState(() {
+                _candidates = val;
+              });
+            }
+          });
+        }
+      }
+    }
   }
 
 }

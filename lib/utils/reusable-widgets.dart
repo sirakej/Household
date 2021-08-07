@@ -52,31 +52,31 @@ class _CandidateContainerState extends State<CandidateContainer> {
             Row(
               children: [
                 Container(
-                  height: 57,
-                  width: 72,
+                  height: 60,
+                  width: 60,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: CachedNetworkImage(
                     imageUrl: widget.candidate.profileImage,
-                    height: 57,
-                    width: 72,
+                    height: 60,
+                    width: 60,
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Container(),
                   ),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 17),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${widget.candidate.firstName} (${widget.candidate.gender})",
+                      "${widget.candidate.firstName} ${widget.candidate.firstName}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Color(0xFF042538),
                       ),
                     ),
@@ -84,9 +84,9 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       "${widget.candidate.experience} ${widget.candidate.experience > 1 ? 'Years' : 'Year'} Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 12,
+                        fontSize: 14,
                         color: Color(0xFF717F88),
                       ),
                     ),
@@ -94,9 +94,9 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       "${widget.candidate.availability.title} . ${widget.candidate.origin}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 12,
+                        fontSize: 14,
                         color: Color(0xFF717F88),
                       ),
                     ),
@@ -165,31 +165,31 @@ class _CandidateContainerState extends State<CandidateContainer> {
             Row(
               children: [
                 Container(
-                  height: 57,
-                  width: 72,
+                  height: 60,
+                  width: 60,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
                   child: CachedNetworkImage(
                     imageUrl: widget.candidate.profileImage,
-                    height: 57,
-                    width: 72,
+                    height: 60,
+                    width: 60,
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Container(),
                   ),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 17),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${widget.candidate.firstName} (${widget.candidate.gender})",
+                      "${widget.candidate.firstName} ${widget.candidate.lastName}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Color(0xFF042538),
                       ),
                     ),
@@ -197,9 +197,9 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       "${widget.candidate.experience} ${widget.candidate.experience > 1 ? 'Years' : 'Year'} Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 12,
+                        fontSize: 14,
                         color: Color(0xFFF7941D),
                       ),
                     ),
@@ -207,9 +207,9 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       "${widget.candidate.availability.title} . ${widget.candidate.origin}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 12,
+                        fontSize: 14,
                         color: Color(0xFF717F88),
                       ),
                     ),
@@ -275,6 +275,8 @@ class Button extends StatelessWidget {
 
   final double width;
 
+  final double height;
+
   final double padding;
 
   final double radius;
@@ -286,6 +288,7 @@ class Button extends StatelessWidget {
     this.foregroundColor,
     @required this.child,
     this.width,
+    this.height,
     this.padding,
     this.radius
   }) : super(key: key);
@@ -293,7 +296,23 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ElevatedButton(
+    return height != null
+        ? ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: buttonColor, // background
+          onPrimary: foregroundColor ?? Color(0xFFFFFFFF), // foreground
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius ?? 8)),
+          )
+      ),
+      onPressed: onTap,
+      child: Container(
+        width: width ?? SizeConfig.screenWidth,
+        height: height,
+        child: child,
+      ),
+    )
+        : ElevatedButton(
       style: ElevatedButton.styleFrom(
           primary: buttonColor, // background
           onPrimary: foregroundColor ?? Color(0xFFFFFFFF), // foreground
@@ -307,7 +326,7 @@ class Button extends StatelessWidget {
         padding: EdgeInsets.only(top: padding ?? 18, bottom: padding ?? 18),
         child: child,
       ),
-    );
+    ) ;
   }
 
 }
@@ -431,25 +450,16 @@ class DrawerContainer extends StatelessWidget {
               ],
             ),
             number != null
-                ? Container(
-              width: 18,
-              height: 18,
+                ? number > 0
+                  ? Container(
+              width: 8,
+              height: 8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF00889D)
-              ),
-              child: Center(
-                child: Text(
-                  '$number',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    fontSize: 12,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
+                color: Color(0xFFF7941D)
               ),
             )
+                  : Container()
                 : Container(),
           ],
         ),

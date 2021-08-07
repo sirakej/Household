@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
@@ -8,7 +10,7 @@ import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:skeleton_loader/skeleton_loader.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
@@ -24,10 +26,14 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
 
   TabController _tabController;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
+
+  /// Converting [dateTime] in string format to return a formatted time
+  /// of hrs, minutes and am/pm
+  String _getFormattedDate(DateTime dateTime) {
+    return DateFormat('E, d MMM, y h:mm a').format(dateTime).toString();
+  }
 
   /// A List to hold the all the hired candidates
   List<HiredCandidates> _candidates = [];
@@ -40,6 +46,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
   void _allHiredCandidates() async {
     Future<List<HiredCandidates>> list = futureValue.getAllHiredCandidatesFromDB();
     await list.then((value) {
+      _candidates.clear();
       if(value.isEmpty || value.length == 0){
         if(!mounted)return;
         setState(() {
@@ -60,69 +67,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     });
   }
 
-  /// A function to build the list of all the pending hired candidates
-  Widget _buildPending(){
-    List<Widget> pendingContainer = [];
-    if(_candidates.length > 0 && _candidates.isNotEmpty){
-      for (int i = 0; i < _candidates.length; i++){
-        if(_candidates[i].status.toLowerCase() == 'pending'){
-          pendingContainer.add(
-            Container(
-              margin: EdgeInsets.only(bottom: 15),
-              child: CandidateContainer(
-                candidate: _candidates[i].getCandidate,
-                onPressed: (){
-                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, 'Send Review');
-                },
-                selected: false,
-                showStars: false,
-              ),
-            ),
-          );
-        }
-      }
-      return pendingContainer.length > 0
-          ? SingleChildScrollView(
-        child: Column(
-          children: pendingContainer,
-        ),
-      )
-          : _buildEmpty('You have no Pending candidate\nat the moment');
-    }
-    else if(_candidatesLength == 0){
-      return _buildEmpty('You have no Pending candidate\nat the moment');
-    }
-    return Container(
-        child: Center(child: CupertinoActivityIndicator(radius: 15))
-    );
-    return SingleChildScrollView(
-      child: SkeletonLoader(
-        builder: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                height: 10,
-                color: Colors.white.withOpacity(0.5),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                height: 12,
-                color: Colors.white.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
-        items: 20,
-        period: Duration(seconds: 3),
-        highlightColor: Color(0xFF1F1F1F),
-        direction: SkeletonDirection.btt,
-      ),
-    );
-  }
-
   /// A function to build the list of all the ongoing hired candidates
   Widget _buildOngoing(){
     List<Widget> ongoingContainer = [];
@@ -135,7 +79,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
               child: CandidateContainer(
                 candidate: _candidates[i].getCandidate,
                 onPressed: (){
-                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, null);
+                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, _candidates[i].id, 'Send Review');
                 },
                 selected: false,
                 showStars: false,
@@ -158,32 +102,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     return Container(
         child: Center(child: CupertinoActivityIndicator(radius: 15))
     );
-    return SingleChildScrollView(
-      child: SkeletonLoader(
-        builder: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                height: 10,
-                color: Colors.white.withOpacity(0.5),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                height: 12,
-                color: Colors.white.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
-        items: 20,
-        period: Duration(seconds: 3),
-        highlightColor: Color(0xFF1F1F1F),
-        direction: SkeletonDirection.btt,
-      ),
-    );
   }
 
   /// A function to build the list of all the previous hired candidates
@@ -198,7 +116,11 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
               child: CandidateContainer(
                 candidate: _candidates[i].getCandidate,
                 onPressed: (){
-                  _buildProfileModalSheet(context, _candidates[i].getCandidate, _candidates[i].category, 'Rehire');
+                  _buildProfileModalSheet(context, _candidates[i].getCandidate,
+                      _candidates[i].category,  _candidates[i].id, 'Rehire',
+                    savedCategoryId: _candidates[i].savedCategory,
+                    hirePlan: _candidates[i].hirePlan,
+                  );
                 },
                 selected: false,
                 showStars: false,
@@ -220,32 +142,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     }
     return Container(
         child: Center(child: CupertinoActivityIndicator(radius: 15))
-    );
-    return SingleChildScrollView(
-      child: SkeletonLoader(
-        builder: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                height: 10,
-                color: Colors.white.withOpacity(0.5),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                height: 12,
-                color: Colors.white.withOpacity(0.5),
-              ),
-            ],
-          ),
-        ),
-        items: 20,
-        period: Duration(seconds: 3),
-        highlightColor: Color(0xFF1F1F1F),
-        direction: SkeletonDirection.btt,
-      ),
     );
   }
 
@@ -292,7 +188,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
   @override
   void initState(){
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _allHiredCandidates();
   }
 
@@ -300,132 +196,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      key: _scaffoldKey,
-      /*drawer: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(30))
-        ),
-        child: Drawer(
-          elevation: 20,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF006838),
-                            Color(0xFF00A69D),
-                          ],
-                          stops: [0.55, 1],
-                        )
-                    ),
-                    child: DrawerHeaderName(
-                      firstName: _firstName,
-                      surName: _surName,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(24, 34, 24, 20),
-                    height: SizeConfig.screenHeight * 0.6,
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Column(
-                          children:[
-                            DrawerContainer(
-                              title: "My Account",
-                              imageName: "account",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return Account();
-                                    })
-                                );
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "Hired Candidates",
-                              imageName: "hired_candidates",
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "Transactions & Payments",
-                              imageName: "transactions",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return TransactionAndPayments();
-                                    }
-                                    )
-                                );
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "My Purchases",
-                              imageName: "my_purchases",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return SavedPurchases();
-                                    }
-                                    )
-                                );
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "Scheduled Interview",
-                              imageName: "scheduled_interview",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return ScheduledInterview();
-                                    }
-                                    )
-                                );
-                              },
-                            ),
-                          ]
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 16, bottom: 35),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: TextButton(
-                    onPressed:(){
-                      Functions.logOut(context);
-                    },
-                    child: Text(
-                      "Log Out",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
-                        color: Color(0xFFE36D45),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),*/
       backgroundColor: Color(0xFFFCFDFE),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -478,9 +248,8 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorWeight: 3,
                 tabs:[
-                  Tab(text: 'Ongoing'),
-                  Tab(text: 'Pending'),
-                  Tab(text: 'Previous'),
+                  Tab(text: 'Ongoing Hires'),
+                  Tab(text: 'Previous Hires'),
                 ]
             ),
             Container(
@@ -495,7 +264,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                 controller: _tabController,
                 children: [
                   _buildOngoing(),
-                  _buildPending(),
+                  //_buildPending(),
                   _buildPrevious(),
                 ],
               ),
@@ -506,35 +275,32 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     );
   }
 
-  _buildProfileModalSheet(BuildContext context, Candidate candidate, String categoryId, String text){
+  _buildProfileModalSheet(BuildContext context, Candidate candidate, String categoryId, String hireId, String text, {String savedCategoryId, dynamic hirePlan}){
+    List<Widget> allHistory = [];
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
-      history.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check,
-              size:12,
+      allHistory.add(
+        Container(
+          width: SizeConfig.screenWidth - 120,
+          child: Text(
+            '• ${candidate.history[i].toString()}',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 14,
               color: Color(0xFF717F88),
             ),
-            SizedBox(width:8),
-            Container(
-              width: SizeConfig.screenWidth - 120,
-              child: Text(
-                candidate.history[i].toString(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF717F88),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       );
+    }
+    if(allHistory.length <= 2){
+      history.addAll(allHistory);
+    }
+    else {
+      history.add(allHistory[0]);
+      history.add(allHistory[1]);
     }
     showModalBottomSheet<void>(
         backgroundColor: Color(0xFFFFFFFF),
@@ -591,14 +357,12 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(34),
-                              child: Image.network(
-                                candidate.profileImage,
+                              child: CachedNetworkImage(
+                                imageUrl: candidate.profileImage,
                                 width: 74,
                                 height: 74,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace){
-                                  return Container();
-                                },
+                                errorWidget: (context, url, error) => Container(),
                               ),
                             ),
                           ),
@@ -632,7 +396,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "ID Number:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -643,7 +407,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       'HE${candidate.id.substring(0, 6).toUpperCase()}',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -656,10 +420,10 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Origin",
+                                      "Service Area",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -670,7 +434,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "${candidate.origin ?? ''}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -686,7 +450,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "Availability:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -697,7 +461,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       candidate.availability.title ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -717,7 +481,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "Age:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -728,7 +492,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "${candidate.age ?? ''}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -741,10 +505,10 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Residence:",
+                                      "Languages:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -754,10 +518,10 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                     Container(
                                       width: 120,
                                       child: Text(
-                                        candidate.residence ?? '',
+                                        candidate.language ?? '',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w400,
+                                          fontWeight: FontWeight.normal,
                                           fontFamily: 'Gelion',
                                           fontSize: 14,
                                           color: Color(0xFF717F88),
@@ -774,7 +538,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "Rating:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -787,7 +551,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                           '${candidate.rating ?? ''}',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w400,
+                                            fontWeight: FontWeight.normal,
                                             fontFamily: 'Gelion',
                                             fontSize: 14,
                                             color: Color(0xFF717F88),
@@ -816,7 +580,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "Gender:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -824,10 +588,10 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      candidate.gender ?? '',
+                                      Functions.capitalize(candidate.gender) ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -843,7 +607,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "Experience:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -851,10 +615,10 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} +",
+                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -870,7 +634,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       "Tribe",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF042538),
@@ -881,7 +645,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       candidate.tribe ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.normal,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
                                         color: Color(0xFF717F88),
@@ -904,7 +668,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                   "Unique Skill(s):",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.normal,
                                     fontFamily: 'Gelion',
                                     fontSize: 14,
                                     color: Color(0xFF042538),
@@ -918,7 +682,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                     "${candidate.skill}",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      fontWeight: FontWeight.w400,
+                                      fontWeight: FontWeight.normal,
                                       fontFamily: 'Gelion',
                                       fontSize: 14,
                                       color: Color(0xFF717F88),
@@ -935,7 +699,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                   "Work History:",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.normal,
                                     fontFamily: 'Gelion',
                                     fontSize: 14,
                                     color: Color(0xFF042538),
@@ -950,7 +714,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                             ),
                             SizedBox(height: 18),
                             Container(
-                              width:100,
+                              width: 100,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -1010,7 +774,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                                         children: [
                                           Text(
                                             "Guarantors",
@@ -1031,7 +794,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                                         children: [
                                           Text(
                                             "Health Status",
@@ -1056,12 +818,11 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                               ),
                             ),
                             SizedBox(height: 5),
-                            candidate.officialHeReport.isNotEmpty
-                                ? TextButton(
+                            TextButton(
                               onPressed: () {
                                 _openUrl(candidate.officialHeReport);
                               },
-                              child:  Text(
+                              child: Text(
                                 "view official HE Report",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
@@ -1073,7 +834,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                 ),
                               ),
                             )
-                                : Container(),
                           ],
                         ),
                         SizedBox(height: 30),
@@ -1082,10 +842,10 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                           onTap: (){
                             Navigator.pop(context);
                             if(text == 'Send Review'){
-                              _buildReviewSheet(context, candidate, categoryId);
+                              _buildReviewSheet(context, candidate, categoryId, hireId);
                             }
                             else if(text == 'Rehire') {
-
+                              _buildHireStartSheet(context, candidate, savedCategoryId, categoryId, hirePlan);
                             }
                           },
                           buttonColor: Color(0xFF00A69D),
@@ -1116,10 +876,12 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
 
   /// Function to call a number using the [url_launcher] package
   _openUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch the url';
+    if(url != null || url.isNotEmpty){
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch the url';
+      }
     }
   }
 
@@ -1127,7 +889,8 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
 
   bool _showSpinner = false;
 
-  _buildReviewSheet(BuildContext context, Candidate candidate, String categoryId){
+  _buildReviewSheet(BuildContext context, Candidate candidate, String categoryId, String hireId){
+    reviewController.clear();
     final formKey = GlobalKey<FormState>();
     int rating = 0;
     showModalBottomSheet<void>(
@@ -1219,7 +982,6 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                           });
                         },
                       ),
-                      //StarDisplay(value: candidate.rating ?? 0),
                       SizedBox(height: 23),
                       Form(
                         key: formKey,
@@ -1272,7 +1034,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                       Button(
                         onTap: (){
                           if(formKey.currentState.validate() && !_showSpinner){
-                            _reviewCandidate(candidate.id, categoryId, rating, setModalState);
+                            _reviewCandidate(candidate.id, categoryId, rating, hireId, setModalState);
                           }
                         },
                         buttonColor: Color(0xFF00A69D),
@@ -1397,11 +1159,11 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
   }
 
   void _reviewCandidate(String candidateId, String categoryId, int rating,
-      StateSetter setModalState){
+      String hireId, StateSetter setModalState){
     if(!mounted) return;
     setModalState(() { _showSpinner = true; });
     var api = RestDataSource();
-    api.reviewCandidate(candidateId, categoryId, reviewController.text.trim(),
+    api.reviewCandidate(candidateId, categoryId, hireId, reviewController.text.trim(),
         rating).then((dynamic) async{
       reviewController.clear();
       if(!mounted) return;
@@ -1414,6 +1176,649 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
       setModalState(() { _showSpinner = false; });
       Functions.showError(context, e);
     });
+  }
+
+
+  TextEditingController _scheduleController = TextEditingController();
+
+  DateTime _resumeAt;
+
+  _buildHireStartSheet(BuildContext context, Candidate candidate, String savedCategoryId, String categoryId, dynamic hirePlan){
+    _scheduleController.clear();
+    final formKey = GlobalKey<FormState>();
+    showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: true,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
+            return GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(24, 45, 24, 38),
+                margin: EdgeInsets.only(top: 34),
+                width: SizeConfig.screenWidth,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft:Radius.circular(30),
+                      topRight:Radius.circular(30)
+                  ),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children:[
+                    Text(
+                      "Resumption Date",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                    SizedBox(height: 13),
+                    Container(
+                      width: SizeConfig.screenWidth - 150,
+                      child: Text(
+                        "Your candidate(s) will be informed of the resumption date. We will contact you to firm up final arrangements.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          color: Color(0xFF57565C),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Availability',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Gelion',
+                              fontSize: 16,
+                              color: Color(0xFF042538),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: candidate.availability.sunday['availability']
+                                    ? candidate.availability.sunday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Sun",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Sun",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Sun",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: candidate.availability.monday['availability']
+                                    ? candidate.availability.monday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Mon",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Mon",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Mon",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: candidate.availability.tuesday['availability']
+                                    ? candidate.availability.tuesday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Tue",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Tue",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Tue",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: candidate.availability.wednesday['availability']
+                                    ? candidate.availability.wednesday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Wed",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Wed",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Wed",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: candidate.availability.thursday['availability']
+                                    ? candidate.availability.thursday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Thu",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Thu",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Thu",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: candidate.availability.friday['availability']
+                                    ? candidate.availability.friday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Fri",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Fri",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Fri",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: candidate.availability.saturday['availability']
+                                    ? candidate.availability.saturday['booked']
+                                    ? Container(
+                                    height:33,
+                                    width: 33,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Sat",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Gelion',
+                                          fontSize: 14,
+                                          color: Color(0xFF00A69D),
+                                        ),
+                                      ),
+                                    )
+                                )
+                                    : Text(
+                                  "Sat",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF000000),
+                                  ),
+                                )
+                                    : Text(
+                                  "Sat",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFFC4CDD5),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ]
+                    ),
+                    SizedBox(height: 30),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Start Date',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                fontSize: 16,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              width: SizeConfig.screenWidth,
+                              child: TextFormField(
+                                controller: _scheduleController,
+                                keyboardType: TextInputType.text,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please select';
+                                  }
+                                  return null;
+                                },
+                                readOnly: true,
+                                onTap: (){
+                                  _showDateTime(setModalState);
+                                },
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  fontFamily: 'Gelion',
+                                  color: Color(0xFF042538),
+                                ),
+                                decoration: kFieldDecoration.copyWith(
+                                  hintText: 'Please Select',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xFF717F88),
+                                    fontSize: 14,
+                                    fontFamily: 'Gelion',
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                  suffixIcon: Container(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          constraints: BoxConstraints(
+                                            maxWidth: 16,
+                                            maxHeight: 16,
+                                          ),
+                                          width: 16,
+                                          height: 16,
+                                          child: Icon(
+                                            Icons.calendar_today_outlined,
+                                            color: Color(0xFF000000),
+                                            size: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                      ),
+                    ),
+                    SizedBox(height: 40),
+                    Button(
+                      onTap: (){
+                        if(formKey.currentState.validate()){
+                          _hireCandidate(savedCategoryId, categoryId, candidate, hirePlan, setModalState);
+                        }
+                      },
+                      buttonColor: Color(0xFF00A69D),
+                      child: Center(
+                        child: _showSpinner
+                            ? CupertinoActivityIndicator(radius: 13)
+                            : Text(
+                          "Continue",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+                  ],
+                ),
+              ),
+            );
+          });
+        }
+    );
+  }
+
+  /// Function to show the bottom date time picker fo selecting frequency time
+  void _showDateTime(StateSetter setModalState){
+    DateTime now = DateTime.now();
+    DatePicker.showDateTimePicker(
+        context,
+        showTitleActions: true,
+        minTime: DateTime.now(),
+        maxTime: DateTime(now.year + 1, now.month, now.day),
+        onChanged: (date) {
+          if(!mounted)return;
+          setModalState(() {
+            _scheduleController.text = _getFormattedDate(date);
+            _resumeAt = date;
+          });
+        },
+        onConfirm: (date) {
+          if(!mounted)return;
+          setModalState(() {
+            _scheduleController.text = _getFormattedDate(date);
+            _resumeAt = date;
+          });
+        },
+        currentTime: DateTime.now(),
+        locale: LocaleType.en
+    );
+  }
+
+  void _hireCandidate(String savedCategoryId, String categoryId,
+      Candidate candidate, dynamic hirePlan, StateSetter setModalState){
+    if(!mounted) return;
+    setModalState(() { _showSpinner = true; });
+    var api = RestDataSource();
+    api.hireCandidate(savedCategoryId, categoryId, candidate,
+        _resumeAt, hirePlan).then((dynamic) async{
+      if(!mounted) return;
+      setModalState(() {
+        _resumeAt = null;
+        _showSpinner = false;
+      });
+      _allHiredCandidates();
+      Navigator.pop(context);
+      _buildCompletedHireSheet(context);
+    }).catchError((e){
+      print(e);
+      if(!mounted)return;
+      setModalState(() {
+        _showSpinner = false;
+        _resumeAt = null;
+      });
+      Functions.showError(context, e);
+    });
+  }
+
+  _buildCompletedHireSheet(BuildContext context){
+    showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: false,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: false,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
+            return SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(24, 30, 24, 38),
+                margin: EdgeInsets.only(top: 34),
+                width: SizeConfig.screenWidth,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight:Radius.circular(30)),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children:[
+                    Image.asset(
+                        "assets/icons/circle check full.png",
+                        height: 60.5,
+                        width: 60.5,
+                        fit: BoxFit.contain
+                    ),
+                    SizedBox(height: 24.75),
+                    Text(
+                      "Success",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                    SizedBox(height: 13),
+                    Text(
+                      "You have completed your hire!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF57565C),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Button(
+                      onTap: (){
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      buttonColor: Color(0xFF00A69D),
+                      child: Center(
+                        child: Text(
+                          "Home",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child:Text(
+                        "Hire Others",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFF00A69D),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+        }
+    );
   }
 
 }

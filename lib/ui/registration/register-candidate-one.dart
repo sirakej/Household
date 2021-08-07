@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/registration/register-candidate-two.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
@@ -19,6 +23,9 @@ class RegisterCandidateOne extends StatefulWidget {
 
 class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
 
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
 
@@ -30,9 +37,6 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
 
   /// A [TextEditingController] to control the input text for the user's email
   TextEditingController _emailController = TextEditingController();
-
-  /// A [TextEditingController] to control the input text for the user's address
-  TextEditingController _addressController = TextEditingController();
 
   /// A [TextEditingController] to control the input text for the user's phone number
   TextEditingController _phoneNumberController = TextEditingController();
@@ -121,8 +125,55 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
     "10 years and above",
   ];
 
+  /// A [TextEditingController] to control the input text for the categories
+  TextEditingController _categoryController = TextEditingController();
+
   /// A string variable holding the selected state value
   String _selectedExperience;
+
+  /// A List to hold the all the categories
+  List<Category> _categories = [];
+
+  /// A List to hold the all the selected categories
+  List<Category> _allSelectedCategories = [];
+
+  Category _selectedCategory;
+
+  /// An Integer variable to hold the length of [_categories]
+  int _categoriesLength;
+
+  /// A List to hold the widgets of all the category widgets
+  List<Widget> _categoriesList = [];
+
+  /// [This function gets all the categories in the db to put in [_categories]
+  void _allCategories() async {
+    Future<List<Category>> names = futureValue.getAllCategories();
+    await names.then((value) {
+      if(value.isEmpty || value.length == 0){
+        if(!mounted)return;
+        setState(() {
+          _categoriesLength = 0;
+          _categories = [];
+        });
+      }
+      else if (value.length > 0){
+        if(!mounted)return;
+        setState(() {
+          _categories.addAll(value.reversed);
+          _categoriesLength = value.length;
+        });
+      }
+    }).catchError((e){
+      print(e);
+      Functions.showError(context, e);
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _allCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +236,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                 ),
                 SizedBox(height: 8,),
                 Text(
-                  'Experienced, Professional & Vetted',
+                  'Join our team of professionals',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
@@ -206,8 +257,14 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         SizedBox(height: 60),
                         Button(
                           onTap: (){
-                            if(_formKey.currentState.validate()){
-                              _registerCandidate();
+                            _registerCandidate();
+                            if(_allSelectedCategories.length > 0){
+                              if(_formKey.currentState.validate()){
+                                _registerCandidate();
+                              }
+                            }
+                            else {
+                              Functions.showInfo(context, 'Select at least one category of what you do');
                             }
                           },
                           buttonColor: Color(0xFF00A69D),
@@ -253,6 +310,141 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          // Email Address
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Email Address",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter your email';
+                    }
+                    if (value.length < 3 && !value.contains("@") && !value.contains(".")){
+                      return 'Invalid email address';
+                    }
+                    return null;
+                  },
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  decoration:kFieldDecoration.copyWith(
+                      hintText: 'placeholder@mail.com',
+                      hintStyle:TextStyle(
+                        color:Color(0xFF717F88),
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        fontWeight: FontWeight.normal,
+                      )
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          // Category
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Categories",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: DropdownButtonFormField<Category>(
+                  isExpanded: true,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  icon: Image.asset(
+                      'assets/icons/arrow-down.png',
+                      height: 18,
+                      width: 18,
+                      fit: BoxFit.contain
+                  ),
+                  value: _selectedCategory,
+                  onChanged: (Category value){
+                    if(!mounted)return;
+                    setState(() {
+                      if(!_allSelectedCategories.contains(value)){
+                        _allSelectedCategories.add(value);
+                      }
+                      _selectedCategory = null;
+                    });
+                  },
+                  decoration: kFieldDecoration.copyWith(
+                    hintText: 'Please Select',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF717F88),
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                    ),
+                  ),
+                  selectedItemBuilder: (BuildContext context){
+                    return _categories.map((value){
+                      return Text(
+                        value.category.singularName,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                      );
+                    }).toList();
+                  },
+                  items: _categories.map((Category value){
+                    return DropdownMenuItem<Category>(
+                      value: value,
+                      child: Text(
+                        value.category.singularName,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildCategoryList(),
+            ],
+          ),
+          SizedBox(height: 20),
+          // First Name
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -305,6 +497,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
             ],
           ),
           SizedBox(height: 20),
+          // Last Name
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -357,359 +550,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
             ],
           ),
           SizedBox(height: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Email Address",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF042538),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: SizeConfig.screenWidth,
-                child: TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter your email';
-                    }
-                    if (value.length < 3 && !value.contains("@") && !value.contains(".")){
-                      return 'Invalid email address';
-                    }
-                    return null;
-                  },
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    color: Color(0xFF042538),
-                  ),
-                  decoration:kFieldDecoration.copyWith(
-                      hintText: 'placeholder@mail.com',
-                      hintStyle:TextStyle(
-                        color:Color(0xFF717F88),
-                        fontSize: 14,
-                        fontFamily: 'Gelion',
-                        fontWeight: FontWeight.normal,
-                      )
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Residence",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF042538),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: SizeConfig.screenWidth,
-                child: TextFormField(
-                  controller: _addressController,
-                  keyboardType: TextInputType.streetAddress,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter your residence';
-                    }
-                    return null;
-                  },
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    color: Color(0xFF042538),
-                  ),
-                  decoration:kFieldDecoration.copyWith(
-                      hintText: 'Ogba, Lagos',
-                      hintStyle:TextStyle(
-                        color:Color(0xFF717F88),
-                        fontSize: 14,
-                        fontFamily: 'Gelion',
-                        fontWeight: FontWeight.normal,
-                      )
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Phone Number",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF042538),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: SizeConfig.screenWidth,
-                child: InternationalPhoneNumberInput(
-                  onInputChanged: (PhoneNumber number) {
-                    _number = number;
-                  },
-                  selectorConfig: SelectorConfig(
-                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                      showFlags: true,
-                      useEmoji: true
-                  ),
-                  ignoreBlank: true,
-                  autoValidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter your phone number';
-                    }
-                    return null;
-                  },
-                  spaceBetweenSelectorAndTextField: 8,
-                  selectorTextStyle: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Gelion',
-                    color: Color(0xFF042538),
-                  ),
-                  inputDecoration: kFieldDecoration.copyWith(
-                      hintText: 'Phone Number',
-                      hintStyle: TextStyle(
-                        color:Color(0xFF717F88),
-                        fontSize: 14,
-                        fontFamily: 'Gelion',
-                        fontWeight: FontWeight.normal,
-                      )
-                  ),
-                  initialValue: _number,
-                  textFieldController: _phoneNumberController,
-                  formatInput: true,
-                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                  inputBorder: OutlineInputBorder(),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Age",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      child: TextFormField(
-                        controller: _ageController,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        validator: (value){
-                          if(value.isEmpty){
-                            return 'Enter age';
-                          }
-                          return null;
-                        },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(3),
-                        ],
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'Gelion',
-                          color: Color(0xFF042538),
-                        ),
-                        decoration:kFieldDecoration.copyWith(
-                            hintText: 'Please enter age',
-                            hintStyle:TextStyle(
-                              color:Color(0xFF717F88),
-                              fontSize: 14,
-                              fontFamily: 'Gelion',
-                              fontWeight: FontWeight.normal,
-                            )
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Origin",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      child: TextFormField(
-                        controller: _originController,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.next,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                        ],
-                        validator: (value){
-                          if(value.isEmpty){
-                            return 'Enter state of origin';
-                          }
-                          return null;
-                        },
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'Gelion',
-                          color: Color(0xFF042538),
-                        ),
-                        decoration:kFieldDecoration.copyWith(
-                            hintText: 'Enter state of origin',
-                            hintStyle:TextStyle(
-                              color:Color(0xFF717F88),
-                              fontSize: 14,
-                              fontFamily: 'Gelion',
-                              fontWeight: FontWeight.normal,
-                            )
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
+          // Gender and Tribe
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Tribe",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      child: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                          fontFamily: 'Gelion',
-                          color: Color(0xFF042538),
-                        ),
-                        icon: Image.asset(
-                            'assets/icons/arrow-down.png',
-                            height: 18,
-                            width: 18,
-                            fit: BoxFit.contain
-                        ),
-                        value: _selectedTribe,
-                        onChanged: (String value){
-                          if(!mounted)return;
-                          setState(() {
-                            _selectedTribe = value;
-                          });
-                        },
-                        validator: (value){
-                          if (_selectedTribe == null || _selectedTribe.isEmpty){
-                            return 'Pick your option';
-                          }
-                          return null;
-                        },
-                        decoration: kFieldDecoration.copyWith(
-                          hintText: 'Please Select',
-                          hintStyle: TextStyle(
-                            color: Color(0xFF717F88),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Gelion',
-                          ),
-                        ),
-                        selectedItemBuilder: (BuildContext context){
-                          return _tribe.map((value){
-                            return Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Gelion',
-                                color: Color(0xFF042538),
-                              ),
-                            );
-                          }).toList();
-                        },
-                        items: _tribe.map((String value){
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Gelion',
-                                color: Color(0xFF042538),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: 10),
               Expanded(
                   child:Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -795,10 +639,267 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                       ),
                     ],
                   )
-              )
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Tribe",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                        icon: Image.asset(
+                            'assets/icons/arrow-down.png',
+                            height: 18,
+                            width: 18,
+                            fit: BoxFit.contain
+                        ),
+                        value: _selectedTribe,
+                        onChanged: (String value){
+                          if(!mounted)return;
+                          setState(() {
+                            _selectedTribe = value;
+                          });
+                        },
+                        validator: (value){
+                          if (_selectedTribe == null || _selectedTribe.isEmpty){
+                            return 'Pick your option';
+                          }
+                          return null;
+                        },
+                        decoration: kFieldDecoration.copyWith(
+                          hintText: 'Please Select',
+                          hintStyle: TextStyle(
+                            color: Color(0xFF717F88),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Gelion',
+                          ),
+                        ),
+                        selectedItemBuilder: (BuildContext context){
+                          return _tribe.map((value){
+                            return Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                            );
+                          }).toList();
+                        },
+                        items: _tribe.map((String value){
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           SizedBox(height: 24),
+          // Phone Number
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Phone Number",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: InternationalPhoneNumberInput(
+                  onInputChanged: (PhoneNumber number) {
+                    _number = number;
+                  },
+                  selectorConfig: SelectorConfig(
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                      showFlags: true,
+                      useEmoji: true
+                  ),
+                  ignoreBlank: true,
+                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter your phone number';
+                    }
+                    return null;
+                  },
+                  spaceBetweenSelectorAndTextField: 8,
+                  selectorTextStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  inputDecoration: kFieldDecoration.copyWith(
+                      hintText: 'Phone Number',
+                      hintStyle: TextStyle(
+                        color:Color(0xFF717F88),
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        fontWeight: FontWeight.normal,
+                      )
+                  ),
+                  initialValue: _number,
+                  textFieldController: _phoneNumberController,
+                  formatInput: true,
+                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                  inputBorder: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          // Age and Origin
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Age",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      child: TextFormField(
+                        controller: _ageController,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        validator: (value){
+                          if(value.isEmpty){
+                            return 'Enter age';
+                          }
+                          return null;
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(3),
+                        ],
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                        decoration:kFieldDecoration.copyWith(
+                            hintText: 'Please enter age',
+                            hintStyle:TextStyle(
+                              color:Color(0xFF717F88),
+                              fontSize: 14,
+                              fontFamily: 'Gelion',
+                              fontWeight: FontWeight.normal,
+                            )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Area of Service",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      child: TextFormField(
+                        controller: _originController,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                        ],
+                        validator: (value){
+                          if(value.isEmpty){
+                            return 'Enter area of service';
+                          }
+                          return null;
+                        },
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                        decoration:kFieldDecoration.copyWith(
+                            hintText: 'Enter state of origin',
+                            hintStyle:TextStyle(
+                              color:Color(0xFF717F88),
+                              fontSize: 14,
+                              fontFamily: 'Gelion',
+                              fontWeight: FontWeight.normal,
+                            )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -946,6 +1047,64 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
     );
   }
 
+  Widget _buildCategoryList(){
+    List<Widget> categoryContainer = [];
+    if(_allSelectedCategories.length <= 0){
+      categoryContainer.add(Container());
+    }
+    else {
+      for(int i = 0; i < _allSelectedCategories.length; i++){
+        if(_allSelectedCategories[i] != null){
+          categoryContainer.add(
+            InkWell(
+              onTap: (){
+                if(!mounted)return;
+                setState(() {
+                  _allSelectedCategories.removeAt(i);
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 9.73, right: 3.89242),
+                margin: EdgeInsets.only(right: 7.78484, bottom: 8),
+                decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    border: Border.all(color: Color(0xFF757575), width: 0.486553, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.all(Radius.circular(7.78484))
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _allSelectedCategories[i].category.singularName,
+                      style: TextStyle(
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                          color: Color(0xFF0C0C0C)
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.close_sharp,
+                      size: 12,
+                      color: Color(0xFF000000),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      }
+    }
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      direction: Axis.horizontal,
+      children: categoryContainer,
+    );
+  }
+
   /// Function to save the user's details in [CreateCandidate] model then move
   /// to the next phase of registration [RegisterCandidateTwo]
   void _registerCandidate(){
@@ -954,7 +1113,6 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
       candidate.firstName = Functions.capitalize(_firstNameController.text.trim());
       candidate.lastName = Functions.capitalize(_lastNameController.text.trim());
       candidate.email = _emailController.text.toLowerCase().trim();
-      candidate.residence = _addressController.text.trim();
       candidate.phoneNumber = _number.phoneNumber.trim();
       candidate.age = int.parse(_ageController.text);
       candidate.origin = Functions.capitalize(_originController.text.trim());
@@ -962,6 +1120,11 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
       candidate.gender = _selectedGender;
       candidate.religion = _selectedReligion;
       candidate.experience = int.parse(_experienceController.text);
+      List<String> category = [];
+      _allSelectedCategories.forEach((value) {
+        category.add(value.category.id);
+      });
+      candidate.category = jsonEncode(category);
       Navigator.push(context,
           CupertinoPageRoute(builder: (_){
             return RegisterCandidateTwo(candidate: candidate);

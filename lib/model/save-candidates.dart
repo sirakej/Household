@@ -1,5 +1,5 @@
 import 'candidate.dart';
-import 'plans.dart';
+import 'plan.dart';
 
 class SaveCandidates {
 

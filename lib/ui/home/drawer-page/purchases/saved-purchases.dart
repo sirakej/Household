@@ -1,12 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/bloc/future-values.dart';
-import 'package:householdexecutives_mobile/model/saved-candidates.dart';
-import 'package:householdexecutives_mobile/utils/static-functions.dart';
-import 'package:householdexecutives_mobile/utils/size-config.dart';
-import 'package:intl/intl.dart';
-import 'package:skeleton_loader/skeleton_loader.dart';
-import 'purchases-tab.dart';
 
 class SavedPurchases extends StatefulWidget {
 
@@ -18,7 +11,12 @@ class SavedPurchases extends StatefulWidget {
 
 class _SavedPurchasesState extends State<SavedPurchases> {
 
-  /// Instantiating a class of the [FutureValues]
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+
+  /*/// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
 
   /// GlobalKey of a my RefreshIndicatorState to refresh my list items
@@ -172,30 +170,6 @@ class _SavedPurchasesState extends State<SavedPurchases> {
         padding: EdgeInsets.only(top: 100),
         child: Center(child: CupertinoActivityIndicator(radius: 15))
     );
-    return SkeletonLoader(
-      builder: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 20,
-              color: Colors.white.withOpacity(0.5),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 22,
-              color: Colors.white.withOpacity(0.5),
-            ),
-          ],
-        ),
-      ),
-      items: 20,
-      period: Duration(seconds: 3),
-      highlightColor: Color(0xFFEBF1F4),
-      direction: SkeletonDirection.btt,
-    );
   }
 
   Widget _buildEmpty(String description){
@@ -310,7 +284,7 @@ class _SavedPurchasesState extends State<SavedPurchases> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'You’re only allowed to select a maximmum of 3\ncandidates per category',
+                  'These are your preferred candidates',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
@@ -328,6 +302,6 @@ class _SavedPurchasesState extends State<SavedPurchases> {
         ),
       ),
     );
-  }
+  }*/
 
 }

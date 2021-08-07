@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:householdexecutives_mobile/model/plans.dart';
+import 'package:householdexecutives_mobile/model/plan.dart';
 import 'package:householdexecutives_mobile/model/save-candidates.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
 import 'package:householdexecutives_mobile/networking/paystack-webview.dart';
@@ -31,7 +31,7 @@ class ShortListedCandidate extends StatefulWidget {
   _ShortListedCandidateState createState() => _ShortListedCandidateState();
 }
 
-class _ShortListedCandidateState extends State<ShortListedCandidate> {
+class _ShortListedCandidateState extends State<ShortListedCandidate> with SingleTickerProviderStateMixin{
 
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
@@ -80,6 +80,8 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
     });
   }
 
+  /// This function gets the total category counts into a Map [_counts]
+  /// by storing the category model and value of 1 as default for roles to fill
   void _getCounts(){
     if(!mounted)return;
     setState(() {
@@ -89,102 +91,138 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
     });
   }
 
-  Widget _buildShortListedList(){
-    List<Widget> categoriesList = [];
+  /// This value holds the current selected category
+  String _selectedCategory;
+
+  /// This function get the total category and candidates from [widget.candidates]
+  void _getTotalCategories(){
+    List<String> _allCategories = [];
+    if(!mounted)return;
+    setState(() {
+      widget.candidates.forEach((k, v) {
+        if(v.isNotEmpty){
+          _allCategories.add(k.category.singularName);
+        }
+      });
+      if(_allCategories.length > 0){
+        _selectedCategory = _allCategories.first;
+      }
+      else {
+        if(!mounted)return;
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  /// This function returns the category name of category that has selected
+  /// candidates under them
+  Widget _buildTabCategories(){
+    List<Widget> categoriesTab = [];
+    setState(() {
+      widget.candidates.forEach((k, v) {
+        if(v.isNotEmpty){
+          categoriesTab.add(
+            InkWell(
+              onTap: (){
+                setState(() {
+                  _selectedCategory = k.category.singularName;
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: _selectedCategory == k.category.singularName
+                        ? BorderSide(color: Color(0xFF00A69D), width: 2)
+                        : BorderSide.none
+                  )
+                ),
+                child: Center(
+                  child: Text(
+                    k.category.singularName,
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: _selectedCategory == k.category.singularName
+                            ? Color(0xFF00A69D)
+                            : Color(0xFF717F88)
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      });
+    });
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: categoriesTab
+    );
+  }
+
+  /// This function returns the candidates and package to be selected under
+  /// each category
+  Map<String, Widget> _buildShortListedList(){
+    Map<String, Widget> categoriesList = {};
     widget.candidates.forEach((k, v) {
       if(v.isNotEmpty){
         List<Widget> candidateList = [];
         for(int i = 0; i < v.length; i++){
           candidateList.add(
             Container(
-              padding: EdgeInsets.fromLTRB(4, 8, 18, 21),
-              margin: EdgeInsets.only(bottom: 15),
+              padding: EdgeInsets.only(bottom: 27, top: 24),
               decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  border: Border.all(color: Color(0xFFEBF1F4), width: 1)
+                border: Border(
+                    bottom: BorderSide(color: Color(0xFFEBF1F4), width: 1)
+                ),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        //padding: EdgeInsets.only(top: 11),
-                        height: 57,
-                        width: 72,
+                        height: 30,
+                        width: 30,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
                         child: CachedNetworkImage(
                           imageUrl: v[i].profileImage,
-                          height: 57,
-                          width: 72,
+                          height: 30,
+                          width: 30,
                           fit: BoxFit.cover,
                           errorWidget: (context, url, error) => Container(),
                         ),
                       ),
-                      SizedBox(width: 17),
+                      SizedBox(width: 20),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            v[i].firstName,
+                            v[i].firstName + ' ' + v[i].lastName.split('').first.toUpperCase(),
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.normal,
                               fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFF5D6970),
+                              fontSize: 14,
+                              color: Color(0xFF042538),
                             ),
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 1),
                           Text(
                             "${v[i].experience} ${v[i].experience > 1 ? 'Years' : 'Year'} Experience",
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.normal,
                               fontFamily: 'Gelion',
-                              fontSize: 16,
-                              color: Color(0xFFF7941D),
+                              fontSize: 12,
+                              color: Color(0xFF9BA8B1),
                             ),
-                          ),
-                          SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Text(
-                                v[i].availability.title,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 14,
-                                  color: Color(0xFFC4C4C4),
-                                ),
-                              ),
-                              SizedBox(width: 7,),
-                              Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    color: Color(0xFFC4C4C4),
-                                    shape: BoxShape.circle
-                                ),
-                              ),
-                              SizedBox(width: 7,),
-                              Text(
-                                v[i].origin,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Gelion',
-                                  fontSize: 14,
-                                  color: Color(0xFFC4C4C4),
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
@@ -196,17 +234,14 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                       setState(() {
                         widget.candidates[k].remove(v[i]);
                       });
+                      _getTotalCategories();
                       _calculateTotalPrice();
+                      setState(() { });
                     },
-                    child: Text(
-                      "Remove",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 11,
-                        color: Color(0xFFE93E3A),
-                      ),
+                    child: Icon(
+                      Icons.close,
+                      color: Color(0xFFE93E3A),
+                      size: 14,
                     ),
                   )
                 ],
@@ -218,148 +253,101 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
         if(_selectedPlans.isNotEmpty){
           _selectedPlans[k].forEach((key, value) {
             planContainer.add(
-                TextButton(
-                  onPressed: (){
-                    if(!mounted)return;
-                    setState(() {
-                      _selectedPlans[k].forEach((x, y) {
-                        if(x.id == key.id){
-                          _selectedPlans[k][x] = true;
-                        }
-                        else {
-                          _selectedPlans[k][x] = false;
-                        }
-                      });
+              InkWell(
+                onTap: (){
+                  if(!mounted)return;
+                  setState(() {
+                    _selectedPlans[k].forEach((x, y) {
+                      if(x.id == key.id){
+                        _selectedPlans[k][x] = true;
+                      }
+                      else {
+                        _selectedPlans[k][x] = false;
+                      }
                     });
-                    _calculateTotalPrice();
-                  },
+                  });
+                  _calculateTotalPrice();
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(20, 15, 22, 15),
+                  margin: EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    border: Border.all(color: value
+                        ? Color(0xFF00A69D) : Color(0xFFEBF1F4),
+                        width: 1
+                    )
+                  ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
-                        value
-                            ? Icons.check_circle
-                            : Icons.radio_button_unchecked,
-                        size: 12.83,
-                        color: value
-                            ? Color(0xFF00A69D)
-                            : Color(0xFF000000),
-                      ),
-                      SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            key.title ?? '',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'Gelion',
-                              fontSize: 12.6829,
-                              color: Color(0xFF717F88),
-                            ),
+                          Icon(
+                            value
+                                ? Icons.check_circle
+                                : Icons.radio_button_unchecked,
+                            size: 12.83,
+                            color: value
+                                ? Color(0xFF00A69D)
+                                : Color(0xFF000000),
                           ),
-                          SizedBox(height: 2),
+                          SizedBox(width: 15),
                           Text(
                             key.price != null ? Functions.money(double.parse(key.price), 'N') : '',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.normal,
                               fontFamily: 'Gelion',
                               fontSize: 20,
                               color: Color(0xFF042538),
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      Text(
+                        key.title ?? '',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          fontSize: 12,
+                          color: Color(0xFF717F88),
+                        ),
+                      ),
                     ],
                   ),
-                )
+
+                ),
+              )
             );
           });
         }
 
-        categoriesList.add(
-            Column(
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Hire a ${k.category.name}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Gelion',
-                          fontSize: 16,
-                          color: Color(0xFF000000),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: (){
-                          Navigator.pop(context);
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xFF00A69D)
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFFFFFFFF),
-                                  size: 12,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              "Add",
-                              style: TextStyle(
-                                color: Color(0xFF00A69D),
-                                fontFamily: 'Rubik',
-                                fontSize: 14,
-                                fontWeight:FontWeight.w400,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ]
-                ),
-                SizedBox(height: 17),
-                Column(children: candidateList),
-                SizedBox(height: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        categoriesList[k.category.singularName] = SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Roles to fill',
-                      textAlign: TextAlign.center,
+                      "Candidates to hire",
+                      textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         fontFamily: 'Gelion',
-                        fontSize: 14,
+                        fontSize: 16,
                         color: Color(0xFF042538),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(width: 24),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFFDFE3E8),
-                            onPrimary: Color(0xFF000000),
-                            shadowColor: Color(0xFFFFFFFF),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)
-                            ),
-                          ),
-                          onPressed: (){
+                        InkWell(
+                          onTap: (){
                             if(_counts[k] > 1){
                               if(!mounted)return;
                               setState(() {
@@ -369,55 +357,35 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                             _calculateTotalPrice();
                           },
                           child: Container(
-                            width: 42,
-                            height: 50,
+                            width: 29,
+                            height: 29,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFD5D9DE).withOpacity(0.4)
+                            ),
                             child: Center(
                               child: Container(
-                                height:2,
-                                width: 14,
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF000000),
-                                    borderRadius: BorderRadius.all(Radius.circular(2))
-                                ),
+                                height: 2,
+                                width: 9.33,
+                                color: Color(0xFF000000),
                               ),
                             ),
                           ),
                         ),
-                        Expanded(
-                            child: Center(
-                              child: Container(
-                                width: SizeConfig.screenWidth,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color(0xFFDDDDDD),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${_counts[k]}",
-                                    style: TextStyle(
-                                      color: Color(0xFF001845),
-                                      fontFamily: 'Rubik',
-                                      fontSize: 16,
-                                      fontWeight:FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF00A69D),
-                            onPrimary: Color(0xFFFFFFFF),
-                            shadowColor: Color(0xFFFFFFFF),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                          child: Text(
+                            "${_counts[k]}",
+                            style: TextStyle(
+                              color: Color(0xFF042538),
+                              fontFamily: 'Gelion',
+                              fontSize: 23,
+                              fontWeight:FontWeight.normal,
                             ),
                           ),
-                          onPressed: (){
+                        ),
+                        InkWell(
+                          onTap: (){
                             if(!mounted)return;
                             setState(() {
                               _counts[k] += 1;
@@ -425,85 +393,163 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
                             _calculateTotalPrice();
                           },
                           child: Container(
-                            width: 42,
-                            height: 50,
+                            width: 29,
+                            height: 29,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFF00A69D)
+                            ),
                             child: Center(
                               child: Icon(
                                 Icons.add,
-                                size: 17,
                                 color: Color(0xFFFFFFFF),
+                                size: 12,
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ],
+                  ]
+              ),
+              SizedBox(height: 14),
+              Container(
+                padding: EdgeInsets.fromLTRB(12, 0, 12, 28),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFFEBF1F4), width: 1),
                 ),
-                SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Select A Package',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontFamily: 'Gelion',
-                        fontSize: 12.6829,
-                        color: Color(0xFF042538),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        if(_plans.isNotEmpty){
-                          Navigator.push(context,
-                              CupertinoPageRoute(builder: (_){
-                                return Packages(
-                                  plans: _plans,
-                                );
-                              })
-                          );
-                        }
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/learn-more.png',
-                            width: 12,
-                            height: 12,
-                            fit: BoxFit.contain,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            'Learn More',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'Gelion',
-                              fontSize: 12.6829,
-                              color: Color(0xFF00A69D),
+                child: Column(
+                    children: [
+                      Column(children: candidateList),
+                      SizedBox(height: 18),
+                      InkWell(
+                        onTap: (){
+                          if(v.length < (_counts[k] * 3)){
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: (v.length < (_counts[k] * 3))
+                                      ? Color(0xFF00A69D) : Color(0xFFC4CDD5)
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Color(0xFFFFFFFF),
+                                  size: 12,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 8),
+                            Text(
+                              "Add More To This Category",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: (v.length < (_counts[k] * 3))
+                                    ? Color(0xFF00A69D) : Color(0xFFC4CDD5),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 24),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(18, 28, 20, 31),
+                        color: Color(0xFFF4F7F9),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Select A Package',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                fontSize: 14,
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            InkWell(
+                              onTap: (){
+                                if(_plans.isNotEmpty){
+                                  Navigator.push(context,
+                                      CupertinoPageRoute(builder: (_){
+                                        return Packages(
+                                          plans: _plans,
+                                        );
+                                      })
+                                  ).then((value) {
+                                    if(value != null){
+                                      if(!mounted)return;
+                                      setState(() {
+                                        _selectedPlans[k].forEach((x, y) {
+                                          if(x.id == value.id){
+                                            _selectedPlans[k][x] = true;
+                                          }
+                                          else {
+                                            _selectedPlans[k][x] = false;
+                                          }
+                                        });
+                                      });
+                                      _calculateTotalPrice();
+                                    }
+                                  });
+                                }
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/learn-more.png',
+                                    width: 12,
+                                    height: 12,
+                                    fit: BoxFit.contain,
+                                    color: Color(0xFFF7941D),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Text(
+                                    'What does this mean?',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Gelion',
+                                      fontSize: 14,
+                                      color: Color(0xFFF7941D),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 13),
+                            Column(children: planContainer),
+                          ],
+                        ),
+                      ),
+                    ]
                 ),
-                SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: planContainer
-                ),
-                SizedBox(height: 18),
-              ],
-            )
+              ),
+              SizedBox(height: 200),
+            ],
+          ),
         );
       }
     });
-    return Column(children: categoriesList);
+    return categoriesList;
   }
+
+  /// This variable holds the boolean value either the instruction modal is
+  /// shown or not
+  bool _shownPopup = false;
 
   /// This function removes the saved shortlisted candidates stored in shared
   /// preference
@@ -511,6 +557,12 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('checkoutCategory');
     await prefs.remove('checkoutCandidates');
+    prefs.getString('instructions');
+    if(prefs.getString('instructions') != 'done' && !_shownPopup){
+      if(!mounted)return;
+      setState(() { _shownPopup = true; });
+      _buildInstructionsSheet(context);
+    }
   }
 
   /// This function saves user's shortlisted candidates temporarily to shared
@@ -558,6 +610,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
   void initState() {
     _saveList();
     super.initState();
+    _getTotalCategories();
     _allPlans();
     _getCounts();
   }
@@ -565,133 +618,289 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFFCFDFE),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-            color: Color(0xFF000000),
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Scaffold(
+        backgroundColor: Color(0xFFDFE3E8),
+        appBar: AppBar(
+          backgroundColor: Color(0xFFFFFFFF),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 20,
+              color: Color(0xFF000000),
+            ),
+            onPressed: () {
+              Navigator.pop(context, widget.candidates);
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context, widget.candidates);
-          },
-        ),
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          'Shortlisted Candidates',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.normal,
-            fontFamily: 'Gelion',
-            fontSize: 19,
-            color: Color(0xFF000000),
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'Check Out',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 19,
+              color: Color(0xFF000000),
+            ),
           ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(25, 14, 25, 0),
-        child: Column(
+        body: Column(
           children: [
-            Text(
-              'select up to 3 candidates per category to\ninterview and make a final choice after',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Gelion',
-                fontSize: 12.6829,
-                color: Color(0xFF57565C),
+            Container(
+              width: SizeConfig.screenWidth,
+              color: Color(0xFFFFFFFF),
+              padding: EdgeInsets.only(bottom: 39.39),
+              child: Text(
+                'These are your preferred candidates.\nPlease schedule Set/Note Interview Dates',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 12.6829,
+                  color: Color(0xFF57565C),
+                ),
               ),
             ),
-            SizedBox(height: 36.39),
-            Expanded(
+            Container(
+              width: SizeConfig.screenWidth,
+              height: 51,
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildShortListedList(),
-                    SizedBox(height: 22),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      height: 0.5,
-                      color: Color(0xFFC4CDD5),
+                scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
+                child: _buildTabCategories(),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(25, 22, 25, 0),
+                color: Color(0xFFFFFFFF),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: _buildShortListedList()[_selectedCategory],
+                ),
+              ),
+            ),
+          ],
+        ),
+        floatingActionButton: Container(
+          padding: EdgeInsets.fromLTRB(25, 22, 25, 30),
+          color: Color(0xFFF4F7F9),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Total Price',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                      fontSize: 16,
+                      color: Color(0xFF717F88),
                     ),
-                    SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  Text(
+                    Functions.money(_totalPrice, 'N'),
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'Gelion',
+                      fontSize: 20,
+                      color: Color(0xFF042538),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Button(
+                onTap: (){
+                  if(_buttonText == 'Pay'){
+                    _pay();
+                  }
+                  else {
+                    bool check = false;
+                    widget.candidates.forEach((key, value) {
+                      if(value.length > 0){
+                        check = true;
+                      }
+                    });
+                    if(check){
+                      if(_validateRoles() == true){
+                        if(_validatePlan() == true){
+                          _saveCandidate();
+                        }
+                      }
+                    }
+                    else {
+                      Functions.showInfo(context, "Go back and select your candidates");
+                    }
+                  }
+                },
+                buttonColor: Color(0xFF00A69D),
+                child: Center(
+                  child: _showSpinner
+                      ? CupertinoActivityIndicator(radius: 13)
+                      : Text(
+                    _buttonText,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Gelion',
+                      fontSize: 16,
+                      color: Color(0xFFFFFFFF),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      ),
+    );
+  }
+
+  _buildInstructionsSheet(BuildContext context){
+    showModalBottomSheet<void>(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        barrierColor: Color(0xFF07072B).withOpacity(0.81),
+        isDismissible: false,
+        context: context,
+        builder: (BuildContext context){
+          return StatefulBuilder(builder:(context, StateSetter setModalState){
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      padding: EdgeInsets.only(right: 24),
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: 26,
+                        height: 26,
+                        child: FloatingActionButton(
+                            elevation: 30,
+                            backgroundColor: Color(0xFF00A69D).withOpacity(0.25),
+                            shape:CircleBorder(),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: Color(0xFFFFFFFF),
+                              size:13,
+                            )
+                        ),
+                      )
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(24, 40, 24, 48),
+                    margin: EdgeInsets.only(top: 34),
+                    width: SizeConfig.screenWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight:Radius.circular(30)
+                      ),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Total Price',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFF717F88),
+                      children:[
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFFF7941D)
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                                "assets/icons/info.png",
+                                height: 24,
+                                width: 24,
+                                fit: BoxFit.contain
+                            ),
                           ),
                         ),
+                        SizedBox(height: 18),
                         Text(
-                          Functions.money(_totalPrice, 'N'),
+                          "Instructions For Checkout",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontFamily: 'Gelion',
-                            fontSize: 20,
-                            color: Color(0xFF042538),
+                            fontSize: 18,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
+                        SizedBox(height: 19),
+                        Container(
+                          width: SizeConfig.screenWidth - 150,
+                          child: Text(
+                            "You are allowed to pick maximum of 3 candidates per role for a category. Example; 6 candidates = 2 roles",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Gelion',
+                              fontSize: 12.6829,
+                              color: Color(0xFF57565C),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 37),
+                        Button(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          buttonColor: Color(0xFF00A69D),
+                          child: Center(
+                            child: Text(
+                              "I Understand",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                fontSize: 16,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 9),
+                        TextButton(
+                          onPressed: () async {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('instructions', 'done');
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Don’t Show Again",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: 'Gelion',
+                              fontSize: 14,
+                              color: Color(0xFFF7941D),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
-                    Button(
-                      onTap: (){
-                        if(_buttonText == 'Pay'){
-                          _pay();
-                        }
-                        else {
-                          bool check = false;
-                          widget.candidates.forEach((key, value) {
-                            if(value.length > 0){
-                              check = true;
-                            }
-                          });
-                          if(check){
-                            if(_validateRoles() == true){
-                              if(_validatePlan() == true){
-                                _saveCandidate();
-                              }
-                            }
-                          }
-                          else {
-                            Functions.showInfo(context, "Go back and select your candidates");
-                          }
-                        }
-                      },
-                      buttonColor: Color(0xFF00A69D),
-                      child: Center(
-                        child: _showSpinner
-                            ? CupertinoActivityIndicator(radius: 13)
-                            : Text(
-                          _buttonText,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Gelion',
-                            fontSize: 16,
-                            color: Color(0xFFFFFFFF),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                  ],
-                )
-              )
-            ),
-          ],
-        ),
-      ),
+                  ),
+                ],
+              ),
+            );
+          });
+        }
     );
   }
 
@@ -702,7 +911,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
       if(value.length > 0){
         if(!checked){
           if(value.length > (_counts[key] * 3)){
-            _buildCountErrorDialog('${key.category.name}\'s category');
+            _buildCountErrorDialog('${key.category.singularName}\'s category');
             result = false;
             checked = true;
           }
@@ -720,7 +929,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> {
       if(widget.candidates[key].length > 0){
         if(!(value.containsValue(true))){
           if(!checked){
-            _buildPaymentErrorDialog("${key.category.name}\'s");
+            _buildPaymentErrorDialog("${key.category.singularName}\'s");
             result = false;
             checked = true;
           }

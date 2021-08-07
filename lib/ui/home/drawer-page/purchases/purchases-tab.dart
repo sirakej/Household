@@ -12,7 +12,6 @@ import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../home-screen.dart';
 import 'add-candidate.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -44,7 +43,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
     setState(() {
       for(int i = 0; i < widget.categories.length; i++){
         _categoryTabLabel.add(
-          Tab(text: widget.categories[i].getCategory.name),
+          Tab(text: widget.categories[i].getCategory.singularName),
         );
       }
     });
@@ -288,29 +287,18 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
       history.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check,
-              size:12,
+        Container(
+          width: SizeConfig.screenWidth - 120,
+          child: Text(
+            '• ${candidate.history[i].toString()}',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 14,
               color: Color(0xFF717F88),
             ),
-            SizedBox(width:8),
-            Container(
-              width: SizeConfig.screenWidth - 120,
-              child: Text(
-                candidate.history[i].toString(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF717F88),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       );
     }
@@ -432,7 +420,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Origin",
+                                      "Service Area",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
@@ -600,7 +588,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      candidate.gender ?? '',
+                                      Functions.capitalize(candidate.gender) ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
@@ -627,7 +615,7 @@ class _PurchasesTabState extends State<PurchasesTab> with SingleTickerProviderSt
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} +",
+                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,

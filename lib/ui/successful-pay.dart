@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/ui/home/drawer-page/schedule-interview.dart';
 import 'package:householdexecutives_mobile/ui/home/home-screen.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
@@ -32,7 +33,7 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
                 width:70,
                 fit: BoxFit.contain
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 18.92),
               Text(
                 'Payment Successful!',
                 textAlign: TextAlign.start,
@@ -54,19 +55,24 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
                   color: Color(0xFFFFFFFF),
                 ),
               ),
-              SizedBox(height: 82),
+              SizedBox(height: 48),
               Button(
                 onTap: (){
-                  //Navigator.of(context).popUntil(ModalRoute.withName(HomeScreen.id));
                   Navigator.pushAndRemoveUntil(context,
                       CupertinoPageRoute(builder: (_){
                         return HomeScreen();
                       }), (route) => false);
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_){
+                        return ScheduledInterview();
+                      }
+                      )
+                  );
                 },
                 buttonColor: Color(0xFF00A69D),
                 child: Center(
                   child: Text(
-                    "Proceed",
+                    "Schedule Interview",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -74,6 +80,24 @@ class _SuccessfulPayState extends State<SuccessfulPay> {
                       fontSize: 16,
                       color: Color(0xFFFFFFFF),
                     ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 22),
+              TextButton(
+                onPressed: (){
+                  Navigator.pushAndRemoveUntil(context,
+                      CupertinoPageRoute(builder: (_){
+                        return HomeScreen();
+                      }), (route) => false);
+                },
+                child: Text(
+                  'Go Home',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    fontSize: 16,
+                    color: Color(0xFFFFFFFF),
                   ),
                 ),
               ),

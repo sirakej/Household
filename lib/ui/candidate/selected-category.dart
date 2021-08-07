@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate-availability.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
@@ -16,12 +17,15 @@ class SelectedCategory extends StatefulWidget {
 
   static const String id = 'selected_category';
 
+  final Availability availability;
+
   final Category category;
 
   final  List<Candidate> candidates;
 
   const SelectedCategory({
     Key key,
+    this.availability,
     @required this.category,
     this.candidates,
   }) : super(key: key);
@@ -147,40 +151,80 @@ class _SelectedCategoryState extends State<SelectedCategory> {
       _candidatesList.clear();
       for (int i = 0; i < _filteredCandidates.length; i++){
         if (widget.candidates.any((element) => element.id == _filteredCandidates[i].id)) {
-          _candidatesList.add(
-            Container(
-              margin: EdgeInsets.only(bottom: 8),
-              child: CandidateContainer(
-                candidate: _filteredCandidates[i],
-                category: widget.category,
-                onPressed: (){},
-                selected: true,
-                showStars: true,
+          if(widget.availability.title == 'Live In' && _filteredCandidates[i].availability.title == 'Live In'){
+            _candidatesList.add(
+              Container(
+                margin: EdgeInsets.only(bottom: 8),
+                child: CandidateContainer(
+                  candidate: _filteredCandidates[i],
+                  category: widget.category,
+                  onPressed: (){},
+                  selected: true,
+                  showStars: true,
+                ),
               ),
-            ),
-          );
+            );
+          }
+          else if(widget.availability.title == 'Custom' && _filteredCandidates[i].availability.title == 'Custom'){
+            if(_filteredCandidates[i].availability.toJson() == widget.availability.toJson()){
+              _candidatesList.add(
+                Container(
+                  margin: EdgeInsets.only(bottom: 8),
+                  child: CandidateContainer(
+                    candidate: _filteredCandidates[i],
+                    category: widget.category,
+                    onPressed: (){},
+                    selected: true,
+                    showStars: true,
+                  ),
+                ),
+              );
+            }
+          }
         }
         else {
-          _candidatesList.add(
-            Container(
-              margin: EdgeInsets.only(bottom: 8),
-              child: CandidateContainer(
-                candidate: _filteredCandidates[i],
-                category: widget.category,
-                onPressed: (){
-                  _buildProfileModalSheet(context, _filteredCandidates[i]);
-                },
-                selected: false,
-                showStars: true,
+          if(widget.availability.title == 'Live In' && _filteredCandidates[i].availability.title == 'Live In'){
+            _candidatesList.add(
+              Container(
+                margin: EdgeInsets.only(bottom: 8),
+                child: CandidateContainer(
+                  candidate: _filteredCandidates[i],
+                  category: widget.category,
+                  onPressed: (){
+                    _buildProfileModalSheet(context, _filteredCandidates[i]);
+                  },
+                  selected: false,
+                  showStars: true,
+                ),
               ),
-            ),
-          );
+            );
+          }
+          else if(widget.availability.title == 'Custom' && _filteredCandidates[i].availability.title == 'Custom'){
+            if(_filteredCandidates[i].availability.toJson() == widget.availability.toJson()){
+              _candidatesList.add(
+                Container(
+                  margin: EdgeInsets.only(bottom: 8),
+                  child: CandidateContainer(
+                    candidate: _filteredCandidates[i],
+                    category: widget.category,
+                    onPressed: (){
+                      _buildProfileModalSheet(context, _filteredCandidates[i]);
+                    },
+                    selected: false,
+                    showStars: true,
+                  ),
+                ),
+              );
+            }
+          }
         }
       }
-      return Column(children: _candidatesList);
+      return _candidatesList.length > 0
+          ? Column(children: _candidatesList)
+          : _buildEmpty('Sorry there is no available candidates in this category with your preference');
     }
     else if(_candidatesLength == 0){
-      return Container();
+      return _buildEmpty('Sorry there is no available candidates in this category at the moment');
     }
     return SkeletonLoader(
       builder: Container(
@@ -220,6 +264,49 @@ class _SelectedCategoryState extends State<SelectedCategory> {
     );
   }
 
+  Widget _buildEmpty(String description){
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children : [
+          SizedBox(height: 50),
+          Image.asset(
+              'assets/icons/empty.png',
+              width: 143,
+              height: 108,
+              fit: BoxFit.contain
+          ),
+          SizedBox(height: 24),
+          Text(
+            "Empty List",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 19,
+              color: Color(0xFF000000),
+            ),
+          ),
+          SizedBox(height: 12),
+          Container(
+            width: 280,
+            child: Text(
+              description,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 14,
+                color: Color(0xFF3B4A54),
+              ),
+            ),
+          ),
+        ]
+      )
+    );
+  }
+
   @override
   void initState() {
     _allCandidates();
@@ -256,26 +343,49 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${widget.category.category.name}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Gelion',
-                          fontSize: 19,
-                          color: Color(0xFF000000),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${widget.category.category.pluralName}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Gelion',
+                              fontSize: 19,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          CachedNetworkImage(
+                            imageUrl: widget.category.category.smallerImage,
+                            width: 22,
+                            height: 22,
+                            fit: BoxFit.contain,
+                            errorWidget: (context, url, error) => Container(),
+                          ),
+                        ],
+                      ),
+                      (widget.candidates != null || widget.candidates.isNotEmpty)
+                          ? TextButton(
+                        onPressed: (){
+                          if(widget.candidates.length > 0){
+                            Navigator.pop(context, [true, widget.candidates]);
+                          }
+                        },
+                        child: Text(
+                          'Checkout(${widget.candidates.length})',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Gelion',
+                            fontSize: 16,
+                            color: Color(0xFF00A69D),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 5),
-                      CachedNetworkImage(
-                        imageUrl: widget.category.category.smallerImage,
-                        width: 22,
-                        height: 22,
-                        fit: BoxFit.contain,
-                        errorWidget: (context, url, error) => Container(),
-                      ),
+                      )
+                          : Container()
                     ],
                   ),
                   SizedBox(height: 8),
@@ -342,23 +452,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
           ),
         ),
       ),
-      floatingActionButton: (widget.candidates != null || widget.candidates.isNotEmpty)
-          ? FloatingActionButton(
-        onPressed: null,
-        child: Center(
-          child: Text(
-            widget.candidates.length.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Gelion',
-              fontSize: 24,
-              color: Color(0xFFFFFFFF),
-            ),
-          ),
-        ),
-        backgroundColor: Color(0xFF00A69D),
-      )
-          : Container(),
     );
   }
 
@@ -1037,34 +1130,31 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   }
 
   _buildProfileModalSheet(BuildContext context, Candidate candidate){
+    List<Widget> allHistory = [];
     List<Widget> history = [];
     for(int i = 0; i < candidate.history.length; i++){
-      history.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check,
-              size:12,
+      allHistory.add(
+        Container(
+          width: SizeConfig.screenWidth - 120,
+          child: Text(
+            '• ${candidate.history[i].toString()}',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Gelion',
+              fontSize: 14,
               color: Color(0xFF717F88),
             ),
-            SizedBox(width:8),
-            Container(
-              width: SizeConfig.screenWidth - 120,
-              child: Text(
-                candidate.history[i].toString(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 14,
-                  color: Color(0xFF717F88),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       );
+    }
+    if(allHistory.length <= 2){
+      history.addAll(allHistory);
+    }
+    else {
+      history.add(allHistory[0]);
+      history.add(allHistory[1]);
     }
     showModalBottomSheet<void>(
         backgroundColor: Color(0xFFFFFFFF),
@@ -1184,7 +1274,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Origin",
+                                      "Service Area",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -1269,7 +1359,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Residence:",
+                                      "Languages:",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -1282,7 +1372,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                     Container(
                                       width: 120,
                                       child: Text(
-                                        candidate.residence ?? '',
+                                        candidate.language ?? '',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           fontWeight: FontWeight.normal,
@@ -1352,7 +1442,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      candidate.gender ?? '',
+                                      Functions.capitalize(candidate.gender) ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -1379,7 +1469,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} +",
+                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -1442,7 +1532,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                 Container(
                                   width: SizeConfig.screenWidth - 120,
                                   child: Text(
-                                    // "Fluent in 5 languages - English, Yoruba, Hausa, Igbo and Igala.",
                                     "${candidate.skill}",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
@@ -1584,13 +1673,12 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                               ),
                             ),
                             SizedBox(height: 5),
-                            candidate.officialHeReport.isNotEmpty
-                                ? TextButton(
+                            TextButton(
                               onPressed: () {
-                                _openUrl(candidate.officialHeReport);
+                                //_openUrl(candidate.officialHeReport);
                               },
                               child:  Text(
-                                "view official HE Report",
+                                "View official HE Report",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
@@ -1601,14 +1689,18 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                 ),
                               ),
                             )
-                                : Container(),
                           ],
                         ),
                         SizedBox(height: 18),
                         Button(
                           onTap: (){
+                            setModalState(() {
+                              if(!(widget.candidates.contains(candidate))){
+                                widget.candidates.add(candidate);
+                              }
+                            });
                             Navigator.pop(context);
-                            _buildCustomAvailabilitySheet(context, candidate);
+                            _buildAddCandidateSheet(context);
                           },
                           buttonColor: Color(0xFF00A69D),
                           child: Center(
@@ -2149,102 +2241,90 @@ class _SelectedCategoryState extends State<SelectedCategory> {
         context: context,
         builder: (BuildContext context){
           return StatefulBuilder(builder:(BuildContext context, StateSetter setModalState){
-            return SingleChildScrollView(
+            return Container(
+              padding: EdgeInsets.fromLTRB(24, 30, 24, 38),
+              margin: EdgeInsets.only(top: 34),
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight:Radius.circular(30)),
+                color: Colors.white,
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(24, 30, 24, 38),
-                          margin: EdgeInsets.only(top: 34),
-                          width: SizeConfig.screenWidth,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight:Radius.circular(30)),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              Center(
-                                child:Image.asset(
-                                    "assets/icons/circle check full.png",
-                                    height: 60.5,
-                                    width: 60.5,
-                                    fit: BoxFit.contain
-                                ),
-                              ),
-                              SizedBox(height: 24.75),
-                              Center(
-                                child: Text(
-                                  "Candidate Added",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 16,
-                                    color: Color(0xFF042538),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 13),
-                              Center(
-                                child: Text(
-                                  "One Preferred Candidate Selected",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF57565C),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 30),
-                              Button(
-                                onTap: (){
-                                  Navigator.pop(context);
-                                  Navigator.pop(context, [true, widget.candidates]);
-                                },
-                                buttonColor: Color(0xFF00A69D),
-                                child: Center(
-                                  child: Text(
-                                    "Check Out",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Gelion',
-                                      fontSize: 16,
-                                      color: Color(0xFFFFFFFF),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Center(
-                                child: TextButton(
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                  child:Text(
-                                    "View Other Candidates",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Gelion',
-                                      fontSize: 16,
-                                      color: Color(0xFF00A69D),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
+                children:[
+                  Center(
+                    child:Image.asset(
+                        "assets/icons/circle check full.png",
+                        height: 60.5,
+                        width: 60.5,
+                        fit: BoxFit.contain
                     ),
                   ),
+                  SizedBox(height: 24.75),
+                  Center(
+                    child: Text(
+                      "Candidate Added",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 13),
+                  Center(
+                    child: Text(
+                      "One Preferred Candidate Selected",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 14,
+                        color: Color(0xFF57565C),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Button(
+                    onTap: (){
+                      Navigator.pop(context);
+                      Navigator.pop(context, [true, widget.candidates]);
+                    },
+                    buttonColor: Color(0xFF00A69D),
+                    child: Center(
+                      child: Text(
+                        "Check Out",
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFFFFFFFF),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Center(
+                    child: TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                        setState(() { });
+                      },
+                      child:Text(
+                        "View Other Candidates",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          fontSize: 16,
+                          color: Color(0xFF00A69D),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             );

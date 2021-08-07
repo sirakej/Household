@@ -46,7 +46,6 @@ class _EditProfileState extends State<EditProfile> {
   /// Setting the current user's details to [_userId], [_fullName],
   /// [_username] and [_phoneNumber]
   void _getCurrentUser() async {
-    await futureValue.updateUser();
     await futureValue.getCurrentUser().then((user) {
       if(!mounted)return;
       setState(() {

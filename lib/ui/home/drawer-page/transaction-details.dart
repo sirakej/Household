@@ -2,15 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/transaction.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
-import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:intl/intl.dart';
-import 'package:skeleton_loader/skeleton_loader.dart';
-import 'hired-candidate.dart';
-import 'account.dart';
-import 'purchases/saved-purchases.dart';
-import 'schedule-interview.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 
 class TransactionAndPayments extends StatefulWidget{
@@ -21,29 +14,8 @@ class TransactionAndPayments extends StatefulWidget{
 
 class _TransactionAndPaymentsState extends State<TransactionAndPayments> with SingleTickerProviderStateMixin{
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   /// Instantiating a class of the [FutureValues]
   var futureValue = FutureValues();
-
-  /// String variable to hold the current name of the user
-  String _firstName;
-
-  String _surName;
-
-  /// Setting the current user logged in to [_firstName]
-  void _getCurrentUser() async {
-    await futureValue.getCurrentUser().then((user) {
-      if(!mounted)return;
-      setState(() {
-        _firstName = user.firstName;
-        _surName = user.surName;
-      });
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
 
   /// Converting [dateTime] in string format to return a formatted time
   /// of hrs, minutes and am/pm
@@ -166,30 +138,6 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
     return Container(
         child: Center(child: CupertinoActivityIndicator(radius: 15))
     );
-    return SkeletonLoader(
-      builder: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 10,
-              color: Colors.white.withOpacity(0.5),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 12,
-              color: Colors.white.withOpacity(0.5),
-            ),
-          ],
-        ),
-      ),
-      items: 20,
-      period: Duration(seconds: 3),
-      highlightColor: Color(0xFF1F1F1F),
-      direction: SkeletonDirection.btt,
-    );
   }
 
   Widget _buildEmpty(String description){
@@ -234,7 +182,6 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
 
   @override
   void initState(){
-    _getCurrentUser();
     super.initState();
     _allTransactionList();
   }
@@ -243,132 +190,6 @@ class _TransactionAndPaymentsState extends State<TransactionAndPayments> with Si
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      key: _scaffoldKey,
-      /*drawer: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topRight: Radius.circular(30))
-        ),
-        child: Drawer(
-          elevation: 20,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF006838),
-                            Color(0xFF00A69D),
-                          ],
-                          stops: [0.55, 1],
-                        )
-                    ),
-                    child: DrawerHeaderName(
-                      firstName: _firstName,
-                      surName: _surName,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(24, 34, 24, 20),
-                    height: SizeConfig.screenHeight * 0.6,
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Column(
-                          children:[
-                            DrawerContainer(
-                              title: "My Account",
-                              imageName: "account",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return Account();
-                                    }
-                                    )
-                                );
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "Hired Candidates",
-                              imageName: "hired_candidates",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return HireCandidate();
-                                    }
-                                    )
-                                );
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "Transactions & Payments",
-                              imageName: "transactions",
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "My Purchases",
-                              imageName: "my_purchases",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return SavedPurchases();
-                                    })
-                                );
-                              },
-                            ),
-                            DrawerContainer(
-                              title: "Scheduled Interview",
-                              imageName: "scheduled_interview",
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    CupertinoPageRoute(builder: (_){
-                                      return ScheduledInterview();
-                                    }
-                                    )
-                                );
-                              },
-                            ),
-                          ]
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 16, bottom: 35),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: TextButton(
-                    onPressed:(){
-                      Functions.logOut(context);
-                    },
-                    child: Text(
-                      "Log Out",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
-                        color: Color(0xFFE36D45),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),*/
       backgroundColor: Color(0xFFFCFDFE),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
