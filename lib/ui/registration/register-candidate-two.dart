@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate-availability.dart';
@@ -46,55 +47,61 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
   /// A [TextEditingController] to control the input text for the unique skills
   TextEditingController _skillsController = TextEditingController();
 
-  /// A [TextEditingController] to control the input text for the languages
-  TextEditingController _languagesController = TextEditingController();
+  /// A [TextEditingController] to control the input text for the name of current
+  /// of previous employer
+  TextEditingController _nameEmployerController = TextEditingController();
 
-  /// A [TextEditingController] to control the input text for the history
-  TextEditingController _historyController = TextEditingController();
+  /// A [TextEditingController] to control the input text for the position of
+  /// current of previous employer
+  TextEditingController _positionEmployerController = TextEditingController();
+
+  /// A list of string variables holding a list of all languages
+  List<String> _languages = [
+    "Arabic", "English", "Francais", "Hausa", "Hindi", "Igbo", "Italiano"
+    "Mandarin", "Yoruba", "Native Dialect", "Other"
+  ];
+
+  /// A List to hold the all the selected languages
+  List<String> _allSelectedLanguages = [];
+
+  /// A string variable holding the selected language
+  String _selectedLanguage;
 
   bool _liveIn = false;
   bool _custom = true;
 
   bool _monday = true;
-  bool _tuesday = false;
-  bool _wednesday = false;
+  bool _tuesday = true;
+  bool _wednesday = true;
   bool _thursday = true;
-  bool _friday = false;
+  bool _friday = true;
   bool _saturday = true;
   bool _sunday = false;
 
   Map<dynamic, String> _verifications = {
-    1: 'Profile Image',
-    2: 'Identity Verification',
-    3: 'Residence Verification',
-    4: 'Guarantor Verification',
-    5: 'Medical Examination',
+    1: 'Passport Photograph',
+    2: 'Government Identity',
+    3: 'Current Recent Utility Bill'
   };
 
   List<String> _verificationName = [
-    'Profile Image',
-    'Identity Verification',
-    'Residence Verification',
-    'Guarantor Verification',
-    'Medical Examination',
+    'Passport Photograph',
+    'Government Identity',
+    'Current Recent Utility Bill'
   ];
 
   List<String> _uploadName = [
     'profile_image',
-    'identity',
-    'resedential',
-    'guarantors',
-    'medical',
+    'government_identity',
+    'utility_bill',
   ];
 
-  String _profileImage = 'Profile Image'; // IMG123.JPEG
-  String _identityVerification = 'Identity Verification';
-  String _residenceVerification = 'Residence Verification';
-  String _guarantorVerification = 'Guarantor Verification';
-  String _medicalExamination = 'Medical Examination';
+  String _passportPhoto = 'Passport Photograph'; // IMG123.JPEG
+  String _governmentIdentity = 'Government Identity';
+  String _utilityBill = 'Current Recent Utility Bill';
 
   Map<int, http.MultipartFile> _uploads = {
-    1: null, 2: null, 3: null, 4: null, 5: null
+    1: null, 2: null, 3: null
   };
 
   final _picker = ImagePicker();
@@ -242,6 +249,9 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     );
   }
 
+  /// Boolean variable holding either the condition is accepted or not
+  bool _terms = false;
+
   /// A boolean variable to control showing of the progress indicator
   bool _showSpinner = false;
 
@@ -295,7 +305,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                 ),
                 SizedBox(height: 22.54),
                 Text(
-                  'Register As a Candidate',
+                  'Register as a Candidate',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -430,7 +440,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                         ),
                                       ),
                                       Text(
-                                        "Custom",
+                                        "Live Out",
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           fontWeight: FontWeight.normal,
@@ -449,54 +459,10 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                   ? CrossFadeState.showSecond
                                   : CrossFadeState.showFirst,
                               duration: const Duration(milliseconds: 500),
-                              firstChild: Container(),
-                              secondChild: Container(
+                              firstChild: Container(
                                 padding: EdgeInsets.only(bottom: 33),
                                 child: Row(
                                   children: [
-                                    Expanded(
-                                      child: TextButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            _sunday = !_sunday;
-                                          });
-                                        },
-                                        style: TextButton.styleFrom(
-                                            shape: CircleBorder()
-                                        ),
-                                        child: _sunday
-                                            ? Container(
-                                            height:33,
-                                            width: 33,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Color(0xFF00A69D).withOpacity(0.1),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Sun",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontFamily: 'Gelion',
-                                                  fontSize: 14,
-                                                  color: Color(0xFF00A69D),
-                                                ),
-                                              ),
-                                            )
-                                        )
-                                            : Text(
-                                          "Sun",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontFamily: 'Gelion',
-                                            fontSize: 14,
-                                            color: Color(0xFF000000),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                     Expanded(
                                       child: TextButton(
                                         onPressed: () {
@@ -745,6 +711,347 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                         ),
                                       ),
                                     ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _sunday = !_sunday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _sunday
+                                            ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Sun",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        )
+                                            : Text(
+                                          "Sun",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              secondChild: Container(
+                                padding: EdgeInsets.only(bottom: 33),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _monday = !_monday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _monday
+                                            ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Mon",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        )
+                                            : Text(
+                                          "Mon",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _tuesday = !_tuesday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _tuesday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Tue",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Tue",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _wednesday = !_wednesday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _wednesday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Wed",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Wed",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _thursday = !_thursday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _thursday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Thu",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Thu",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _friday = !_friday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _friday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Fri",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Fri",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _saturday = !_saturday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _saturday ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child:Center(
+                                              child: Text(
+                                                "Sat",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        ) : Text(
+                                          "Sat",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _sunday = !_sunday;
+                                          });
+                                        },
+                                        style: TextButton.styleFrom(
+                                            shape: CircleBorder()
+                                        ),
+                                        child: _sunday
+                                            ? Container(
+                                            height:33,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00A69D).withOpacity(0.1),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Sun",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontFamily: 'Gelion',
+                                                  fontSize: 14,
+                                                  color: Color(0xFF00A69D),
+                                                ),
+                                              ),
+                                            )
+                                        )
+                                            : Text(
+                                          "Sun",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF000000),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -768,7 +1075,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                             color: Color(0xFF042538),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 16),
                         Column(
                           children: [
                             Container(
@@ -820,214 +1127,230 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                               ),
                             ),
                             SizedBox(height: 16),
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xFFC4C4C4), width: 1),
-                                  borderRadius: BorderRadius.all(Radius.circular(8))
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: SizeConfig.screenWidth - 220,
-                                    child: Text(
-                                      _verifications[2],
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontFamily: 'Gelion',
-                                        fontSize: 14,
-                                        color: Color(0xFF717F88),
-                                      ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: SizeConfig.screenWidth,
+                                  child: Text(
+                                    "  (Valid Driver's License or NIN Slip)",
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Gelion',
+                                      fontSize: 12,
+                                      color: Color(0xFF042538),
                                     ),
                                   ),
-                                  Button(
-                                    onTap: (){
-                                      _loadAssets(2);
-                                    },
-                                    buttonColor: Color(0xFF00A69D),
-                                    width: 103,
-                                    padding: 12,
-                                    radius: 6.14925,
-                                    child: Center(
-                                      child: Text(
-                                        "Upload",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  width: SizeConfig.screenWidth,
+                                  padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                                      borderRadius: BorderRadius.all(Radius.circular(8))
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width: SizeConfig.screenWidth - 220,
+                                        child: Text(
+                                          _verifications[2],
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF717F88),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      Button(
+                                        onTap: (){
+                                          _loadAssets(2);
+                                        },
+                                        buttonColor: Color(0xFF00A69D),
+                                        width: 103,
+                                        padding: 12,
+                                        radius: 6.14925,
+                                        child: Center(
+                                          child: Text(
+                                            "Upload",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 16,
+                                              color: Color(0xFFFFFFFF),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 16),
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xFFC4C4C4), width: 1),
-                                  borderRadius: BorderRadius.all(Radius.circular(8))
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: SizeConfig.screenWidth - 220,
-                                    child: Text(
-                                      _verifications[3],
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontFamily: 'Gelion',
-                                        fontSize: 14,
-                                        color: Color(0xFF717F88),
-                                      ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: SizeConfig.screenWidth,
+                                  child: Text(
+                                    "  (Eko Electric, Ikeja Electric or LAWMA)",
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Gelion',
+                                      fontSize: 12,
+                                      color: Color(0xFF042538),
                                     ),
                                   ),
-                                  Button(
-                                    onTap: (){
-                                      _loadAssets(3);
-                                    },
-                                    buttonColor: Color(0xFF00A69D),
-                                    width: 103,
-                                    padding: 12,
-                                    radius: 6.14925,
-                                    child: Center(
-                                      child: Text(
-                                        "Upload",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFFFFFFFF),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  width: SizeConfig.screenWidth,
+                                  padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Color(0xFFC4C4C4), width: 1),
+                                      borderRadius: BorderRadius.all(Radius.circular(8))
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width: SizeConfig.screenWidth - 220,
+                                        child: Text(
+                                          _verifications[3],
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontFamily: 'Gelion',
+                                            fontSize: 14,
+                                            color: Color(0xFF717F88),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xFFC4C4C4), width: 1),
-                                  borderRadius: BorderRadius.all(Radius.circular(8))
-                              ),
-                              child:Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: SizeConfig.screenWidth - 220,
-                                    child: Text(
-                                      _verifications[4],
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontFamily: 'Gelion',
-                                        fontSize: 14,
-                                        color: Color(0xFF717F88),
-                                      ),
-                                    ),
-                                  ),
-                                  Button(
-                                    onTap: (){
-                                      _loadAssets(4);
-                                    },
-                                    buttonColor: Color(0xFF00A69D),
-                                    width: 103,
-                                    padding: 12,
-                                    radius: 6.14925,
-                                    child: Center(
-                                      child: Text(
-                                        "Upload",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFFFFFFFF),
+                                      Button(
+                                        onTap: (){
+                                          _loadAssets(3);
+                                        },
+                                        buttonColor: Color(0xFF00A69D),
+                                        width: 103,
+                                        padding: 12,
+                                        radius: 6.14925,
+                                        child: Center(
+                                          child: Text(
+                                            "Upload",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 16,
+                                              color: Color(0xFFFFFFFF),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 16),
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              padding: EdgeInsets.fromLTRB(16, 4, 2, 3.9),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xFFC4C4C4), width: 1),
-                                  borderRadius: BorderRadius.all(Radius.circular(8))
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: SizeConfig.screenWidth - 220,
-                                    child: Text(
-                                      _verifications[5],
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
+                          ],
+                        ),
+                        SizedBox(height: 28),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                                icon: _terms == false
+                                    ? Icon(
+                                  Icons.check_box_outline_blank_outlined,
+                                  size: 25,
+                                  color:  Color(0xFF9097A5),
+                                )
+                                    : Icon(
+                                  Icons.check_box_outlined,
+                                  size: 25,
+                                  color:  Color(0xFF9097A5),
+                                ),
+                                onPressed: (){
+                                  setState(() {
+                                    _terms =! _terms;
+                                  });
+                                }
+                            ),
+                            RichText(
+                              text:TextSpan(
+                                  text: "I agree to the ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Gelion',
+                                    fontSize: 14,
+                                    color: Color(0xFF042538),
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: "Terms of Use",
                                       style: TextStyle(
-                                        fontWeight: FontWeight.normal,
+                                        fontWeight: FontWeight.w400,
                                         fontFamily: 'Gelion',
                                         fontSize: 14,
-                                        color: Color(0xFF717F88),
+                                        color: Color(0xFF00A69D),
                                       ),
+                                      recognizer: TapGestureRecognizer()..onTap = (){
+                                        //Navigator.pushNamed(context, Terms.id);
+                                      },
                                     ),
-                                  ),
-                                  Button(
-                                    onTap: (){
-                                      _loadAssets(5);
-                                    },
-                                    buttonColor: Color(0xFF00A69D),
-                                    width: 103,
-                                    padding: 12,
-                                    radius: 6.14925,
-                                    child: Center(
-                                      child: Text(
-                                        "Upload",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 16,
-                                          color: Color(0xFFFFFFFF),
-                                        ),
+                                    TextSpan(text: " & "),
+                                    TextSpan(
+                                      text: "Privacy Policy",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF00A69D),
                                       ),
+                                      recognizer: TapGestureRecognizer()..onTap = (){
+                                        //Navigator.pushNamed(context, Terms.id);
+                                      },
                                     ),
-                                  ),
-                                ],
+                                    TextSpan(text:" of\nHousehold Executives")
+                                  ]
                               ),
-                            ),
+                              textAlign: TextAlign.start,
+                            )
                           ],
                         ),
                         SizedBox(height: 80),
                         Button(
                           onTap: (){
-                            if(_formKey.currentState.validate() && !_showSpinner){
-                              if(_uploads.containsValue(null)){
-                                Functions.showInfo(context, 'Please upload all Documents');
+                            if(_allSelectedLanguages.length > 0){
+                              if(_formKey.currentState.validate() && !_showSpinner){
+                                if(_uploads.containsValue(null)){
+                                  Functions.showInfo(context, 'Please upload all Documents');
+                                }
+                                else {
+                                  if(_terms){
+                                    _setAvailability();
+                                    _registerCandidate();
+                                  }
+                                  else {
+                                    Functions.showInfo(context, 'Agree to the terms and conditions');
+                                  }
+                                }
                               }
-                              else {
-                                _setAvailability();
-                                _registerCandidate();
-                              }
+                            }
+                            else {
+                              Functions.showInfo(context, 'Select at least one preferred language');
                             }
                           },
                           buttonColor: Color(0xFF00A69D),
@@ -1186,49 +1509,79 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
               SizedBox(height: 10),
               Container(
                 width: SizeConfig.screenWidth,
-                child: TextFormField(
-                  controller: _languagesController,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  validator: (value){
-                    if(value.isEmpty){
-                      return 'Enter the languages you speak';
-                    }
-                    return null;
-                  },
+                child: DropdownButtonFormField(
+                  isExpanded: true,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Gelion',
                     color: Color(0xFF042538),
                   ),
-                  decoration:kFieldDecoration.copyWith(
-                    hintText: 'Enter the languages you speak',
+                  icon: Image.asset(
+                      'assets/icons/arrow-down.png',
+                      height: 18,
+                      width: 18,
+                      fit: BoxFit.contain
+                  ),
+                  value: _selectedLanguage,
+                  onChanged: (value){
+                    if(!mounted)return;
+                    setState(() {
+                      if(!_allSelectedLanguages.contains(value)){
+                        _allSelectedLanguages.add(value);
+                      }
+                      _selectedLanguage = null;
+                    });
+                  },
+                  decoration: kFieldDecoration.copyWith(
+                    hintText: 'Please Select',
                     hintStyle: TextStyle(
                       color: Color(0xFF717F88),
                       fontSize: 14,
-                      fontFamily: 'Gelion',
                       fontWeight: FontWeight.normal,
-                    ),
-                    helperText: "Separate with \",\" if you have more than 1",
-                    helperStyle: TextStyle(
-                      color: Color(0xFF717F88),
-                      fontSize: 14,
                       fontFamily: 'Gelion',
-                      fontWeight: FontWeight.normal,
                     ),
                   ),
+                  selectedItemBuilder: (BuildContext context){
+                    return _languages.map((value){
+                      return Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                      );
+                    }).toList();
+                  },
+                  items: _languages.map((value){
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Gelion',
+                          color: Color(0xFF042538),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
+              SizedBox(height: 10),
+              _buildLanguageList(),
             ],
           ),
           SizedBox(height: 20),
-          // History
+          // Name
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "History",
+                "Name of Current/Former Employer",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
@@ -1241,13 +1594,11 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
               Container(
                 width: SizeConfig.screenWidth,
                 child: TextFormField(
-                  controller: _historyController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 5,
+                  controller: _nameEmployerController,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
                   validator: (value){
-                    if(value.isEmpty){
-                      return 'A brief history about yourself';
-                    }
+                    if(value.isEmpty) return 'Enter name';
                     return null;
                   },
                   style: TextStyle(
@@ -1257,15 +1608,53 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                     color: Color(0xFF042538),
                   ),
                   decoration:kFieldDecoration.copyWith(
-                    hintText: '8 months at Radisson BLU,',
+                    hintText: 'Name',
                     hintStyle: TextStyle(
                       color: Color(0xFF717F88),
                       fontSize: 14,
                       fontFamily: 'Gelion',
                       fontWeight: FontWeight.normal,
                     ),
-                    helperText: "Separate with \",\" if you have more than 1",
-                    helperStyle: TextStyle(
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          // Position
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Position with Current/Former Employer",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: TextFormField(
+                  controller: _positionEmployerController,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  validator: (value){
+                    if(value.isEmpty) return 'Enter your position';
+                    return null;
+                  },
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  decoration:kFieldDecoration.copyWith(
+                    hintText: 'Position',
+                    hintStyle: TextStyle(
                       color: Color(0xFF717F88),
                       fontSize: 14,
                       fontFamily: 'Gelion',
@@ -1282,16 +1671,75 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     );
   }
 
+  /// Function to build the selected language list in a row
+  Widget _buildLanguageList(){
+    List<Widget> languageContainer = [];
+    if(_allSelectedLanguages.length <= 0){
+      languageContainer.add(Container());
+    }
+    else {
+      for(int i = 0; i < _allSelectedLanguages.length; i++){
+        if(_allSelectedLanguages[i] != null){
+          languageContainer.add(
+            InkWell(
+              onTap: (){
+                if(!mounted)return;
+                setState(() {
+                  _allSelectedLanguages.removeAt(i);
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 9.73, right: 3.89242),
+                margin: EdgeInsets.only(right: 7.78484, bottom: 8),
+                decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    border: Border.all(color: Color(0xFF757575), width: 0.486553, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.all(Radius.circular(7.78484))
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _allSelectedLanguages[i],
+                      style: TextStyle(
+                          fontFamily: 'Gelion',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                          color: Color(0xFF0C0C0C)
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.close_sharp,
+                      size: 12,
+                      color: Color(0xFF000000),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      }
+    }
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      direction: Axis.horizontal,
+      children: languageContainer,
+    );
+  }
+
   void _setAvailability(){
     var availability = Availability();
     availability.title = _liveIn ? 'Live In' : 'Custom';
-    availability.sunday = { "availability": _liveIn ? true : _sunday, "booked": false };
-    availability.monday = { "availability": _liveIn ? true : _monday, "booked": false };
-    availability.tuesday = { "availability": _liveIn ? true : _tuesday, "booked": false };
-    availability.wednesday = { "availability": _liveIn ? true : _wednesday, "booked": false };
-    availability.thursday = { "availability": _liveIn ? true : _thursday, "booked": false };
-    availability.friday = { "availability": _liveIn ? true : _friday, "booked": false };
-    availability.saturday = { "availability": _liveIn ? true : _saturday, "booked": false };
+    availability.sunday = { "availability": _sunday, "booked": false };
+    availability.monday = { "availability": _monday, "booked": false };
+    availability.tuesday = { "availability": _tuesday, "booked": false };
+    availability.wednesday = { "availability": _wednesday, "booked": false };
+    availability.thursday = { "availability": _thursday, "booked": false };
+    availability.friday = { "availability": _friday, "booked": false };
+    availability.saturday = { "availability": _saturday, "booked": false };
     widget.candidate.availability = availability;
   }
 
@@ -1299,27 +1747,19 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
   /// to the next phase of registration [RegisterCandidateTwo]
   void _registerCandidate(){
     widget.candidate.skill = _skillsController.text;
-    widget.candidate.languages = _languagesController.text;
+    widget.candidate.languages = _allSelectedLanguages.join(',');
     widget.candidate.residence = _addressController.text.trim();
-    List<String> history = _historyController.text.split(',');
-    List<String> trimmedHistory = [];
-    history.forEach((i) {
-      if(i.trim().isNotEmpty){
-        trimmedHistory.add(i.trim());
-      }
-    });
-    widget.candidate.history = jsonEncode(trimmedHistory);
+    widget.candidate.previousEmployer = _nameEmployerController.text.trim();
+    widget.candidate.previousEmployerPosition = _positionEmployerController.text.trim();
     List<http.MultipartFile> uploads = [];
-    _uploads.forEach((key, value) {
-      uploads.add(value);
-    });
+    _uploads.forEach((key, value) => uploads.add(value));
     widget.candidate.image = uploads;
     if(!mounted)return;
-    setState(() { _showSpinner = true; });
+    setState(() => _showSpinner = true);
     var api = RestDataSource();
     api.registerCandidate(widget.candidate).then((value)async {
       if(!mounted)return;
-      setState(() { _showSpinner = false; });
+      setState(() => _showSpinner = false);
       Navigator.pushReplacementNamed(context, CandidateCreatedSuccessfully.id);
     }).catchError((e){
       print(e);
@@ -1333,13 +1773,11 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
   }
 
   _resetUploads(){
-    _uploads = { 1: null, 2: null, 3: null, 4: null, 5: null };
+    _uploads = { 1: null, 2: null, 3: null};
     _verifications = {
-      1: 'Profile Image',
-      2: 'Identity Verification',
-      3: 'Residence Verification',
-      4: 'Guarantor Verification',
-      5: 'Medical Examination',
+      1: 'Passport Photograph',
+      2: 'Government Identity',
+      3: 'Current Recent Utility Bill'
     };
   }
 

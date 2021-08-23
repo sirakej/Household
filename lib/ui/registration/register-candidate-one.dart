@@ -48,76 +48,45 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
   /// A [TextEditingController] to control the input text for the user's age
   TextEditingController _ageController = TextEditingController();
 
-  /// A [TextEditingController] to control the input text for the user's state of origin
-  TextEditingController _originController = TextEditingController();
-
-  /// A [TextEditingController] to control the input text for the user's experience
-  TextEditingController _experienceController = TextEditingController();
-
   /// A list of string variables holding a list of all tribes
   List<String> _tribe =[
-    "Annang",
-    "Bekwarra",
-    "Berom",
-    "Boki",
-    "Delta-Igbo",
-    "Efik",
-    "Eregbe",
-    "Esan",
-    "Foreign – Béninois",
-    "Foreign - Gambien",
-    "Foreign – Ghanaian",
-    "Foreign - Malien",
-    "Hausa",
-    "Ibibio",
-    "Idoma",
-    "Igala",
-    "Igidi",
-    "Igebe",
-    "Igbo",
-    "Isobo",
-    "Ijaw",
-    "Ika (Auchi)",
-    "Itsekiri",
-    "Obanliku",
-    "Ogoja",
-    "Oron",
-    "Ugep",
-    "Ukwuani",
-    "Urhobo",
-    "Tiv",
-    "Yoruba",
-    "Other"
+    "Annang", "Bekwarra", "Berom", "Boki", "Delta-Igbo", "Efik", "Eregbe",
+    "Esan", "Foreign – Béninois", "Foreign - Gambien", "Foreign – Ghanaian",
+    "Foreign - Malien", "Hausa", "Ibibio", "Idoma", "Igala", "Igidi", "Igebe",
+    "Igbo", "Isobo", "Ijaw", "Ika (Auchi)", "Itsekiri", "Obanliku", "Ogoja",
+    "Oron", "Ugep", "Ukwuani", "Urhobo", "Tiv", "Yoruba", "Other"
   ];
 
-  /// A string variable holding the selected state value
+  /// A string variable holding the selected tribe value
   String _selectedTribe;
 
-  /// A list of string variables holding a list of all countries
+  /// A list of string variables holding a list of all religion
   List<String> _religion =[
-    "Buddhism",
-    "Christianity – Anglican",
-    "Christianity – Catholic",
-    "Christianity – Protestant",
-    "Hinduism",
-    "Islam",
-    "Judaism",
-    "None"
+    "Buddhism", "Christianity – Anglican", "Christianity – Catholic",
+    "Christianity – Protestant", "Hinduism", "Islam", "Judaism", "None"
   ];
 
-  /// A string variable holding the selected state value
+  /// A string variable holding the selected religion value
   String _selectedReligion;
 
-  /// A list of string variables holding a list of all countries
+  /// A list of string variables holding a list of all gender
   List<String> _gender =[
-    "Male",
-    "Female"
+    "Male", "Female"
   ];
 
-  /// A string variable holding the selected state value
+  /// A string variable holding the selected gender value
   String _selectedGender;
 
-  /// A list of string variables holding a list of all countries
+  /// A Map of string and int variables holding the experience and the value to
+  /// pass to the api
+  Map<String, int> _experienceValues = {
+    "0 years - 2 years": 1,
+    "2 years - 5 years": 2,
+    "5 years - 10 years": 3,
+    "10 years and above": 4
+  };
+
+  /// A list of string variables holding a list of all experiences
   List<String> _experience =[
     "0 years - 2 years",
     "2 years - 5 years",
@@ -125,11 +94,21 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
     "10 years and above",
   ];
 
+  /// A string variable holding the selected experience value
+  String _selectedExperience;
+
   /// A [TextEditingController] to control the input text for the categories
   TextEditingController _categoryController = TextEditingController();
 
-  /// A string variable holding the selected state value
-  String _selectedExperience;
+  /// A list of string variables holding a list of all area of service
+  List<String> _areaOfService =[
+    "Lagos Island",
+    "Lagos Mainland",
+    "Any of the Above"
+  ];
+
+  /// A string variable holding the selected area of service
+  String _selectedAreaOfService;
 
   /// A List to hold the all the categories
   List<Category> _categories = [];
@@ -225,7 +204,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                 ),
                 SizedBox(height: 22.54),
                 Text(
-                  'Register As a Candidate',
+                  'Register as a Candidate',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -257,7 +236,6 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         SizedBox(height: 60),
                         Button(
                           onTap: (){
-                            _registerCandidate();
                             if(_allSelectedCategories.length > 0){
                               if(_formKey.currentState.validate()){
                                 _registerCandidate();
@@ -365,7 +343,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Categories",
+                "Category",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
@@ -484,7 +462,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                     color: Color(0xFF042538),
                   ),
                   decoration:kFieldDecoration.copyWith(
-                      hintText: 'Precious',
+                      hintText: 'First Name',
                       hintStyle:TextStyle(
                         color:Color(0xFF717F88),
                         fontSize: 14,
@@ -502,7 +480,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Last Name",
+                "Surname",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
@@ -523,10 +501,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   ],
                   validator: (value){
                     if(value.isEmpty){
-                      return 'Enter your Last Name';
+                      return 'Enter your Surname';
                     }
                     if (value.length < 3){
-                      return 'Last name should be at least 3 characters';
+                      return 'Surname should be at least 3 characters';
                     }
                     return null;
                   },
@@ -537,7 +515,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                     color: Color(0xFF042538),
                   ),
                   decoration:kFieldDecoration.copyWith(
-                    hintText: 'Akande',
+                    hintText: 'Surname',
                     hintStyle:TextStyle(
                         color:Color(0xFF717F88),
                         fontSize: 14,
@@ -747,9 +725,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
               Container(
                 width: SizeConfig.screenWidth,
                 child: InternationalPhoneNumberInput(
-                  onInputChanged: (PhoneNumber number) {
-                    _number = number;
-                  },
+                  onInputChanged: (PhoneNumber number) => _number = number,
                   selectorConfig: SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                       showFlags: true,
@@ -757,10 +733,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   ),
                   ignoreBlank: true,
                   autoValidateMode: AutovalidateMode.onUserInteraction,
+                  maxLength: 13,
+                  countries: ['NG'],
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter your phone number';
-                    }
+                    if (value.isEmpty) return 'Enter your phone number';
                     return null;
                   },
                   spaceBetweenSelectorAndTextField: 8,
@@ -782,14 +758,14 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   initialValue: _number,
                   textFieldController: _phoneNumberController,
                   formatInput: true,
-                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                  keyboardType: TextInputType.phone,
                   inputBorder: OutlineInputBorder(),
                 ),
               ),
             ],
           ),
           SizedBox(height: 20),
-          // Age and Origin
+          // Age and Experience
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -848,11 +824,10 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
               SizedBox(width: 10),
               Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Area of Service",
+                      "Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -861,37 +836,70 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         color: Color(0xFF042538),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Container(
                       width: SizeConfig.screenWidth,
-                      child: TextFormField(
-                        controller: _originController,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.next,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                        ],
-                        validator: (value){
-                          if(value.isEmpty){
-                            return 'Enter area of service';
-                          }
-                          return null;
-                        },
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
                           color: Color(0xFF042538),
                         ),
-                        decoration:kFieldDecoration.copyWith(
-                            hintText: 'Enter state of origin',
-                            hintStyle:TextStyle(
-                              color:Color(0xFF717F88),
-                              fontSize: 14,
-                              fontFamily: 'Gelion',
-                              fontWeight: FontWeight.normal,
-                            )
+                        icon: Image.asset(
+                            'assets/icons/arrow-down.png',
+                            height: 18,
+                            width: 18,
+                            fit: BoxFit.contain
                         ),
+                        value: _selectedExperience,
+                        onChanged: (String value){
+                          if(!mounted)return;
+                          setState(() { _selectedExperience = value; });
+                        },
+                        validator: (value){
+                          if (_selectedExperience == null || _selectedExperience.isEmpty){
+                            return 'Pick your option';
+                          }
+                          return null;
+                        },
+                        decoration: kFieldDecoration.copyWith(
+                          hintText: 'Please Select',
+                          hintStyle: TextStyle(
+                            color: Color(0xFF717F88),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Gelion',
+                          ),
+                        ),
+                        selectedItemBuilder: (BuildContext context){
+                          return _experience.map((value){
+                            return Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                            );
+                          }).toList();
+                        },
+                        items: _experience.map((String value){
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],
@@ -900,6 +908,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
             ],
           ),
           SizedBox(height: 20),
+          // Religion and Area of Service
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -991,10 +1000,11 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
               SizedBox(width: 10),
               Expanded(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Experience",
+                      "Area of Service",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -1003,38 +1013,72 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         color: Color(0xFF042538),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                     Container(
                       width: SizeConfig.screenWidth,
-                      child: TextFormField(
-                        controller: _experienceController,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.done,
-                        validator: (value){
-                          if(value.isEmpty){
-                            return 'Enter experience';
-                          }
-                          return null;
-                        },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(3),
-                        ],
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
                           color: Color(0xFF042538),
                         ),
-                        decoration:kFieldDecoration.copyWith(
-                            hintText: 'Enter experience',
-                            hintStyle:TextStyle(
-                              color:Color(0xFF717F88),
-                              fontSize: 14,
-                              fontFamily: 'Gelion',
-                              fontWeight: FontWeight.normal,
-                            )
+                        icon: Image.asset(
+                            'assets/icons/arrow-down.png',
+                            height: 18,
+                            width: 18,
+                            fit: BoxFit.contain
                         ),
+                        value: _selectedAreaOfService,
+                        onChanged: (String value){
+                          if(!mounted)return;
+                          setState(() {
+                            _selectedAreaOfService = value;
+                          });
+                        },
+                        validator: (value){
+                          if (_selectedAreaOfService == null || _selectedAreaOfService.isEmpty){
+                            return 'Pick your option';
+                          }
+                          return null;
+                        },
+                        decoration: kFieldDecoration.copyWith(
+                          hintText: 'Please Select',
+                          hintStyle: TextStyle(
+                            color: Color(0xFF717F88),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Gelion',
+                          ),
+                        ),
+                        selectedItemBuilder: (BuildContext context){
+                          return _areaOfService.map((value){
+                            return Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                            );
+                          }).toList();
+                        },
+                        items: _areaOfService.map((String value){
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Gelion',
+                                color: Color(0xFF042538),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],
@@ -1047,6 +1091,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
     );
   }
 
+  /// Function to build the selected category list in a row
   Widget _buildCategoryList(){
     List<Widget> categoryContainer = [];
     if(_allSelectedCategories.length <= 0){
@@ -1115,11 +1160,11 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
       candidate.email = _emailController.text.toLowerCase().trim();
       candidate.phoneNumber = _number.phoneNumber.trim();
       candidate.age = int.parse(_ageController.text);
-      candidate.origin = Functions.capitalize(_originController.text.trim());
+      candidate.origin = _selectedAreaOfService;
       candidate.tribe = _selectedTribe;
       candidate.gender = _selectedGender;
       candidate.religion = _selectedReligion;
-      candidate.experience = int.parse(_experienceController.text);
+      candidate.experience = _experienceValues[_selectedExperience];
       List<String> category = [];
       _allSelectedCategories.forEach((value) {
         category.add(value.category.id);

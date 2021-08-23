@@ -458,7 +458,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      candidate.availability.title ?? '',
+                                      kTitle[candidate.availability.title] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -615,7 +615,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
+                                      kExperience[candidate.experience] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,

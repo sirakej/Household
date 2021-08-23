@@ -16,7 +16,8 @@ class CreateCandidate {
   String residence;
   String skill;
   String languages;
-  String history;
+  String previousEmployer;
+  String previousEmployerPosition;
   String category;
   Availability availability;
   List<http.MultipartFile> image;

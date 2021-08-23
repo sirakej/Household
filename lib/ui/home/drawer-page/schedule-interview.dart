@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:householdexecutives_mobile/bloc/future-values.dart';
+import 'package:householdexecutives_mobile/model/candidate-availability.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/purchases.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
@@ -35,7 +36,6 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
   String _getFormattedDate(DateTime dateTime) {
     return DateFormat('E, d MMM, y h:mm a').format(dateTime).toString();
   }
-
 
 
   /// ---------- START OF PENDING SECTION ----------- ////
@@ -158,7 +158,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                       ),
                       SizedBox(height: 1),
                       Text(
-                        "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} Experience",
+                        kExperience[candidate.experience] ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -168,7 +168,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                       ),
                       SizedBox(height: 4),
                       Text(
-                        candidate.availability.title + ' . ' + candidate.origin,
+                        kTitle[candidate.availability.title] + ' . ' + candidate.origin,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -354,7 +354,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                       ),
                       SizedBox(height: 1),
                       Text(
-                        "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} Experience",
+                        "${kExperience[candidate.experience] ?? ''} Experience",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -364,7 +364,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                       ),
                       SizedBox(height: 4),
                       Text(
-                        candidate.availability.title + ' . ' + candidate.origin,
+                        kTitle[candidate.availability.title] + ' . ' + candidate.origin,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -550,7 +550,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                       ),
                       SizedBox(height: 1),
                       Text(
-                        "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'} Experience",
+                        "${kExperience[candidate.experience] ?? ''} Experience",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -560,7 +560,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                       ),
                       SizedBox(height: 4),
                       Text(
-                        candidate.availability.title + ' . ' + candidate.origin,
+                        kTitle[candidate.availability.title] + ' . ' + candidate.origin,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -763,7 +763,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
         centerTitle: true,
         elevation: 0,
         title: Text(
-          "Interview Schedule",
+          "Schedule Interview",
           textAlign: TextAlign.start,
           style: TextStyle(
             fontWeight: FontWeight.normal,
@@ -852,7 +852,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
             child: _showScheduleSpinner
                 ? CupertinoActivityIndicator(radius: 13)
                 : Text(
-              'Schedule Selected',
+              'Schedule',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
@@ -1052,7 +1052,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      candidate.availability.title ?? '',
+                                      kTitle[candidate.availability.title] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
@@ -1209,7 +1209,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
+                                      kExperience[candidate.experience] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
@@ -1484,11 +1484,8 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
   /// Function to call a number using the [url_launcher] package
   _openUrl(String url) async {
     if(url != null || url.isNotEmpty){
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch the url';
-      }
+      if (await canLaunch(url)) await launch(url);
+      throw 'Could not launch the url';
     }
   }
 
@@ -1504,12 +1501,22 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
         minTime: DateTime.now(),
         maxTime: DateTime(now.year + 1, now.month, now.day),
         onConfirm: (date) {
-          if(!mounted)return;
-          setState(() { _scheduleAt = date; });
+          if(date.weekday != 7){
+            if(date.hour > 9 && date.hour < 15){
+              if(!mounted)return;
+              setState(() => _scheduleAt = date);
+            }
+            else {
+              Functions.showError(context, "You can only schedule an interview between 9:00am to 3:00pm");
+            }
+          }
+          else {
+            Functions.showError(context, "You can't schedule an interview on a Sunday");
+          }
         },
         onCancel: (){
           if(!mounted)return;
-          setState(() { _scheduleAt = null; });
+          setState(() => _scheduleAt = null);
         },
         currentTime: DateTime.now(),
         locale: LocaleType.en
@@ -1652,6 +1659,15 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
 
   _buildHireStartSheet(BuildContext context, Candidate candidate, String savedCategoryId, String categoryId, dynamic hirePlan){
     _scheduleController.clear();
+    bool liveIn = candidate.availability.title == 'Live In' ? true : false;
+
+    bool monday = false;
+    bool tuesday = false;
+    bool wednesday = false;
+    bool thursday = false;
+    bool friday = false;
+    bool saturday = false;
+    bool sunday = false;
     final formKey = GlobalKey<FormState>();
     showModalBottomSheet<void>(
         backgroundColor: Colors.transparent,
@@ -1712,7 +1728,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Availability',
+                            'Availability - ${candidate.availability.title == 'Live In' ? 'Full Time' : 'Select Days'}',
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
                               fontFamily: 'Gelion',
@@ -1724,311 +1740,395 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                           Row(
                             children: [
                               Expanded(
-                                child: candidate.availability.sunday['availability']
-                                    ? candidate.availability.sunday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.sunday['availability']){
+                                          sunday = !sunday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Sun",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.sunday['availability']
+                                        ? sunday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Sun",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Sun",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Sun",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Sun",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Sun",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                               Expanded(
-                                child: candidate.availability.monday['availability']
-                                    ? candidate.availability.monday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.monday['availability']){
+                                          monday = !monday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Mon",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.monday['availability']
+                                        ? monday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Mon",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Mon",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Mon",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Mon",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Mon",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                               Expanded(
-                                child: candidate.availability.tuesday['availability']
-                                    ? candidate.availability.tuesday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.tuesday['availability']){
+                                          tuesday = !tuesday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Tue",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.tuesday['availability']
+                                        ? tuesday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Tue",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Tue",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Tue",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Tue",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Tue",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                               Expanded(
-                                child: candidate.availability.wednesday['availability']
-                                    ? candidate.availability.wednesday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.wednesday['availability']){
+                                          wednesday = !wednesday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Wed",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.wednesday['availability']
+                                        ? wednesday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Wed",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Wed",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Wed",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Wed",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Wed",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                               Expanded(
-                                child: candidate.availability.thursday['availability']
-                                    ? candidate.availability.thursday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.thursday['availability']){
+                                          thursday = !thursday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Thu",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.thursday['availability']
+                                        ? thursday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Thu",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Thu",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Thu",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Thu",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Thu",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                               Expanded(
-                                child: candidate.availability.friday['availability']
-                                    ? candidate.availability.friday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.friday['availability']){
+                                          friday = !friday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Fri",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.friday['availability']
+                                        ? friday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Fri",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Fri",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Fri",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Fri",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Fri",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                               Expanded(
-                                child: candidate.availability.saturday['availability']
-                                    ? candidate.availability.saturday['booked']
-                                    ? Container(
-                                    height:33,
-                                    width: 33,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF00A69D).withOpacity(0.1),
+                                child: TextButton(
+                                    onPressed: () {
+                                      setModalState(() {
+                                        if(hirePlan.saturday['availability']){
+                                          saturday = !saturday;
+                                        }
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: CircleBorder()
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        "Sat",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontFamily: 'Gelion',
-                                          fontSize: 14,
-                                          color: Color(0xFF00A69D),
+                                    child: hirePlan.saturday['availability']
+                                        ? saturday
+                                        ? Container(
+                                        height:33,
+                                        width: 33,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF00A69D).withOpacity(0.1),
                                         ),
+                                        child: Center(
+                                          child: Text(
+                                            "Sat",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontFamily: 'Gelion',
+                                              fontSize: 14,
+                                              color: Color(0xFF00A69D),
+                                            ),
+                                          ),
+                                        )
+                                    )
+                                        : Text(
+                                      "Sat",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFF000000),
                                       ),
                                     )
-                                )
-                                    : Text(
-                                  "Sat",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                )
-                                    : Text(
-                                  "Sat",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Gelion',
-                                    fontSize: 14,
-                                    color: Color(0xFFC4CDD5),
-                                  ),
+                                        : Text(
+                                      "Sat",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Gelion',
+                                        fontSize: 14,
+                                        color: Color(0xFFC4CDD5),
+                                      ),
+                                    )
                                 ),
                               ),
                             ],
@@ -2110,7 +2210,16 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
                     Button(
                       onTap: (){
                         if(formKey.currentState.validate()){
-                          _hireCandidate(savedCategoryId, categoryId, candidate, hirePlan, setModalState);
+                          var availability = Availability();
+                          availability.title = hirePlan.title;
+                          availability.sunday = { "availability": liveIn ? true : sunday, "booked": false };
+                          availability.monday = { "availability": liveIn ? true : monday, "booked": false };
+                          availability.tuesday = { "availability": liveIn ? true : tuesday, "booked": false };
+                          availability.wednesday = { "availability": liveIn ? true : wednesday, "booked": false };
+                          availability.thursday = { "availability": liveIn ? true : thursday, "booked": false };
+                          availability.friday = { "availability": liveIn ? true : friday, "booked": false };
+                          availability.saturday = { "availability": liveIn ? true : saturday, "booked": false };
+                          _hireCandidate(savedCategoryId, categoryId, candidate, availability, setModalState);
                         }
                       },
                       buttonColor: Color(0xFF00A69D),

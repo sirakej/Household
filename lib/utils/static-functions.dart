@@ -154,7 +154,7 @@ class Functions{
             type: MaterialType.transparency,
             //animationDuration: Duration(milliseconds: 3500),
             child: WillPopScope(
-              onWillPop: () async => false,
+              onWillPop: () async => true,
               child: Padding(
                 padding: const EdgeInsets.only(top: 50, bottom: 60),
                 child: Align(

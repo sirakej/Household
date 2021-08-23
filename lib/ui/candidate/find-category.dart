@@ -140,7 +140,18 @@ class _FindACategoryState extends State<FindACategory> {
         _categoriesList.add(
             InkWell(
               onTap: (){
-                _buildCandidatePreferenceSheet(context, _filteredCategories[i]);
+                //_buildCandidatePreferenceSheet(context, _filteredCategories[i]);
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (_){
+                      return SelectedCategory(
+                        //availability: availability,
+                        category: _filteredCategories[i],
+                        candidates: _candidates[_filteredCategories[i]],
+                      );
+                    })
+                ).then((value) {
+                  _afterNav(value, _filteredCategories[i]);
+                });
               },
               child: Container(
                 width: SizeConfig.screenWidth,
@@ -189,9 +200,7 @@ class _FindACategoryState extends State<FindACategory> {
             ),
         );
       }
-      return Column(
-        children: _categoriesList,
-      );
+      return Column(children: _categoriesList);
     }
     else if(_categoriesLength == 0){
       return Container();

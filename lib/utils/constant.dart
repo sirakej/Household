@@ -68,3 +68,18 @@ const kPinTextStyle = TextStyle(
   fontSize: 25,
   //fontFamily: "Bold",
 );
+
+const Map<int, String> kExperience = {
+  1: '1 years +',
+  2: '2 years +',
+  3: '5 years +',
+  4: '10 years +',
+  null: '1 years +'
+};
+
+const Map<String, String> kTitle = {
+  'Live In': 'Live In',
+  'Custom': 'Live Out',
+  '': '',
+  null: ''
+};

@@ -53,44 +53,29 @@ class RestDataSource {
       final data = file.readAsStringSync();
       return AdBanner.fromJson(jsonDecode(jsonDecode(data)["data"]));
     }
-    else {
-      Map<String, String> header;
-      Future<User> user = futureValues.getCurrentUser();
-      await user.then((value) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      });
-      return _netUtil.get(GET_AD_BANNER, headers: header).then((dynamic res) {
-        if(res["error"]){
-          throw (res["msg"]);
-        }
-        else{
-          file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
-          return AdBanner.fromJson(res["data"]);
-        }
-      }).catchError((e){
-        errorHandler.handleError(e);
-      });
-    }
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
+    });
+    return _netUtil.get(GET_AD_BANNER, headers: header).then((dynamic res) {
+      if(res["error"]) throw (res["msg"]);
+      file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
+      return AdBanner.fromJson(res["data"]);
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
   }
 
   /// A function that fetches all categories without sending token in header
   Future<List<Category>> getAllCategory() async {
     List<Category> categories;
     return _netUtil.get(GET_CATEGORY_URL).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        categories =
-            rest.map<Category>((json) => Category.fromJson(json)).toList();
-        return categories;
-      }
+      if (res["error"]) throw res["msg"];
+      var rest = res["data"] as List;
+      categories = rest.map<Category>((json) => Category.fromJson(json)).toList();
+      return categories;
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -106,35 +91,24 @@ class RestDataSource {
       final data = file.readAsStringSync();
       final res = jsonDecode(data);
       var rest = res["data"] as List;
-      categories =
-          rest.map<Category>((json) => Category.fromJson(json)).toList();
+      categories = rest.map<Category>((json) => Category.fromJson(json)).toList();
       return categories;
     }
-    else {
-      Map<String, String> header;
-      Future<User> user = futureValues.getCurrentUser();
-      await user.then((value) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      });
-      return _netUtil.get(CATEGORY_URL, headers: header).then((dynamic res) {
-        if (res["error"]) {
-          throw res["msg"];
-        } else {
-          file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
-          var rest = res["data"] as List;
-          categories = rest.map<Category>((json) => Category.fromJson(json)).toList();
-          return categories;
-        }
-      }).catchError((e) {
-        errorHandler.handleError(e);
-      });
-    }
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
+    });
+    return _netUtil.get(CATEGORY_URL, headers: header).then((dynamic res) {
+      if (res["error"]) throw res["msg"];
+      file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
+      var rest = res["data"] as List;
+      categories = rest.map<Category>((json) => Category.fromJson(json)).toList();
+      return categories;
+    }).catchError((e) {
+      errorHandler.handleError(e);
+    });
   }
 
   /// A function that fetches popular categories
@@ -147,62 +121,40 @@ class RestDataSource {
       final data = file.readAsStringSync();
       final res = jsonDecode(data);
       var rest = res["data"] as List;
-      categories =
-          rest.map<PopularCategory>((json) => PopularCategory.fromJson(json)).toList();
+      categories = rest.map<PopularCategory>((json) => PopularCategory.fromJson(json)).toList();
       return categories;
     }
-    else {
-      Map<String, String> header;
-      Future<User> user = futureValues.getCurrentUser();
-      await user.then((value) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      });
-      return _netUtil.get(POPULAR_CATEGORY, headers: header).then((dynamic res) {
-        if(res["error"]){
-          throw (res["msg"]);
-        }else{
-          file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
-          var rest = res["data"] as List;
-          categories =
-              rest.map<PopularCategory>((json) => PopularCategory.fromJson(json)).toList();
-          return categories;
-        }
-      }).catchError((e){
-        errorHandler.handleError(e);
-      });
-    }
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
+    });
+    return _netUtil.get(POPULAR_CATEGORY, headers: header).then((dynamic res) {
+      if(res["error"]) throw (res["msg"]);
+      file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
+      var rest = res["data"] as List;
+      categories = rest.map<PopularCategory>((json) => PopularCategory.fromJson(json)).toList();
+      return categories;
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
   }
 
   Future<List<Candidate>> getCandidate(String id) async {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
-
     List<Candidate> candidates;
     String GET_CANDIDATE_URL = CANDIDATE_URL + "/$id";
     return _netUtil.get(GET_CANDIDATE_URL, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        var rest = res["data"] as List;
-        candidates =
-            rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
-        return candidates;
-      }
+      if (res["error"]) throw res["msg"];
+      var rest = res["data"] as List;
+      candidates = rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
+      return candidates;
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -217,36 +169,25 @@ class RestDataSource {
       final data = file.readAsStringSync();
       final res = jsonDecode(data);
       var rest = res["data"] as List;
-      candidates =
-          rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
+      candidates = rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
       return candidates;
     }
-    else {
-      Map<String, String> header;
-      Future<User> user = futureValues.getCurrentUser();
-      await user.then((value) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      });
-      return _netUtil.get(RECOMMENDED_CANDIDATE, headers: header).then((dynamic res) {
-        if(res["error"]){
-          throw (res["msg"]);
-        }else{
-          file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
-          var rest = res["data"] as List;
-          candidates =
-              rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
-          return candidates;
-        }
-      }).catchError((e){
-        errorHandler.handleError(e);
-      });
-    }
+
+    Map<String, String> header;
+    Future<User> user = futureValues.getCurrentUser();
+    await user.then((value) {
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
+    });
+    return _netUtil.get(RECOMMENDED_CANDIDATE, headers: header).then((dynamic res) {
+      if(res["error"]) throw (res["msg"]);
+      file.writeAsStringSync(jsonEncode(res), flush: true, mode: FileMode.write);
+      var rest = res["data"] as List;
+      candidates = rest.map<Candidate>((json) => Candidate.fromJson(json)).toList();
+      return candidates;
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
   }
 
   Future<dynamic> registerCandidate(CreateCandidate createCandidate) async {
@@ -257,25 +198,22 @@ class RestDataSource {
       "last_name": createCandidate.lastName,
       "age": createCandidate.age.toString(),
       "phone_number": createCandidate.phoneNumber,
-      "origin": createCandidate.origin,
+      "service_area": createCandidate.origin,
       "tribe": createCandidate.tribe,
       "gender": createCandidate.gender,
       "experience": createCandidate.experience.toString(),
       "residence": createCandidate.residence,
       "religion": createCandidate.religion,
       "skill": createCandidate.skill,
-      "history": createCandidate.history,
+      "previous_employer": createCandidate.previousEmployer,
+      "previous_employer_position": createCandidate.previousEmployerPosition,
       "category": createCandidate.category,
       "availability": jsonEncode(createCandidate.availability.toJson())
     };
     return _netUtil.postForm(CANDIDATE_URL, createCandidate.image, body: body)
         .then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      }
-      else {
-        return res['data'];
-      }
+      if (res["error"]) throw res["msg"];
+      return res['data'];
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -286,29 +224,16 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     String SAVED_CANDIDATE_URL = SAVED_CANDIDATE + '/$userId';
     return _netUtil.put(SAVED_CANDIDATE_URL, headers: header, body: {
       "saved": saved
     }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return res["data"];
-      }
+      if (res["error"]) throw res["msg"];
+      return res["data"];
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -319,30 +244,17 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     String UPDATE_CANDIDATE_URL = UPDATE_CANDIDATE + '/$userId/$savedId';
     return _netUtil.put(UPDATE_CANDIDATE_URL, headers: header, body: {
       "candidate": candidate.id,
       "hire_plan": candidate.availability.toJson()
     }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return res["data"];
-      }
+      if (res["error"]) throw res["msg"];
+      return res["data"];
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -353,27 +265,14 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     String DELETE_CANDIDATE_URL = UPDATE_CANDIDATE + '/$userId/$savedCategoryId/$candidateId';
     return _netUtil.delete(DELETE_CANDIDATE_URL, headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return 'Successfully deleted';
-      }
+      if (res["error"]) throw res["msg"];
+      return 'Successfully deleted';
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -385,28 +284,18 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
       userId = value.id;
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     String GET_SAVED_LIST_URL = GET_SAVED_LIST + "/$userId";
     return _netUtil.get(GET_SAVED_LIST_URL , headers: header).then((dynamic res) {
-      if(res["error"]) {
-        throw res["msg"];
+      if(res["error"]) throw res["msg"];
+      if(res["data"] != null){
+        var rest = res["data"] as List;
+        purchases = rest.map<Purchases>((json) => Purchases.fromJson(json)).toList();
       }
-      else {
-        purchases = [];
-        if(res["data"] != null){
-          var rest = res["data"] as List;
-          purchases = rest.map<Purchases>((json) => Purchases.fromJson(json)).toList();
-        }
-        return purchases;
-      }
+      return purchases;
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -417,26 +306,17 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
       userId = value.id;
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     List<HiredCandidates> candidates = [];
     String GET_HIRED_CANDIDATES_URL = GET_HIRED_CANDIDATES + "/$userId";
     return _netUtil.get(GET_HIRED_CANDIDATES_URL , headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      }
-      else {
-        var rest = res["data"] as List;
-        candidates = rest.map<HiredCandidates>((json) => HiredCandidates.fromJson(json)).toList();
-        return candidates;
-      }
+      if (res["error"]) throw res["msg"];
+      var rest = res["data"] as List;
+      candidates = rest.map<HiredCandidates>((json) => HiredCandidates.fromJson(json)).toList();
+      return candidates;
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -447,26 +327,17 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value.token == null) {
-        throw ("No user logged in");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
       userId = value.id;
-      header = {
-        "Authorization": "Bearer ${value.token}",
-        "Content-Type": "application/json",
-      };
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     List<ScheduledCandidates> candidates = [];
     String GET_SCHEDULED_CANDIDATES_URL = GET_SCHEDULED_CANDIDATES + "/$userId";
     return _netUtil.get(GET_SCHEDULED_CANDIDATES_URL , headers: header).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      }
-      else {
-        var rest = res["data"] as List;
-        candidates = rest.map<ScheduledCandidates>((json) => ScheduledCandidates.fromJson(json)).toList();
-        return candidates;
-      }
+      if (res["error"]) throw res["msg"];
+      var rest = res["data"] as List;
+      candidates = rest.map<ScheduledCandidates>((json) => ScheduledCandidates.fromJson(json)).toList();
+      return candidates;
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -478,29 +349,16 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     String SCHEDULE_INTERVIEW_URL = SCHEDULE_INTERVIEW + '/$userId/$id';
     return _netUtil.put(SCHEDULE_INTERVIEW_URL, headers: header, body: {
       "interview_date": Functions.formatISOTime(date)
     }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return res["data"];
-      }
+      if (res["error"]) throw res["msg"];
+      return res["data"];
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -514,19 +372,9 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     String HIRE_CANDIDATE_URL = HIRE_CANDIDATE + '/$userId/${candidate.id}';
     return _netUtil.post(HIRE_CANDIDATE_URL, headers: header, body: {
@@ -535,11 +383,8 @@ class RestDataSource {
       "hire_plan": hirePlan.toJson(),
       "resumption": Functions.formatISOTime(date)
     }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return res["data"];
-      }
+      if (res["error"]) throw res["msg"];
+      return res["data"];
     }).catchError((e) {
       errorHandler.handleError(e);
     });
@@ -553,19 +398,9 @@ class RestDataSource {
     Map<String, String> header;
     Future<User> user = futureValues.getCurrentUser();
     await user.then((value) {
-      if (value != null) {
-        if (value.token == null) {
-          throw ("No user logged in");
-        }
-        userId = value.id;
-        header = {
-          "Authorization": "Bearer ${value.token}",
-          "Content-Type": "application/json",
-        };
-      }
-      else {
-        throw ("No user authenticated");
-      }
+      if(value?.token == null) throw ("You're unauthorized, log out and login back to continue");
+      userId = value.id;
+      header = {"Authorization": "Bearer ${value.token}", "Content-Type": "application/json"};
     });
     return _netUtil.post(CANDIDTE_REVIEW, headers: header, body: {
       "user": userId,
@@ -573,13 +408,10 @@ class RestDataSource {
       "detail": review,
       "rating": rating,
       "category": categoryId,
-      "hirecandidate": hireId
+      "hired_candidate": hireId
     }).then((dynamic res) {
-      if (res["error"]) {
-        throw res["msg"];
-      } else {
-        return 'Successful';
-      }
+      if (res["error"]) throw res["msg"];
+      return 'Successful';
     }).catchError((e) {
       errorHandler.handleError(e);
     });

@@ -151,72 +151,34 @@ class _SelectedCategoryState extends State<SelectedCategory> {
       _candidatesList.clear();
       for (int i = 0; i < _filteredCandidates.length; i++){
         if (widget.candidates.any((element) => element.id == _filteredCandidates[i].id)) {
-          if(widget.availability.title == 'Live In' && _filteredCandidates[i].availability.title == 'Live In'){
-            _candidatesList.add(
-              Container(
-                margin: EdgeInsets.only(bottom: 8),
-                child: CandidateContainer(
-                  candidate: _filteredCandidates[i],
-                  category: widget.category,
-                  onPressed: (){},
-                  selected: true,
-                  showStars: true,
-                ),
+          _candidatesList.add(
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: CandidateContainer(
+                candidate: _filteredCandidates[i],
+                category: widget.category,
+                onPressed: (){},
+                selected: true,
+                showStars: true,
               ),
-            );
-          }
-          else if(widget.availability.title == 'Custom' && _filteredCandidates[i].availability.title == 'Custom'){
-            if(_filteredCandidates[i].availability.toJson() == widget.availability.toJson()){
-              _candidatesList.add(
-                Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  child: CandidateContainer(
-                    candidate: _filteredCandidates[i],
-                    category: widget.category,
-                    onPressed: (){},
-                    selected: true,
-                    showStars: true,
-                  ),
-                ),
-              );
-            }
-          }
+            ),
+          );
         }
         else {
-          if(widget.availability.title == 'Live In' && _filteredCandidates[i].availability.title == 'Live In'){
-            _candidatesList.add(
-              Container(
-                margin: EdgeInsets.only(bottom: 8),
-                child: CandidateContainer(
-                  candidate: _filteredCandidates[i],
-                  category: widget.category,
-                  onPressed: (){
-                    _buildProfileModalSheet(context, _filteredCandidates[i]);
-                  },
-                  selected: false,
-                  showStars: true,
-                ),
+          _candidatesList.add(
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: CandidateContainer(
+                candidate: _filteredCandidates[i],
+                category: widget.category,
+                onPressed: (){
+                  _buildProfileModalSheet(context, _filteredCandidates[i]);
+                },
+                selected: false,
+                showStars: true,
               ),
-            );
-          }
-          else if(widget.availability.title == 'Custom' && _filteredCandidates[i].availability.title == 'Custom'){
-            if(_filteredCandidates[i].availability.toJson() == widget.availability.toJson()){
-              _candidatesList.add(
-                Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  child: CandidateContainer(
-                    candidate: _filteredCandidates[i],
-                    category: widget.category,
-                    onPressed: (){
-                      _buildProfileModalSheet(context, _filteredCandidates[i]);
-                    },
-                    selected: false,
-                    showStars: true,
-                  ),
-                ),
-              );
-            }
-          }
+            ),
+          );
         }
       }
       return _candidatesList.length > 0
@@ -1015,7 +977,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                   ),
                                   SizedBox(width: 7.75),
                                   Text(
-                                    "Custom",
+                                    "Live Out",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                       fontWeight: FontWeight.normal,
@@ -1312,7 +1274,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      candidate.availability.title ?? '',
+                                      kTitle[candidate.availability.title] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -1467,9 +1429,9 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                         color: Color(0xFF042538),
                                       ),
                                     ),
-                                    SizedBox(height:8),
+                                    SizedBox(height: 8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
+                                      kExperience[candidate.experience]  ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -2277,7 +2239,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                   SizedBox(height: 13),
                   Center(
                     child: Text(
-                      "One Preferred Candidate Selected",
+                      "Please remember that you are permitted to pick a maximum of 3 candidates for this category",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -2296,7 +2258,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                     buttonColor: Color(0xFF00A69D),
                     child: Center(
                       child: Text(
-                        "Check Out",
+                        "Continue to Check Out",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Gelion',
@@ -2314,7 +2276,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                         setState(() { });
                       },
                       child:Text(
-                        "View Other Candidates",
+                        "Select Another Candidate",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,

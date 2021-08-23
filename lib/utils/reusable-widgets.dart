@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
+import 'constant.dart';
 import 'static-functions.dart';
 
 class CandidateContainer extends StatefulWidget {
@@ -81,7 +82,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       ),
                     ),
                     Text(
-                      "${widget.candidate.experience} ${widget.candidate.experience > 1 ? 'Years' : 'Year'} Experience",
+                      "${kExperience[widget.candidate.experience] ?? ''} Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -91,7 +92,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       ),
                     ),
                     Text(
-                      "${widget.candidate.availability.title} . ${widget.candidate.origin}",
+                      "${kTitle[widget.candidate.availability.title]} . ${widget.candidate.origin}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -194,7 +195,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       ),
                     ),
                     Text(
-                      "${widget.candidate.experience} ${widget.candidate.experience > 1 ? 'Years' : 'Year'} Experience",
+                      "${kExperience[widget.candidate.experience] ?? ''} Experience",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -204,7 +205,7 @@ class _CandidateContainerState extends State<CandidateContainer> {
                       ),
                     ),
                     Text(
-                      "${widget.candidate.availability.title} . ${widget.candidate.origin}",
+                      "${kTitle[widget.candidate.availability.title]} . ${widget.candidate.origin}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,

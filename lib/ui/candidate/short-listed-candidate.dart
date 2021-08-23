@@ -834,7 +834,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> with Single
                         ),
                         SizedBox(height: 18),
                         Text(
-                          "Instructions For Checkout",
+                          "Instruction For Selection",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -845,9 +845,9 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> with Single
                         ),
                         SizedBox(height: 19),
                         Container(
-                          width: SizeConfig.screenWidth - 150,
+                          width: SizeConfig.screenWidth - 100,
                           child: Text(
-                            "You are allowed to pick maximum of 3 candidates per role for a category. Example; 6 candidates = 2 roles",
+                            "If you would require more than one candidate (from the three options selected) for this category, please indicate by increasing the number of candidates to hire.",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
@@ -875,8 +875,8 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> with Single
                             ),
                           ),
                         ),
-                        SizedBox(height: 9),
-                        TextButton(
+                        SizedBox(height: 29),
+                        /*TextButton(
                           onPressed: () async {
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.setString('instructions', 'done');
@@ -892,7 +892,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> with Single
                               color: Color(0xFFF7941D),
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),

@@ -4,6 +4,7 @@ import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/ui/candidate/selected-category.dart';
+import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
@@ -470,7 +471,7 @@ class _SelectedListState extends State<SelectedList> {
                     ),
                   ),
                   Text(
-                    '${candidate.experience} Years Eperience',
+                    '${kExperience[candidate.experience] ?? ''} Experience',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       //letterSpacing: 1,

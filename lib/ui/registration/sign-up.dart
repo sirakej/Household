@@ -66,7 +66,7 @@ class _SignUpState extends State<SignUp> {
   /// A string variable holding the password
   String _password = '';
 
-  bool isCheck = false;
+  bool _terms = false;
 
   /// A boolean variable to control showing of the progress indicator
   bool _showSpinner = false;
@@ -131,7 +131,7 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(height: 44),
                         Button(
                           onTap: (){
-                            if(isCheck){
+                            if(_terms){
                               if(_formKey.currentState.validate()){
                                 if(_passwordValidated){
                                   _signUp();
@@ -413,9 +413,7 @@ class _SignUpState extends State<SignUp> {
               Container(
                 width: SizeConfig.screenWidth,
                 child: InternationalPhoneNumberInput(
-                  onInputChanged: (PhoneNumber number) {
-                    _number = number;
-                  },
+                  onInputChanged: (PhoneNumber number) => _number = number,
                   selectorConfig: SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                       showFlags: true,
@@ -423,10 +421,10 @@ class _SignUpState extends State<SignUp> {
                   ),
                   ignoreBlank: true,
                   autoValidateMode: AutovalidateMode.onUserInteraction,
+                  maxLength: 13,
+                  countries: ['NG'],
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter your phone number';
-                    }
+                    if (value.isEmpty) return 'Enter your phone number';
                     return null;
                   },
                   spaceBetweenSelectorAndTextField: 8,
@@ -448,7 +446,7 @@ class _SignUpState extends State<SignUp> {
                   initialValue: _number,
                   textFieldController: _phoneNumberController,
                   formatInput: true,
-                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true,),
+                  keyboardType: TextInputType.phone,
                   inputBorder: OutlineInputBorder(),
                 ),
               ),
@@ -488,14 +486,8 @@ class _SignUpState extends State<SignUp> {
                     if (value.isEmpty) {
                       return 'Enter your password';
                     }
-                    if(!_condition1){
-                      Functions.showError(context, "password must be at least 8 characters long");
-                    }
-                    else if(!_condition2){
-                      Functions.showError(context, "password needs to include upper case character");
-                    }
-                    else if(!_condition3){
-                      Functions.showError(context, "password needs to include a number or unique character");
+                    if((!_condition1 && !_condition2) || (!_condition2 && !_condition3) || (!_condition1 && !_condition3)){
+                      Functions.showError(context, "Password too weak");
                     }
                     return null;
                   },
@@ -621,7 +613,7 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                  icon: isCheck == false
+                  icon: _terms == false
                       ? Icon(
                     Icons.check_box_outline_blank_outlined,
                     size: 25,
@@ -634,7 +626,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                   onPressed: (){
                     setState(() {
-                      isCheck =! isCheck;
+                      _terms =! _terms;
                     });
                   }
               ),
@@ -649,7 +641,20 @@ class _SignUpState extends State<SignUp> {
                     ),
                     children: [
                       TextSpan(
-                        text: "Terms & Privacy Policy ",
+                        text: "Terms of Use",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Gelion',
+                            fontSize: 14,
+                            color: Color(0xFF00A69D),
+                          ),
+                        recognizer: TapGestureRecognizer()..onTap = (){
+                          Navigator.pushNamed(context, Terms.id);
+                        },
+                      ),
+                      TextSpan(text: " & "),
+                      TextSpan(
+                        text: "Privacy Policy",
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Gelion',
@@ -675,9 +680,7 @@ class _SignUpState extends State<SignUp> {
   /// A function to toggle if to show the password or not by
   /// changing [_obscureTextLogin] value
   void _toggleLogin() {
-    setState(() {
-      _obscureTextLogin = !_obscureTextLogin;
-    });
+    setState(() { _obscureTextLogin = !_obscureTextLogin; });
   }
 
   /// Function to build the widget of conditions passed
@@ -687,9 +690,7 @@ class _SignUpState extends State<SignUp> {
     bool three = _condition3 = (_password.contains(RegExp(r'[0-9]'))  || _password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')));
 
     if(one && two && three){
-      setState(() {
-        _passwordValidated = true;
-      });
+      setState(() { _passwordValidated = true; });
       return Container(
         width: SizeConfig.screenWidth,
         child: Row(
@@ -722,9 +723,7 @@ class _SignUpState extends State<SignUp> {
       );
     }
     else if((one && two) || (one && three) || (two && three)){
-      setState(() {
-        _passwordValidated = false;
-      });
+      setState(() { _passwordValidated = true; });
       return Container(
         width: SizeConfig.screenWidth,
         child: Row(
@@ -745,9 +744,7 @@ class _SignUpState extends State<SignUp> {
       );
     }
     else if(one || two || three){
-      setState(() {
-        _passwordValidated = false;
-      });
+      setState(() { _passwordValidated = false; });
       return Container(
         width: SizeConfig.screenWidth,
         child: Row(
@@ -764,9 +761,7 @@ class _SignUpState extends State<SignUp> {
       );
     }
     else {
-      setState(() {
-        _passwordValidated = false;
-      });
+      setState(() { _passwordValidated = false; });
       return Container();
     }
   }
@@ -787,7 +782,7 @@ class _SignUpState extends State<SignUp> {
       _passwordController.clear();
       if(!mounted)return;
       setState(() { _showSpinner = false; });
-      var db=DatabaseHelper();
+      var db = DatabaseHelper();
       await db.initDb();
       await db.saveUser(user);
       _addBoolToSF(true,user);

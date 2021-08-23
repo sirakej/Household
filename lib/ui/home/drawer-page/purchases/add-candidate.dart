@@ -6,6 +6,7 @@ import 'package:householdexecutives_mobile/model/candidate.dart';
 import 'package:householdexecutives_mobile/model/category-class.dart';
 import 'package:householdexecutives_mobile/model/saved-candidates.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
+import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
@@ -469,7 +470,7 @@ class _AddCandidateState extends State<AddCandidate> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      candidate.availability.title ?? '',
+                                      kTitle[candidate.availability.title] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -626,7 +627,7 @@ class _AddCandidateState extends State<AddCandidate> {
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
+                                      kExperience[candidate.experience] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,

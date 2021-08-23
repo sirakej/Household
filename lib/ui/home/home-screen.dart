@@ -614,7 +614,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _getAdBanner() async {
     Future<AdBanner> list = futureValue.getAdBanner();
     await list.then((value) {
-      print(value.toJson());
       if(!mounted)return;
       setState(() {
         _banner = value;
@@ -868,7 +867,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                             DrawerContainer(
-                              title: "Interview Schedule",
+                              title: "Schedule Interview",
                               imageName: "scheduled_interview",
                               number: _purchasesLength,
                               onTap: (){
@@ -1138,7 +1137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _banner.title ?? '',
+                                /*_banner.title ??*/ '',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Gelion',
@@ -1148,7 +1147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               SizedBox(height: 12),
                               Text(
-                                _banner.description ?? '',
+                                /*_banner.description ?? */'',
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontFamily: 'Gelion',
@@ -1356,7 +1355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      candidate.availability.title ?? '',
+                                      kTitle[candidate.availability.title] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -1513,7 +1512,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     SizedBox(height:8),
                                     Text(
-                                      "${candidate.experience} ${candidate.experience > 1 ? 'Years' : 'Year'}",
+                                      kExperience[candidate.experience] ?? '',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,

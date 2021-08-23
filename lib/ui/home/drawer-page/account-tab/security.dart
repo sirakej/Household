@@ -199,14 +199,8 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
                     if (value.isEmpty) {
                       return 'Enter your password';
                     }
-                    if(!_condition1){
-                      Functions.showError(context, "password must be at least 8 characters long");
-                    }
-                    if(!_condition2){
-                      Functions.showError(context, "password needs to include upper case character");
-                    }
-                    if(!_condition3){
-                      Functions.showError(context, "password needs to include a number or unique character");
+                    if((!_condition1 && !_condition2) || (!_condition2 && !_condition3) || (!_condition1 && !_condition3)){
+                      Functions.showError(context, "Password too weak");
                     }
                     return null;
                   },
@@ -528,7 +522,13 @@ class _PasswordAndSecurityState extends State<PasswordAndSecurity> {
       _oldPasswordController.clear();
       _newPasswordController.clear();
       _confirmPasswordController.clear();
-      Functions.showSuccess(context, 'Password changed successfully');
+      Functions.showSuccess(
+          context,
+          'Password changed successfully',
+        whereTo: (){
+            Functions.logOut(context);
+        }
+      );
     }).catchError((e){
       if(!mounted)return;
       setState(() { _showSpinner= false; });
