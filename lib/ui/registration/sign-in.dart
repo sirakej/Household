@@ -43,9 +43,7 @@ class _SignInState extends State<SignIn> {
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
+        if (!currentFocus.hasPrimaryFocus) currentFocus.unfocus();
       },
       child: Scaffold(
         backgroundColor: Color(0xFFFFFFFF),
@@ -199,130 +197,140 @@ class _SignInState extends State<SignIn> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            "Email Address",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Gelion',
-              fontSize: 14,
-              color: Color(0xFF042538),
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            width: SizeConfig.screenWidth,
-            child: TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Enter your email';
-                }
-                if (value.length < 3 || !value.contains("@") || !value.contains(".")){
-                  return 'Invalid email address';
-                }
-                return null;
-              },
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Gelion',
-                color: Color(0xFF042538),
-              ),
-              decoration:kFieldDecoration.copyWith(
-                  hintText: 'placeholder@mail.com',
-                  hintStyle:TextStyle(
-                    color:Color(0xFF717F88),
-                    fontSize: 14,
-                    fontFamily: 'Gelion',
-                    fontWeight: FontWeight.w400,
-                  )
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            "Password",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Gelion',
-              fontSize: 14,
-              color: Color(0xFF042538),
-            ),
-          ),
-          SizedBox(height: 10,),
-          Container(
-            width: SizeConfig.screenWidth,
-            child: TextFormField(
-              obscureText: _obscureTextLogin,
-              controller: _passwordController,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              validator: (value){
-                if(value.isEmpty){
-                  return 'Enter your password';
-                }
-                return null;
-              },
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Gelion',
-                color: Color(0xFF042538),
-              ),
-              decoration:kFieldDecoration.copyWith(
-                  suffixIcon: TextButton(
-                    onPressed:_toggleLogin,
-                    child:_obscureTextLogin ?
-                    Text(
-                      "show",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Gelion',
-                        fontSize: 14,
-                        color: Color(0xFF042538),
-                      ),
-                    ): Text(
-                  "Hide",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                  fontWeight: FontWeight.w600,
+          // Email
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Email Address",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
                   fontFamily: 'Gelion',
                   fontSize: 14,
-                      color: Color(0xFF042538),
+                  color: Color(0xFF042538),
+                ),
               ),
-            ),
-                  )
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed:(){
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (_){
-                        return Reset();
-                      })
-                  );
-                },
-                child: Text(
-                  "Forgot Password?",
-                  textAlign: TextAlign.start,
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter your email';
+                    }
+                    if (value.length < 3 || !value.contains("@") || !value.contains(".")){
+                      return 'Invalid email address';
+                    }
+                    return null;
+                  },
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Gelion',
                     fontSize: 14,
-                    color: Color(0xFF00A69D),
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  decoration:kFieldDecoration.copyWith(
+                      hintText: 'placeholder@mail.com',
+                      hintStyle:TextStyle(
+                        color:Color(0xFF717F88),
+                        fontSize: 14,
+                        fontFamily: 'Gelion',
+                        fontWeight: FontWeight.w400,
+                      )
                   ),
                 ),
-              )
+              ),
             ],
+          ),
+          SizedBox(height: 20),
+          // Password
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Password",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF042538),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: SizeConfig.screenWidth,
+                child: TextFormField(
+                  obscureText: _obscureTextLogin,
+                  controller: _passwordController,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  validator: (value){
+                    if(value.isEmpty){
+                      return 'Enter your password';
+                    }
+                    return null;
+                  },
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Gelion',
+                    color: Color(0xFF042538),
+                  ),
+                  decoration:kFieldDecoration.copyWith(
+                      suffixIcon: TextButton(
+                        onPressed:_toggleLogin,
+                        child:_obscureTextLogin ?
+                        Text(
+                          "show",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Gelion',
+                            fontSize: 14,
+                            color: Color(0xFF042538),
+                          ),
+                        ): Text(
+                          "Hide",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Gelion',
+                            fontSize: 14,
+                            color: Color(0xFF042538),
+                          ),
+                        ),
+                      )
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed:(){
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (_){
+                      return Reset();
+                    })
+                );
+              },
+              child: Text(
+                "Forgot Password?",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Gelion',
+                  fontSize: 14,
+                  color: Color(0xFF00A69D),
+                ),
+              ),
+            ),
           )
         ],
       ),

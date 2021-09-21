@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +7,14 @@ import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/candidate-availability.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
+import 'package:householdexecutives_mobile/utils/photo-permissions.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:householdexecutives_mobile/model/create-candidate.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
+import 'package:path_provider/path_provider.dart';
 import 'candidate-created-successfully.dart';
 
 class RegisterCandidateTwo extends StatefulWidget {
@@ -57,7 +56,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
 
   /// A list of string variables holding a list of all languages
   List<String> _languages = [
-    "Arabic", "English", "Francais", "Hausa", "Hindi", "Igbo", "Italiano"
+    "Arabic", "English", "Francais", "Hausa", "Hindi", "Igbo", "Italiano",
     "Mandarin", "Yoruba", "Native Dialect", "Other"
   ];
 
@@ -104,40 +103,8 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     1: null, 2: null, 3: null
   };
 
-  final _picker = ImagePicker();
-
-  void _getImage(int id) async {
-    try{
-      File image;
-      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-      _uploads[id] = null;
-      _verifications[id] = _verificationName[id-1];
-      image = File(pickedFile.path);
-      _verifications[id] = "${_verifications[id]}.${image.path.split('.').last}";
-      _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id-1], image.path, filename: _verificationName[id-1]);
-      setState(() { });
-    } catch (err){
-      print(err);
-    }
-  }
-
-  void _getFile(int id) async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
-    if(result != null) {
-      PlatformFile file = result.files.first;
-      if(!mounted)return;
-      setState(() {
-        _verifications[id] = "${_verifications[id]}.${file.extension}";
-      });
-      _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id - 1], file.path, filename: _verificationName[id - 1]);
-    } else {
-      print("User canceled the picker");
-    }
-  }
-
   Future<void> _loadAssets(int id) async {
     List<Asset> resultList = [];
-    String error;
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 1,
@@ -151,7 +118,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
     } on Exception catch (e) {
       print(e.toString());
       if(e.toString() == "The user has denied the gallery access."){
-        _buildImageRequest();
+        PhotoPermissions.buildImageRequest(context);
       }
     }
 
@@ -163,9 +130,12 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
         _uploads[id] = null;
         _verifications[id] = _verificationName[id-1];
         Asset asset = resultList[0];
-        var path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
-        _verifications[id] = "${_verifications[id]}.${path.split('.').last}";
-        _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id-1], path, filename: _verificationName[id-1]);
+        ByteData thumbData = await asset.getByteData();
+        final directory = await getTemporaryDirectory();
+        final imageFile = await File('${directory.path}/${asset.name}').create();
+        await imageFile.writeAsBytes(thumbData.buffer.asUint8List());
+        _verifications[id] = "${_verifications[id]}.${asset.name.split('.').last}";
+        _uploads[id] = await http.MultipartFile.fromPath(_uploadName[id-1], imageFile.path, filename: _verificationName[id-1]);
       }
     }
 
@@ -175,78 +145,6 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
       //print(_error);
     });
 
-  }
-
-  /// This function builds and return a dialog to the user telling them to enable
-  /// permission in settings
-  Future<void> _buildImageRequest(){
-    return showDialog(
-      context: context,
-      builder: (_) => Dialog(
-        elevation: 0.0,
-        child: Container(
-          width: 300,
-          height: 165,
-          decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF).withOpacity(0.91),
-            borderRadius: BorderRadius.all(Radius.circular(14)),
-          ),
-          child:  Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Text(
-                    'Note',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Raleway',
-                        color: Color(0xFF1D1D1D)
-                    ),
-                  )
-              ),
-              Container(
-                width: 260,
-                padding: EdgeInsets.only(top: 12, bottom: 11),
-                child: Text(
-                  "You disabled permission to access your storage. Please enable access to your storage in settings to upload images",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xFF333333),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Raleway',
-                  ),
-                ),
-              ),
-              Container(
-                width: 252,
-                height: 1,
-                color: Color(0xFF9C9C9C).withOpacity(0.44),
-              ),
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(top: 12.0, bottom: 11),
-                  child: Text(
-                    'Ok',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Raleway',
-                        color: Color(0xFF00A69D)
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   /// Boolean variable holding either the condition is accepted or not

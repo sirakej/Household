@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:householdexecutives_mobile/notifications/notification-manager.dart';
 import 'package:householdexecutives_mobile/ui/home/home-screen.dart';
 import 'package:householdexecutives_mobile/ui/onboarding-screen.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
@@ -138,6 +139,8 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
   void getBoolValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool boolValue = prefs.getBool('loggedIn');
+    NotificationManager notificationManager = NotificationManager();
+    await notificationManager.configurePendingInterviewNotifications();
     if (boolValue == true) {
       Navigator.pushReplacement(context,
           CupertinoPageRoute(builder: (_){

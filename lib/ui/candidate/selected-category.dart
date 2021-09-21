@@ -96,10 +96,10 @@ class _SelectedCategoryState extends State<SelectedCategory> {
 
   /// A list of string variables holding a list of all countries
   List<String> _experience =[
-    "0 - 2",
-    "2 - 5",
-    "5 - 10",
-    "10 - ",
+    "0 years - 2 years",
+    "2 years - 5 years",
+    "5 years - 10 years",
+    "10 years and above",
   ];
 
 
@@ -786,7 +786,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                 selectedItemBuilder: (BuildContext context){
                                   return _experience.map((value){
                                     return Text(
-                                      '$value ${value == '10 - ' ? 'above' : 'years'}',
+                                      value,
                                       style: TextStyle(
                                         color: Color(0xFF1C2D55),
                                         fontSize: 14,
@@ -800,7 +800,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(
-                                      '$value ${value == '10 - ' ? 'above' : 'years'}',
+                                      value,
                                       style: TextStyle(
                                         color: Color(0xFF666666),
                                         fontSize: 14,
@@ -1003,8 +1003,8 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                                   _filteredData['gender'] = _male ? 'Male' : 'Female';
                                   _filteredData['availability'] = _liveIn ? 'Live In' : 'Custom';
                                   _filteredData['age'] = '$_lowerValue - $_upperValue';
-                                  _filteredData['tribe'] = _selectedTribe;
-                                  _filteredData['religion'] = _selectedReligion;
+                                  _filteredData['tribe'] = _selectedTribe ?? '';
+                                  _filteredData['religion'] = _selectedReligion ?? '';
                                   _filteredData['experience'] = _selectedExperience;
                                 });
 
@@ -1070,7 +1070,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   void _filterCandidates(){
     List<Candidate> temp = [];
     List<String> age = _filteredData["age"].split(' - ');
-    List<String> experience = _filteredData["experience"].split(' - ');
     for(int i = 0; i < _filteredCandidates.length; i++) {
       if (_filteredCandidates[i].tribe == _filteredData["tribe"]
           && _filteredCandidates[i].gender == _filteredData["gender"]
@@ -1079,10 +1078,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
               _filteredData["availability"]
           && _filteredCandidates[i].age >= double.parse(age[0].toString())
           && _filteredCandidates[i].age <= double.parse(age[1].toString())
-          && _filteredCandidates[i].experience >= int.parse(experience[0])
-          && (experience.length == 2
-              ? _filteredCandidates[i].experience <= int.parse(experience[1])
-              : true)
+          && _filteredCandidates[i].experience == _experience.indexOf(_filteredData["experience"]) + 1
       ) {
         temp.add(_filteredCandidates[i]);
       }
@@ -1094,29 +1090,31 @@ class _SelectedCategoryState extends State<SelectedCategory> {
   _buildProfileModalSheet(BuildContext context, Candidate candidate){
     List<Widget> allHistory = [];
     List<Widget> history = [];
-    for(int i = 0; i < candidate.history.length; i++){
-      allHistory.add(
-        Container(
-          width: SizeConfig.screenWidth - 120,
-          child: Text(
-            '• ${candidate.history[i].toString()}',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Gelion',
-              fontSize: 14,
-              color: Color(0xFF717F88),
+    if(candidate.history != null){
+      for(int i = 0; i < candidate.history.length; i++){
+        allHistory.add(
+          Container(
+            width: SizeConfig.screenWidth - 120,
+            child: Text(
+              '• ${candidate.history[i].toString()}',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 14,
+                color: Color(0xFF717F88),
+              ),
             ),
           ),
-        ),
-      );
-    }
-    if(allHistory.length <= 2){
-      history.addAll(allHistory);
-    }
-    else {
-      history.add(allHistory[0]);
-      history.add(allHistory[1]);
+        );
+      }
+      if(allHistory.length <= 2){
+        history.addAll(allHistory);
+      }
+      else {
+        history.add(allHistory[0]);
+        history.add(allHistory[1]);
+      }
     }
     showModalBottomSheet<void>(
         backgroundColor: Color(0xFFFFFFFF),

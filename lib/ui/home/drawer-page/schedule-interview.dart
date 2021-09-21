@@ -720,6 +720,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
           }
         });
       }
+      print(_pendingCandidatesLength);
     }).catchError((e){
       print(e);
       Functions.showError(context, e);
@@ -872,29 +873,31 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
   _buildProfileModalSheet(BuildContext context, String savedCategoryId, Candidate candidate, bool hire, {String categoryId, dynamic hirePlan}){
     List<Widget> allHistory = [];
     List<Widget> history = [];
-    for(int i = 0; i < candidate.history.length; i++){
-      allHistory.add(
-        Container(
-          width: SizeConfig.screenWidth - 120,
-          child: Text(
-            '• ${candidate.history[i].toString()}',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Gelion',
-              fontSize: 14,
-              color: Color(0xFF717F88),
+    if(candidate.history != null){
+      for(int i = 0; i < candidate.history.length; i++){
+        allHistory.add(
+          Container(
+            width: SizeConfig.screenWidth - 120,
+            child: Text(
+              '• ${candidate.history[i].toString()}',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 14,
+                color: Color(0xFF717F88),
+              ),
             ),
           ),
-        ),
-      );
-    }
-    if(allHistory.length <= 2){
-      history.addAll(allHistory);
-    }
-    else {
-      history.add(allHistory[0]);
-      history.add(allHistory[1]);
+        );
+      }
+      if(allHistory.length <= 2){
+        history.addAll(allHistory);
+      }
+      else {
+        history.add(allHistory[0]);
+        history.add(allHistory[1]);
+      }
     }
     showModalBottomSheet<void>(
         backgroundColor: Color(0xFFFFFFFF),
@@ -1502,7 +1505,7 @@ class _ScheduledInterviewState extends State<ScheduledInterview> with SingleTick
         maxTime: DateTime(now.year + 1, now.month, now.day),
         onConfirm: (date) {
           if(date.weekday != 7){
-            if(date.hour > 9 && date.hour < 15){
+            if(date.hour >= 9 && date.hour <= 15){
               if(!mounted)return;
               setState(() => _scheduleAt = date);
             }

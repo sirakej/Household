@@ -621,147 +621,150 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> with Single
     return SafeArea(
       top: false,
       bottom: false,
-      child: Scaffold(
-        backgroundColor: Color(0xFFDFE3E8),
-        appBar: AppBar(
-          backgroundColor: Color(0xFFFFFFFF),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Color(0xFF000000),
+      child: AbsorbPointer(
+        absorbing: _showSpinner,
+        child: Scaffold(
+          backgroundColor: Color(0xFFDFE3E8),
+          appBar: AppBar(
+            backgroundColor: Color(0xFFFFFFFF),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                size: 20,
+                color: Color(0xFF000000),
+              ),
+              onPressed: () {
+                Navigator.pop(context, widget.candidates);
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context, widget.candidates);
-            },
+            centerTitle: true,
+            elevation: 0,
+            title: Text(
+              'Check Out',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 19,
+                color: Color(0xFF000000),
+              ),
+            ),
           ),
-          centerTitle: true,
-          elevation: 0,
-          title: Text(
-            'Check Out',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Gelion',
-              fontSize: 19,
-              color: Color(0xFF000000),
-            ),
-          ),
-        ),
-        body: Column(
-          children: [
-            Container(
-              width: SizeConfig.screenWidth,
-              color: Color(0xFFFFFFFF),
-              padding: EdgeInsets.only(bottom: 39.39),
-              child: Text(
-                'These are your preferred candidates.\nPlease schedule Set/Note Interview Dates',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Gelion',
-                  fontSize: 12.6829,
-                  color: Color(0xFF57565C),
-                ),
-              ),
-            ),
-            Container(
-              width: SizeConfig.screenWidth,
-              height: 51,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: BouncingScrollPhysics(),
-                child: _buildTabCategories(),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(25, 22, 25, 0),
-                color: Color(0xFFFFFFFF),
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: _buildShortListedList()[_selectedCategory],
-                ),
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: Container(
-          padding: EdgeInsets.fromLTRB(25, 22, 25, 30),
-          color: Color(0xFFF4F7F9),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          body: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Total Price',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFF717F88),
-                    ),
+              Container(
+                width: SizeConfig.screenWidth,
+                color: Color(0xFFFFFFFF),
+                padding: EdgeInsets.only(bottom: 39.39),
+                child: Text(
+                  'These are your preferred candidates.\nPlease schedule Set/Note Interview Dates',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Gelion',
+                    fontSize: 12.6829,
+                    color: Color(0xFF57565C),
                   ),
-                  Text(
-                    Functions.money(_totalPrice, 'N'),
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontFamily: 'Gelion',
-                      fontSize: 20,
-                      color: Color(0xFF042538),
-                    ),
-                  ),
-                ],
+                ),
               ),
-              SizedBox(height: 30),
-              Button(
-                onTap: (){
-                  if(_buttonText == 'Pay'){
-                    _pay();
-                  }
-                  else {
-                    bool check = false;
-                    widget.candidates.forEach((key, value) {
-                      if(value.length > 0){
-                        check = true;
-                      }
-                    });
-                    if(check){
-                      if(_validateRoles() == true){
-                        if(_validatePlan() == true){
-                          _saveCandidate();
-                        }
-                      }
-                    }
-                    else {
-                      Functions.showInfo(context, "Go back and select your candidates");
-                    }
-                  }
-                },
-                buttonColor: Color(0xFF00A69D),
-                child: Center(
-                  child: _showSpinner
-                      ? CupertinoActivityIndicator(radius: 13)
-                      : Text(
-                    _buttonText,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Gelion',
-                      fontSize: 16,
-                      color: Color(0xFFFFFFFF),
-                    ),
+              Container(
+                width: SizeConfig.screenWidth,
+                height: 51,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  child: _buildTabCategories(),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(25, 22, 25, 0),
+                  color: Color(0xFFFFFFFF),
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: _buildShortListedList()[_selectedCategory],
                   ),
                 ),
               ),
             ],
           ),
+          floatingActionButton: Container(
+            padding: EdgeInsets.fromLTRB(25, 22, 25, 30),
+            color: Color(0xFFF4F7F9),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Total Price',
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFF717F88),
+                      ),
+                    ),
+                    Text(
+                      Functions.money(_totalPrice, 'N'),
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontFamily: 'Gelion',
+                        fontSize: 20,
+                        color: Color(0xFF042538),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30),
+                Button(
+                  onTap: (){
+                    if(_buttonText == 'Pay'){
+                      _pay();
+                    }
+                    else {
+                      bool check = false;
+                      widget.candidates.forEach((key, value) {
+                        if(value.length > 0){
+                          check = true;
+                        }
+                      });
+                      if(check){
+                        if(_validateRoles() == true){
+                          if(_validatePlan() == true){
+                            _saveCandidate();
+                          }
+                        }
+                      }
+                      else {
+                        Functions.showInfo(context, "Go back and select your candidates");
+                      }
+                    }
+                  },
+                  buttonColor: Color(0xFF00A69D),
+                  child: Center(
+                    child: _showSpinner
+                        ? CupertinoActivityIndicator(radius: 13)
+                        : Text(
+                      _buttonText,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Gelion',
+                        fontSize: 16,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -972,7 +975,7 @@ class _ShortListedCandidateState extends State<ShortListedCandidate> with Single
                 width: 220,
                 padding: EdgeInsets.only(top: 12, bottom: 11),
                 child: Text(
-                  "You are only allowed to select a maximum of 3 candidates per role in a category so Increase the number of roles to fill for $name to accommodate your candidates",
+                  "You are only allowed to select a maximum of 3 candidates per hire in a category so Increase the number of candidates to hire for $name to accommodate your candidates",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF333333),

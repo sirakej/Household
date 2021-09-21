@@ -11,6 +11,7 @@ import 'package:householdexecutives_mobile/model/category.dart';
 import 'package:householdexecutives_mobile/model/hired-candidates.dart';
 import 'package:householdexecutives_mobile/model/purchases.dart';
 import 'package:householdexecutives_mobile/networking/restdata-source.dart';
+import 'package:householdexecutives_mobile/notifications/notification-manager.dart';
 import 'package:householdexecutives_mobile/ui/candidate/find-category.dart';
 import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'package:householdexecutives_mobile/utils/reusable-widgets.dart';
@@ -1175,29 +1176,31 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildProfileModalSheet(BuildContext context, Candidate candidate, String categoryId, String hireId){
     List<Widget> allHistory = [];
     List<Widget> history = [];
-    for(int i = 0; i < candidate.history.length; i++){
-      allHistory.add(
-        Container(
-          width: SizeConfig.screenWidth - 120,
-          child: Text(
-            '• ${candidate.history[i].toString()}',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Gelion',
-              fontSize: 14,
-              color: Color(0xFF717F88),
+    if(candidate.history != null){
+      for(int i = 0; i < candidate.history.length; i++){
+        allHistory.add(
+          Container(
+            width: SizeConfig.screenWidth - 120,
+            child: Text(
+              '• ${candidate.history[i].toString()}',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 14,
+                color: Color(0xFF717F88),
+              ),
             ),
           ),
-        ),
-      );
-    }
-    if(allHistory.length <= 2){
-      history.addAll(allHistory);
-    }
-    else {
-      history.add(allHistory[0]);
-      history.add(allHistory[1]);
+        );
+      }
+      if(allHistory.length <= 2){
+        history.addAll(allHistory);
+      }
+      else {
+        history.add(allHistory[0]);
+        history.add(allHistory[1]);
+      }
     }
     showModalBottomSheet<void>(
         backgroundColor: Color(0xFFFFFFFF),

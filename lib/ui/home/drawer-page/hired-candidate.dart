@@ -72,6 +72,7 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
     List<Widget> ongoingContainer = [];
     if(_candidates.length > 0 && _candidates.isNotEmpty){
       for (int i = 0; i < _candidates.length; i++){
+        print(_candidates[i].status);
         if(_candidates[i].status.toLowerCase() == 'ongoing'){
           ongoingContainer.add(
             Container(
@@ -278,29 +279,31 @@ class _HireCandidateState extends State<HireCandidate> with SingleTickerProvider
   _buildProfileModalSheet(BuildContext context, Candidate candidate, String categoryId, String hireId, String text, {String savedCategoryId, dynamic hirePlan}){
     List<Widget> allHistory = [];
     List<Widget> history = [];
-    for(int i = 0; i < candidate.history.length; i++){
-      allHistory.add(
-        Container(
-          width: SizeConfig.screenWidth - 120,
-          child: Text(
-            '• ${candidate.history[i].toString()}',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Gelion',
-              fontSize: 14,
-              color: Color(0xFF717F88),
+    if(candidate.history != null){
+      for(int i = 0; i < candidate.history.length; i++){
+        allHistory.add(
+          Container(
+            width: SizeConfig.screenWidth - 120,
+            child: Text(
+              '• ${candidate.history[i].toString()}',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Gelion',
+                fontSize: 14,
+                color: Color(0xFF717F88),
+              ),
             ),
           ),
-        ),
-      );
-    }
-    if(allHistory.length <= 2){
-      history.addAll(allHistory);
-    }
-    else {
-      history.add(allHistory[0]);
-      history.add(allHistory[1]);
+        );
+      }
+      if(allHistory.length <= 2){
+        history.addAll(allHistory);
+      }
+      else {
+        history.add(allHistory[0]);
+        history.add(allHistory[1]);
+      }
     }
     showModalBottomSheet<void>(
         backgroundColor: Color(0xFFFFFFFF),

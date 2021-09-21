@@ -27,13 +27,22 @@ void main() {
 }
 
 /// A StatelessWidget class to hold basic details and routes of my application
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  static final navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Household Executives',
       debugShowCheckedModeBanner: false,
+      navigatorKey: MyApp.navigatorKey,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Color(0xFF00A69D),
