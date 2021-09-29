@@ -1,4 +1,4 @@
-package com.example.householdexecutives_mobile
+package com.household.executives
 
 import io.flutter.embedding.android.FlutterActivity
 
