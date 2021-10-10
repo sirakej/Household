@@ -16,6 +16,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'candidate-created-successfully.dart';
+import 'terms.dart';
 
 class RegisterCandidateTwo extends StatefulWidget {
 
@@ -1187,7 +1188,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                 }
                             ),
                             RichText(
-                              text:TextSpan(
+                              text: TextSpan(
                                   text: "I agree to the ",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
@@ -1205,7 +1206,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                         color: Color(0xFF00A69D),
                                       ),
                                       recognizer: TapGestureRecognizer()..onTap = (){
-                                        //Navigator.pushNamed(context, Terms.id);
+                                        Navigator.pushNamed(context, Terms.id);
                                       },
                                     ),
                                     TextSpan(text: " & "),
@@ -1218,7 +1219,7 @@ class _RegisterCandidateTwoState extends State<RegisterCandidateTwo> {
                                         color: Color(0xFF00A69D),
                                       ),
                                       recognizer: TapGestureRecognizer()..onTap = (){
-                                        //Navigator.pushNamed(context, Terms.id);
+                                        Navigator.pushNamed(context, Terms.id);
                                       },
                                     ),
                                     TextSpan(text:" of\nHousehold Executives")

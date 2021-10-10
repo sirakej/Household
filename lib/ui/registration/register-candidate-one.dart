@@ -624,7 +624,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Tribe",
+                      "Tribe (Optional)",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -653,15 +653,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         value: _selectedTribe,
                         onChanged: (String value){
                           if(!mounted)return;
-                          setState(() {
-                            _selectedTribe = value;
-                          });
-                        },
-                        validator: (value){
-                          if (_selectedTribe == null || _selectedTribe.isEmpty){
-                            return 'Pick your option';
-                          }
-                          return null;
+                          setState(() => _selectedTribe = value);
                         },
                         decoration: kFieldDecoration.copyWith(
                           hintText: 'Please Select',
@@ -775,7 +767,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Age",
+                      "Age (Optional)",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -791,12 +783,6 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                         controller: _ageController,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
-                        validator: (value){
-                          if(value.isEmpty){
-                            return 'Enter age';
-                          }
-                          return null;
-                        },
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(3),
@@ -917,7 +903,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Religion",
+                      "Religion (Optional)",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
@@ -949,12 +935,6 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
                           setState(() {
                             _selectedReligion = value;
                           });
-                        },
-                        validator: (value){
-                          if (_selectedReligion == null || _selectedReligion.isEmpty){
-                            return 'Pick your option';
-                          }
-                          return null;
                         },
                         decoration: kFieldDecoration.copyWith(
                           hintText: 'Please Select',
@@ -1159,7 +1139,11 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
       candidate.lastName = Functions.capitalize(_lastNameController.text.trim());
       candidate.email = _emailController.text.toLowerCase().trim();
       candidate.phoneNumber = _number.phoneNumber.trim();
-      candidate.age = int.parse(_ageController.text);
+      if(_ageController.text.isNotEmpty) {
+        candidate.age = int.parse(_ageController.text);
+      } else {
+        candidate.age = null;
+      }
       candidate.origin = _selectedAreaOfService;
       candidate.tribe = _selectedTribe;
       candidate.gender = _selectedGender;

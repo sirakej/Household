@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -15,6 +16,8 @@ class Terms extends StatefulWidget {
 class _TermsState extends State<Terms> {
 
   final Completer<WebViewController> _controller = Completer<WebViewController>();
+
+  bool _isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +36,27 @@ class _TermsState extends State<Terms> {
           },
         ),
       ),
-      body: WebView(
-        initialUrl: 'https://www.householdexecutivesltd.com/privacy-policy',
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController){
-          _controller.complete(webViewController);
-        },
+      body: Stack(
+        children: [
+          WebView(
+            initialUrl: 'https://www.householdexecutivesltd.com/privacy-policy',
+            javascriptMode: JavascriptMode.unrestricted,
+            onPageFinished: (finish) {
+              if(!mounted)return;
+              setState(() => _isLoading = false);
+            },
+            onWebViewCreated: (WebViewController webViewController){
+              _controller.complete(webViewController);
+            },
+          ),
+          _isLoading
+              ? Center(
+            child: CupertinoActivityIndicator(
+              radius: 10,
+            ),
+          )
+              : Stack(),
+        ],
       ),
     );
   }

@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:householdexecutives_mobile/notifications/notification-manager.dart';
 import 'package:householdexecutives_mobile/ui/home/home-screen.dart';
 import 'package:householdexecutives_mobile/ui/onboarding-screen.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
 import 'package:flutter/material.dart';
+import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
@@ -25,10 +27,35 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
 
   bool right = false;
 
+  void _checkVersion() async {
+    final newVersion = NewVersion(
+        androidId: 'com.household.executives',
+        iOSId: 'com.householdexecutives.io'
+    );
+    await newVersion.getVersionStatus().then((status) {
+      if(status.canUpdate){
+        newVersion.showUpdateDialog(
+            context: context,
+            versionStatus: status,
+            dialogTitle: 'Household Executives',
+            dialogText: 'New update is available, you can update to the latest version \n ${status.storeVersion}',
+            dismissAction: (){
+              Navigator.pop(context);
+              _navigate();
+            },
+            updateButtonText: 'Open ${Platform.isIOS ? 'App Store' : 'Play Store'}'
+        );
+      }
+      else {
+        _navigate();
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-   navigate();
+    _navigate();
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds:1),
@@ -48,7 +75,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin{
 
   /// A function to set a 3 seconds timer for my splash screen to show
   /// and navigate to my [OnBoard] screen after
-  void navigate() {
+  void _navigate() {
     Timer(Duration(seconds: 2), () { getBoolValuesSF(); });
   }
 
