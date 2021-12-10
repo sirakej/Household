@@ -71,7 +71,7 @@ class _RegisterCandidateOneState extends State<RegisterCandidateOne> {
 
   /// A list of string variables holding a list of all gender
   List<String> _gender =[
-    "Male", "Female"
+    "Male", "Female", "Other"
   ];
 
   /// A string variable holding the selected gender value

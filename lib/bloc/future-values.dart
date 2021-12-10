@@ -49,6 +49,15 @@ class FutureValues{
     });
   }
 
+  /// Function to check if register as a candidate button is to be shown with
+  /// the help of [RestDataSource]
+  /// It returns a [dynamic] value
+  Future<dynamic> showCandidateButton() {
+    var data = RestDataSource();
+    Future<dynamic> value = data.showCandidateButton();
+    return value;
+  }
+
   /// Function to get the ad banner in the database with the help
   /// of [RestDataSource]
   /// It returns a model of [AdBanner]

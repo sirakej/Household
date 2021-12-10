@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/database/user-db-helper.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
 import 'package:householdexecutives_mobile/networking/auth-rest-data.dart';
@@ -23,6 +24,9 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
 
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
   /// A [GlobalKey] to hold the form state of my form widget for form validation
   final _formKey = GlobalKey<FormState>();
 
@@ -36,6 +40,27 @@ class _SignInState extends State<SignIn> {
   bool _obscureTextLogin = true;
 
   bool _showSpinner = false;
+
+  /// A variable to hold if candidate button is to be shown
+  bool _showCandidateButton = false;
+
+  /// Function to check if candidate button is to be shown
+  void _getShowCandidateButton() async {
+    Future<dynamic> show = futureValue.showCandidateButton();
+    await show.then((value) {
+      if(!mounted)return;
+      setState(() => _showCandidateButton = value);
+    }).catchError((e){
+      if(!mounted)return;
+      setState(() => _showCandidateButton = false);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getShowCandidateButton();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +175,9 @@ class _SignInState extends State<SignIn> {
                               )
                           ),
                         ),
-                        Container(
+                        !_showCandidateButton
+                            ? Container()
+                            : Container(
                           alignment: Alignment.center,
                           child: Center(
                             child: TextButton(

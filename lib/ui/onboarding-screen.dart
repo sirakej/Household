@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/ui/registration/register-candidate-one.dart';
 import 'package:householdexecutives_mobile/ui/registration/sign-in.dart';
 import 'package:householdexecutives_mobile/utils/size-config.dart';
@@ -15,6 +16,9 @@ class OnBoard extends StatefulWidget {
 
 class _OnBoardState extends State<OnBoard> {
 
+  /// Instantiating a class of the [FutureValues]
+  var futureValue = FutureValues();
+
   final int _numPages = 3;
 
   final PageController _pageController = PageController(initialPage: 0);
@@ -28,15 +32,6 @@ class _OnBoardState extends State<OnBoard> {
   int index = 0;
 
   Timer timer;
-
-  @override
-  void initState() {
-    super.initState();
-    timer = Timer.periodic(
-      Duration(milliseconds: 3500),
-          (timer) => carousel(),
-    );
-  }
 
   onImageChange(int page) {
     index = page;
@@ -94,6 +89,31 @@ class _OnBoardState extends State<OnBoard> {
           color: isActive ? Color(0xFFFFFFFF) : Color(0xFFFFFFFF).withOpacity(0.4),
           shape: BoxShape.circle,
         ));
+  }
+
+  /// A variable to hold if candidate button is to be shown
+  bool _showCandidateButton = false;
+
+  /// Function to check if candidate button is to be shown
+  void _getShowCandidateButton() async {
+    Future<dynamic> show = futureValue.showCandidateButton();
+    await show.then((value) {
+      if(!mounted)return;
+      setState(() => _showCandidateButton = value);
+    }).catchError((e){
+      if(!mounted)return;
+      setState(() => _showCandidateButton = false);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      Duration(milliseconds: 3500),
+          (timer) => carousel(),
+    );
+    _getShowCandidateButton();
   }
 
   @override
@@ -198,8 +218,10 @@ class _OnBoardState extends State<OnBoard> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30,),
-                      Center(
+                      SizedBox(height: 30),
+                      !_showCandidateButton
+                          ? Container()
+                          : Center(
                         child: TextButton(
                           onPressed:(){
                             Navigator.pushNamed(context, RegisterCandidateOne.id);

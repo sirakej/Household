@@ -17,6 +17,7 @@ import 'package:householdexecutives_mobile/utils/static-functions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'error-handler.dart';
 import 'network-util.dart';
+import 'endpoints.dart';
 
 class RestDataSource {
 
@@ -29,21 +30,16 @@ class RestDataSource {
   /// Instantiating a class of the [NetworkHelper]
   NetworkHelper _netUtil = NetworkHelper();
 
-  static final GET_AD_BANNER = BASE_URL + "banner";
-  static final GET_SAVED_LIST = BASE_URL + "user/savedcandidate";
-  static final UPDATE_CANDIDATE = BASE_URL + "user/purchase/savedcategory";
-  static final GET_HIRED_CANDIDATES = BASE_URL + "user/hire";
-  static final GET_SCHEDULED_CANDIDATES = BASE_URL + "user/schedule";
-
-  static final GET_CATEGORY_URL = BASE_URL + "getcategory";
-  static final CATEGORY_URL = BASE_URL + "category";
-  static final POPULAR_CATEGORY = BASE_URL + "category/popular";
-  static final CANDIDATE_URL = BASE_URL + "candidate";
-  static final RECOMMENDED_CANDIDATE = BASE_URL + "candidate/recommended";
-  static final SAVED_CANDIDATE = BASE_URL + 'candidate/saved';
-  static final SCHEDULE_INTERVIEW = BASE_URL + "candidate/schedule";
-  static final HIRE_CANDIDATE = BASE_URL + "candidate/hire";
-  static final CANDIDTE_REVIEW = BASE_URL + 'candidate/review';
+  /// This function checks if a register as a candiate button is to be shown
+  Future<dynamic> showCandidateButton() async {
+    Map<String, String> header = {"Content-Type": "application/json"};
+    return _netUtil.get(SHOW_CANDIDATE_BUTTON, headers: header).then((dynamic res) {
+      if(res["error"]) throw res["msg"] ?? 'Error occurred';
+      return res["data"];
+    }).catchError((e){
+      errorHandler.handleError(e);
+    });
+  }
 
   Future<AdBanner> getAdBanner({bool refresh}) async {
     String fileName = 'ad-banner.json';

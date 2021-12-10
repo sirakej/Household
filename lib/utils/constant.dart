@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// This variable holds the value of the API base url
-/// const String BASE_URL = "https://householdexecutives.herokuapp.com/v1/";
-const String BASE_URL = "https://backend.householdexecutivesltd.com/v1/";
-
 const kFieldDecoration = InputDecoration(
   border: OutlineInputBorder(
     borderSide: BorderSide(

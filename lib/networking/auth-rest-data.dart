@@ -3,9 +3,9 @@ import 'package:householdexecutives_mobile/bloc/future-values.dart';
 import 'package:householdexecutives_mobile/model/plan.dart';
 import 'package:householdexecutives_mobile/model/transaction.dart';
 import 'package:householdexecutives_mobile/model/user.dart';
-import 'package:householdexecutives_mobile/utils/constant.dart';
 import 'error-handler.dart';
 import 'network-util.dart';
+import 'endpoints.dart';
 
 /// A [AuthRestDataSource] class to do all the send request to the back end
 /// and handle the result
@@ -19,19 +19,6 @@ class AuthRestDataSource {
 
   /// Instantiating a class of the [NetworkHelper]
   NetworkHelper _netUtil = NetworkHelper();
-
-  static final SIGN_UP_URL = BASE_URL + "user/register";
-  static final LOGIN_URL = BASE_URL + "user/login";
-  static final RESET_PASSWORD_URL = BASE_URL + "user/resetpassword";
-  static final CHANGE_PASSWORD = BASE_URL + "user/resetpassword/change";
-  static final GET_USER = BASE_URL + "user";
-  static final UPDATE_USER_PROFILE = BASE_URL + "user/profile";
-  static final UPDATE_USER_PASSWORD = BASE_URL + "user/profile/password";
-
-  static final GET_PLANS = BASE_URL + "plan";
-  static final VERIFY_PAYMENT = BASE_URL + 'plan/payment/verify';
-  static final FETCH_PAYMENT_HISTORY = BASE_URL + 'plan/payment/history';
-
 
   /// A function that creates a new user with [name], [email]
   /// and [password] POST
